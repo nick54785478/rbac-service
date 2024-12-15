@@ -88,7 +88,6 @@ public class UserInfo {
 	 * 新增使用者資料
 	 * 
 	 * @param command
-	 * @param passwordEncoder 密碼加密器
 	 */
 	public void create(CreateUserCommand command) {
 		this.name = command.getName();
