@@ -1,5 +1,6 @@
 package com.example.demo.iface.dto;
 
+import java.util.Date;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -20,6 +21,10 @@ public class UserInfoQueriedResource {
 	private String username; // 帳號
 
 	private String address;
+	
+	private String nationalIdNo; // 身分證字號
+	
+	private Date birthday; // 出生年月日
 
 	private List<UserGroupQueriedResource> groups;
 

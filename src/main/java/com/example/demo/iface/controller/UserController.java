@@ -106,7 +106,7 @@ public class UserController {
 	 * @return ResponseEntity<List<UserInfoQueriedResource>>
 	 */
 	@GetMapping("/{username}")
-	public ResponseEntity<List<UserInfoQueriedResource>> query(@PathVariable String username) {
+	public ResponseEntity<UserInfoQueriedResource> query(@PathVariable String username) {
 		return new ResponseEntity<>(
 				BaseDataTransformer.transformData(userQueryService.query(username), UserInfoQueriedResource.class),
 				HttpStatus.OK);

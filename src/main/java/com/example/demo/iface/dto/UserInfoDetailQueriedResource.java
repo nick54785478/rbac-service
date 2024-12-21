@@ -20,6 +20,10 @@ public class UserInfoDetailQueriedResource {
 	private String username; // 帳號
 
 	private String address;
+	
+	private String birthday;
+	
+	private String nationalIdNo;
 
 	private List<UserGroupQueriedResource> groups;
 

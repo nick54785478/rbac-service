@@ -62,6 +62,16 @@ public class UserService {
 		UserInfo saved = userRepository.save(userInfo);
 		return BaseDataTransformer.transformData(saved, UserInfoCreated.class);
 	}
+	
+	/**
+	 * 查詢該使用者資料
+	 * @param username
+	 * @return UserInfoQueried
+	 * */
+	public UserInfoQueried queryByUsername(String username) {
+		UserInfo userInfo = userRepository.findByUsername(username);
+		return BaseDataTransformer.transformData(userInfo, UserInfoQueried.class);
+	}
 
 	/**
 	 * 更新使用者角色資料
@@ -122,7 +132,7 @@ public class UserService {
 	}
 
 	/**
-	 * 查詢使用者資訊
+	 * 查詢使用者資訊(模糊查詢)
 	 * 
 	 * @param username 使用者帳號
 	 * @return UserOtionInfoQueried

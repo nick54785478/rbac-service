@@ -29,6 +29,7 @@ public class UserQueryService {
 		return groups;
 	}
 	
+	
 	/**
 	 * 取得特定使用者所在的 Role 資料
 	 * 
@@ -46,8 +47,8 @@ public class UserQueryService {
 	 * @param username 使用者帳號
 	 * @return UserInfoQueried
 	 */
-	public List<UserInfoQueried> query(String username) {
-		return userService.getUserInfoList(username);
+	public UserInfoQueried query(String username) {
+		return userService.queryByUsername(username);
 	}
 	
 	/**
