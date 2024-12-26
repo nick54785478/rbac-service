@@ -25,7 +25,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public ResponseEntity<JwtokenGeneratedResource> login(@RequestBody GenerateJwtokenResource resource) {
 		GenerateJwtokenCommand command = BaseDataTransformer.transformData(resource, GenerateJwtokenCommand.class);
-		String token = jwtokenService.generateToken(command);
-		return new ResponseEntity<>(new JwtokenGeneratedResource(token), HttpStatus.OK);
+		return new ResponseEntity<>(BaseDataTransformer.transformData(jwtokenService.generateToken(command),
+				JwtokenGeneratedResource.class), HttpStatus.OK);
 	}
 }

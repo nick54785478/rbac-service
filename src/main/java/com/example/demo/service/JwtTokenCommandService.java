@@ -7,11 +7,13 @@ import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.config.security.JwtConstants;
 import com.example.demo.domain.service.UserService;
+import com.example.demo.domain.share.JwtokenGenerated;
 import com.example.demo.domain.share.UserGroupQueried;
 import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.aggregate.UserInfo;
@@ -51,12 +53,13 @@ public class JwtTokenCommandService {
 	 * @return token
 	 */
 	@Transactional
-	public String generateToken(GenerateJwtokenCommand command) {
+	public JwtokenGenerated generateToken(GenerateJwtokenCommand command) {
 		UserInfo userInfo = userInfoRepository.findByUsername(command.getUsername());
 		boolean checkPassword = PasswordUtil.checkPassword(command.getPassword(), userInfo.getPassword());
+		log.info("command ", command.getUsername(), command.getPassword());
 		// 檢查密碼是否相符
 		if (!checkPassword) {
-			throw new ValidationException("VALIDATION_FAILED", "Password does not match");// 比對失敗
+			throw new ValidationException("VALIDATION_FAILED", "使用者帳號或密碼有誤");// 比對失敗
 		}
 
 		// 查詢該使用者所在的群組
@@ -66,8 +69,21 @@ public class JwtTokenCommandService {
 		// 查詢該使用者個人角色
 		List<UserRoleQueried> queryRoles = userService.queryRoles(command.getUsername());
 		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-
-		return jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles, groups);
+		JwtokenGenerated resource = jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles, groups);
+		
+		// 若不存在 RefreshToken，設置進去
+		if (StringUtils.isBlank( userInfo.getRefreshToken())) {
+			userInfo.updateRefreshToken(resource.getRefreshToken());			
+		} else {
+			// 過期日
+			Date expDate = jwtTokenUtil.getExpDate(resource.getRefreshToken());
+			// 現在時間比過期日大
+			if (new Date().after(expDate)) {
+				userInfo.updateRefreshToken(resource.getRefreshToken());			
+			}
+		}
+		userInfoRepository.save(userInfo);
+		return resource;
 	}
 
 	/**

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.security.JwtConstants;
+import com.example.demo.domain.share.JwtokenGenerated;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -29,25 +30,45 @@ public class JwtTokenUtil {
 	private String scretKey;
 
 	@Value("${jwt.token-expiration-seconds}")
-	private long expiration; // 過期時間若是3600L秒，即1個小時
+	private long tokenExpiration; // 過期時間若是3600L秒，即1個小時
+
+	@Value("${jwt.refresh-token-expiration-seconds}")
+	private long refreshTokenExpiration; // 過期時間若是3600L秒，即1個小時
 
 	private static final String ISS = "SYSTEM"; // 簽發者
 
 	/**
-	 * 建立 token 參數:
+	 * 建立 JwtToken & RefreshToken
 	 * 
 	 * @param username 使用者名稱
-	 * @param email 使用者信箱
-	 * @param roles - 角色權限清單
-	 * @param groups - 功能清單
+	 * @param email    使用者信箱
+	 * @param roles    - 角色權限清單
+	 * @param groups   - 功能清單
+	 * @return JwtokenGenerated
+	 */
+	public JwtokenGenerated generateToken(String username, String email, List<String> roles, List<String> groups) {
+		String token = this.generateToken(username, email, roles, groups, tokenExpiration);
+		String refreshToken = this.generateToken(username, email, roles, groups, refreshTokenExpiration);
+		return new JwtokenGenerated(token, refreshToken);
+	}
+
+	/**
+	 * 建立 token 參數:
+	 * 
+	 * @param username   使用者名稱
+	 * @param email      使用者信箱
+	 * @param roles      - 角色權限清單
+	 * @param groups     - 功能清單
+	 * @param expiration 過期時間 (秒)
 	 * @return JWToken
 	 */
-	public String generateToken(String username, String email, List<String> roles, List<String> groups) {
+	public String generateToken(String username, String email, List<String> roles, List<String> groups,
+			long expiration) {
 		log.debug("有效時間: {}", expiration);
 		HashMap<String, Object> map = new HashMap<>();
 		map.put(JwtConstants.JWT_CLAIMS_KEY_EMAIL.getValue(), email);
-		map.put(JwtConstants.JWT_CLAIMS_KEY_ROLE.getValue(), roles);  // 個人角色
-		map.put(JwtConstants.JWT_CLAIMS_KEY_GROUP.getValue(), groups);	// 群組角色
+		map.put(JwtConstants.JWT_CLAIMS_KEY_ROLE.getValue(), roles); // 個人角色
+		map.put(JwtConstants.JWT_CLAIMS_KEY_GROUP.getValue(), groups); // 群組角色
 		log.info("map: {}", map);
 
 		Date issDate = new Date(System.currentTimeMillis()); // 簽發日+7天
@@ -55,7 +76,6 @@ public class JwtTokenUtil {
 
 		Date expDate = new Date(System.currentTimeMillis() + expiration * 1000); // 過期日+7天
 		log.info("建立Token欲設置的過期日: {}", expDate);
-
 		return Jwts.builder().claims(map) // 角色
 				.issuer(ISS) // 簽發者
 				.subject(username) // 使用者名稱

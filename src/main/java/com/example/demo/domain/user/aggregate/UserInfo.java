@@ -62,6 +62,9 @@ public class UserInfo {
 	private Date birthday; // 出生年月日
 
 	private String address;
+	
+	@Column(name = "refresh_token")
+	private String refreshToken;
 
 	// 使用懶加載，避免 N+1 query 效能問題
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -83,6 +86,14 @@ public class UserInfo {
 		this.username = username;
 		this.password = password;
 	}
+	
+	/**
+	 * 設置 Refresh Token
+	 * */
+	public void updateRefreshToken(String token) {
+		this.refreshToken = token;
+	}
+	
 
 	/**
 	 * 新增使用者資料

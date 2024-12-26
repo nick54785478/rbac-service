@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS user_info (
     `national_id` VARCHAR(10),
     `birthday` DATETIME,
     `active_flag` CHAR(1),
+    `refresh_token` text,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
