@@ -22,6 +22,8 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 	List<UserInfo> findByUsernameOrNationalIdNoOrEmail(String username, String nationalIdNo, String email);
 	
 	List<UserInfo> findAll(Specification<UserInfo> specification);
+	
+	UserInfo findByRefreshToken(String refreshToken);
 
 	default List<UserInfo> findAllWithSpecification(String str) {
 		Specification<UserInfo> specification = ((root, query, cb) -> {

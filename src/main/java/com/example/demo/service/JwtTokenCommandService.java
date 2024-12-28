@@ -3,6 +3,7 @@ package com.example.demo.service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.crypto.SecretKey;
@@ -18,6 +19,7 @@ import com.example.demo.domain.share.UserGroupQueried;
 import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.command.GenerateJwtokenCommand;
+import com.example.demo.domain.user.command.RefreshTokenCommand;
 import com.example.demo.exception.ValidationException;
 import com.example.demo.infra.repository.UserInfoRepository;
 import com.example.demo.util.JwtTokenUtil;
@@ -69,21 +71,41 @@ public class JwtTokenCommandService {
 		// 查詢該使用者個人角色
 		List<UserRoleQueried> queryRoles = userService.queryRoles(command.getUsername());
 		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-		JwtokenGenerated resource = jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles, groups);
-		
+		JwtokenGenerated resource = jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
+				groups);
+
 		// 若不存在 RefreshToken，設置進去
-		if (StringUtils.isBlank( userInfo.getRefreshToken())) {
-			userInfo.updateRefreshToken(resource.getRefreshToken());			
+		if (StringUtils.isBlank(userInfo.getRefreshToken())) {
+			userInfo.updateRefreshToken(resource.getRefreshToken());
 		} else {
 			// 過期日
 			Date expDate = jwtTokenUtil.getExpDate(resource.getRefreshToken());
 			// 現在時間比過期日大
 			if (new Date().after(expDate)) {
-				userInfo.updateRefreshToken(resource.getRefreshToken());			
+				userInfo.updateRefreshToken(resource.getRefreshToken());
 			}
 		}
 		userInfoRepository.save(userInfo);
 		return resource;
+	}
+
+	/**
+	 * 刷新 Token
+	 * 
+	 * @param command
+	 * @return JwtokenGenerated
+	 */
+	public JwtokenGenerated refresh(RefreshTokenCommand command) {
+		UserInfo userInfo = userInfoRepository.findByRefreshToken(command.getToken());
+		if (!Objects.isNull(userInfo)) {
+			// 查詢該使用者個人角色
+			List<UserGroupQueried> queryGroups = userService.queryGroups(userInfo.getUsername());
+			List<String> groups = queryGroups.stream().map(UserGroupQueried::getCode).collect(Collectors.toList());
+			List<UserRoleQueried> queryRoles = userService.queryRoles(userInfo.getUsername());
+			List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
+			return jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles, groups);
+		}
+		return null;
 	}
 
 	/**
@@ -194,5 +216,4 @@ public class JwtTokenCommandService {
 		return claims != null;
 	}
 
-	
 }
