@@ -68,6 +68,7 @@ public class UserService {
 	 * @param username
 	 * @return UserInfoQueried
 	 * */
+	@Transactional
 	public UserInfoQueried queryByUsername(String username) {
 		UserInfo userInfo = userRepository.findByUsername(username);
 		return BaseDataTransformer.transformData(userInfo, UserInfoQueried.class);

@@ -57,8 +57,15 @@ public class JwtTokenCommandService {
 	@Transactional
 	public JwtokenGenerated generateToken(GenerateJwtokenCommand command) {
 		UserInfo userInfo = userInfoRepository.findByUsername(command.getUsername());
+		
+		if (Objects.isNull(userInfo)) {
+			throw new ValidationException("VALIDATION_FAILED", "該使用者帳號不存在");// 比對失敗
+		}
+		
 		boolean checkPassword = PasswordUtil.checkPassword(command.getPassword(), userInfo.getPassword());
 		log.info("command ", command.getUsername(), command.getPassword());
+
+		
 		// 檢查密碼是否相符
 		if (!checkPassword) {
 			throw new ValidationException("VALIDATION_FAILED", "使用者帳號或密碼有誤");// 比對失敗

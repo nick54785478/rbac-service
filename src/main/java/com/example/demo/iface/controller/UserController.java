@@ -80,6 +80,9 @@ public class UserController {
 
 	/**
 	 * 查詢該使用者相關角色資訊
+	 * 
+	 * @param username
+	 * @return ResponseEntity<List<UserRoleQueriedResource>>
 	 */
 	@GetMapping("/{username}/roles")
 	public ResponseEntity<List<UserRoleQueriedResource>> queryRoles(@PathVariable String username) {
@@ -90,6 +93,7 @@ public class UserController {
 
 	/**
 	 * 查詢該使用者相關資訊(含權限、角色)
+	 * 
 	 * @param username
 	 * @return ResponseEntity<UserInfoQueriedResource>
 	 */
