@@ -38,6 +38,7 @@ public class UserQueryService {
 	 */
 	public List<UserRoleQueried> queryRoles(String username) {
 		List<UserRoleQueried> roles = userService.queryRoles(username);
+		System.out.println(roles);
 		return roles;
 	}
 

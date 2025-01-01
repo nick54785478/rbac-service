@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.function.aggregate.FunctionInfo;
@@ -23,6 +24,7 @@ import com.example.demo.domain.share.UserInfoUpdated;
 import com.example.demo.domain.share.UserOptionQueried;
 import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.share.UserRolesGranted;
+import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
@@ -62,12 +64,13 @@ public class UserService {
 		UserInfo saved = userRepository.save(userInfo);
 		return BaseDataTransformer.transformData(saved, UserInfoCreated.class);
 	}
-	
+
 	/**
 	 * 查詢該使用者資料
+	 * 
 	 * @param username
 	 * @return UserInfoQueried
-	 * */
+	 */
 	@Transactional
 	public UserInfoQueried queryByUsername(String username) {
 		UserInfo userInfo = userRepository.findByUsername(username);
@@ -153,9 +156,11 @@ public class UserService {
 	public List<UserGroupQueried> queryGroups(String username) {
 		UserInfo userInfo = userRepository.findByUsername(username);
 		// 取得 User Group 的 GroupId
-		List<Long> groupIds = userInfo.getGroups().stream().map(UserGroup::getGroupId).collect(Collectors.toList());
+		List<Long> groupIds = userInfo.getGroups().stream()
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(UserGroup::getGroupId).collect(Collectors.toList());
 		// 透過 ID 取得 Group 資料
-		List<UserGroupQueried> groups = groupRepository.findByIdIn(groupIds).stream()
+		List<UserGroupQueried> groups = groupRepository.findByIdInAndActiveFlag(groupIds, YesNo.Y).stream()
 				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueried.class))
 				.collect(Collectors.toList());
 		return groups;
@@ -171,9 +176,13 @@ public class UserService {
 	public List<UserRoleQueried> queryRoles(String username) {
 		UserInfo user = userRepository.findByUsername(username);
 		// 取得該使用者的 RoleId 清單
-		List<Long> roleIds = user.getRoles().stream().map(UserRole::getRoleId).collect(Collectors.toList());
+		List<Long> roleIds = user.getRoles().stream()
+				// 過濾 UserRole 的 activeFlag = 'N' 者
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(UserRole::getRoleId).collect(Collectors.toList());
 
-		List<UserRoleQueried> userRoleList = roleRepository.findByIdIn(roleIds).stream()
+		// 查詢使用者角色資料
+		List<UserRoleQueried> userRoleList = roleRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y).stream()
 				.map(role -> BaseDataTransformer.transformData(role, UserRoleQueried.class))
 				.collect(Collectors.toList());
 
@@ -189,7 +198,6 @@ public class UserService {
 	@Transactional
 	public UserInfoDetailQueried getUserDetails(String username) {
 		Map<String, List<FunctionInfoDetailQueried>> funcMap = new HashMap<>();
-		
 
 		UserInfo userInfo = userRepository.findByUsername(username);
 		// 取得 Group ID 清單
@@ -204,24 +212,21 @@ public class UserService {
 		funcMap.put("PERSONALITY", this.getFuncList(roles));
 
 		// 群組角色權限
-		List<Long> groupRoleIds = groups.stream().flatMap(g -> g.getRoles().stream().map(GroupRole::getRoleId)).distinct()
-				.collect(Collectors.toList());
-		List<RoleInfo> groupRoles = roleRepository.findByIdIn(groupRoleIds);	
+		List<Long> groupRoleIds = groups.stream().flatMap(g -> g.getRoles().stream().map(GroupRole::getRoleId))
+				.distinct().collect(Collectors.toList());
+		List<RoleInfo> groupRoles = roleRepository.findByIdIn(groupRoleIds);
 		// 取得群組權限
 		funcMap.put("GROUP", this.getFuncList(groupRoles));
-		
 
 		// 合併功能權限(群組角色功能、個人角色功能)
-		List<FunctionInfoDetailQueried> functions = funcMap.entrySet().stream()
-			    .flatMap(entry -> {
-			    	String key = entry.getKey();
-			    	// 遍歷 Functions 資料，將 key 值設置進去
-			        entry.getValue().forEach(e -> {
-			            e.setLabel(key);
-			        });
-			        return entry.getValue().stream();
-			    })
-			    .collect(Collectors.toList());
+		List<FunctionInfoDetailQueried> functions = funcMap.entrySet().stream().flatMap(entry -> {
+			String key = entry.getKey();
+			// 遍歷 Functions 資料，將 key 值設置進去
+			entry.getValue().forEach(e -> {
+				e.setLabel(key);
+			});
+			return entry.getValue().stream();
+		}).collect(Collectors.toList());
 
 		List<UserGroupQueried> groupList = groups.stream()
 				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueried.class))
@@ -248,19 +253,19 @@ public class UserService {
 		List<Long> funcIds = roles.stream().flatMap(r -> r.getFunctions().stream().map(RoleFunction::getFunctionId))
 				.distinct().collect(Collectors.toList());
 		List<FunctionInfo> personalFuncs = functionRepository.findByIdIn(funcIds);
-		return BaseDataTransformer.transformData(personalFuncs,
-				FunctionInfoDetailQueried.class);
+		return BaseDataTransformer.transformData(personalFuncs, FunctionInfoDetailQueried.class);
 
 	}
-	
+
 	/**
 	 * 檢查該帳號、身分證、email 是否已註冊
 	 * 
 	 * @author command
 	 * @return boolean
-	 * */
+	 */
 	public boolean checkIsRegistered(CreateUserCommand command) {
-		List<UserInfo> userList = userRepository.findByUsernameOrNationalIdNoOrEmail(command.getUsername(), command.getNationalId(), command.getEmail());
+		List<UserInfo> userList = userRepository.findByUsernameOrNationalIdNoOrEmail(command.getUsername(),
+				command.getNationalId(), command.getEmail());
 		return userList.isEmpty();
 	}
 }

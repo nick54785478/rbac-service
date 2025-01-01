@@ -52,4 +52,26 @@ public class UserGroup {
 		this.groupId = groupId;
 		this.activeFlag = YesNo.Y;
 	}
+	
+	/**
+	 * 更新一筆使用者群組資料
+	 * 
+	 * @param id
+	 * @param userId
+	 * @param roleId
+	 */
+	public void update(Long id, Long userId, Long groupId) {
+		this.id = id;
+		this.userId = userId;
+		this.groupId = groupId;
+	}
+	
+	/**
+	 * 刪除動作
+	 * */
+	public void delete() {
+		this.activeFlag = YesNo.N;
+	}
+
+	
 }

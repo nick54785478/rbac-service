@@ -52,5 +52,25 @@ public class UserRole {
 		this.roleId = roleId;
 		this.activeFlag = YesNo.Y;
 	}
+	
+	/**
+	 * 更新一筆使用者角色資料
+	 * 
+	 * @param id
+	 * @param userId
+	 * @param roleId
+	 */
+	public void update(Long id, Long userId, Long roleId) {
+		this.id = id;
+		this.userId = userId;
+		this.roleId = roleId;
+	}
+	
+	/**
+	 * 刪除動作
+	 * */
+	public void delete() {
+		this.activeFlag = YesNo.N;
+	}
 
 }

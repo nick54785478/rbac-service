@@ -39,7 +39,7 @@ public class UserController {
 	private UserCommandService userCommandService;
 
 	/**
-	 * 新增 使用者資料
+	 * 註冊 使用者資料
 	 * 
 	 * @param resource
 	 * @return ResponseEntity<UserCreatedResource>
@@ -86,8 +86,8 @@ public class UserController {
 	 */
 	@GetMapping("/{username}/roles")
 	public ResponseEntity<List<UserRoleQueriedResource>> queryRoles(@PathVariable String username) {
-		List<UserRoleQueried> userGroups = userQueryService.queryRoles(username);
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userGroups, UserRoleQueriedResource.class),
+		List<UserRoleQueried> userRoles = userQueryService.queryRoles(username);
+		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoles, UserRoleQueriedResource.class),
 				HttpStatus.OK);
 	}
 
