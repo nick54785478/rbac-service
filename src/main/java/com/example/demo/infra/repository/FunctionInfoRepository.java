@@ -22,6 +22,8 @@ public interface FunctionInfoRepository extends JpaRepository<FunctionInfo, Long
 
 	List<FunctionInfo> findByIdInAndActiveFlag(List<Long> ids, YesNo activeFlag);
 	
+	List<FunctionInfo> findByIdInAndTypeAndActiveFlag(List<Long> ids, String type, YesNo activeFlag);
+	
 	List<FunctionInfo> findAll(Specification<FunctionInfo> specification);
 
 	default List<FunctionInfo> findAllWithSpecification(String actionType, String type, String name,

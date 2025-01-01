@@ -14,7 +14,8 @@ public enum ActionType {
 	E("EDIT", "E"), // 編輯（Edit）
 	A("ADD", "A"), // 建立（Add）
 	D("DELETE", "D"), // 刪除（Delete）
-	S("SEARCH", "S"); // 搜尋（Search）
+	S("SEARCH", "S"), // 搜尋（Search）
+	ALL("ALL", "ALL"); // 所有權限
 
 	@Getter
 	private final String code;

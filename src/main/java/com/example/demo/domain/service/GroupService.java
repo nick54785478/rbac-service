@@ -159,7 +159,7 @@ public class GroupService {
 	 * @param ids  要被刪除的 id 清單
 	 * */
 	public void delete(List<Long> ids) {
-		List<GroupInfo> groups = groupInfoRepository.findByIdIn(ids);
+		List<GroupInfo> groups = groupInfoRepository.findByIdInAndActiveFlag(ids, YesNo.Y);
 		groups.stream().forEach(group -> {
 			group.delete();
 		});

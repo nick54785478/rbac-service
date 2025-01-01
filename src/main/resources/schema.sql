@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS group_info (
 -- 功能表 (FUNCTION_INFO)：存儲功能代碼和行為類型
 CREATE TABLE IF NOT EXISTS function_info (
     `id` BIGINT(20) AUTO_INCREMENT,
-    `type` VARCHAR(10),
+    `type` VARCHAR(30),
     `name` VARCHAR(100),
     `code` VARCHAR(100),
     `description` VARCHAR(255),

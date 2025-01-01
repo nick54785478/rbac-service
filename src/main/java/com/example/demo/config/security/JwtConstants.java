@@ -28,11 +28,6 @@ public enum JwtConstants {
 	JWT_CLAIMS_KEY_GROUP("groups"),
 	
 	/**
-	 * JWT 在程式碼中統一引用 JWT 中功能資訊的欄位名稱
-	 * */
-	JWT_CLAIMS_KEY_FUNCTION("function"),
-	
-	/**
 	 * JWT 在程式碼中統一引用 JWT 中使用者帳號
 	 * */
 	JWT_CLAIMS_KEY_USER("username"),
