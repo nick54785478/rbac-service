@@ -2,6 +2,10 @@ package com.example.demo.domain.role.aggregate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -53,7 +57,7 @@ public class RoleInfo {
 	private String description; // 敘述
 
 	// 使用懶加載，避免 N+1 query 效能問題
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "role_id")
 	private List<RoleFunction> functions = new ArrayList<>(); // 角色所屬功能
 
@@ -97,7 +101,7 @@ public class RoleInfo {
 		this.type = command.getType();
 		this.description = command.getDescription();
 	}
-	
+
 	/**
 	 * 更新一筆角色資料
 	 * 
@@ -115,18 +119,44 @@ public class RoleInfo {
 	/**
 	 * 更新角色 Function 清單，使其有權限執行相關動作
 	 * 
-	 * @param roleFunctions
+	 * @param roleFunctions 更新後的使用者角色清單
 	 */
 	public void updateFunctions(List<RoleFunction> roleFunctions) {
-		// 移除 functions 中不存在於 Role Functions 的項目
-		this.functions.removeIf(
-				existingFunction -> roleFunctions.stream().noneMatch(newFunc -> newFunc.equals(existingFunction)));
-		// 增加新的 Role Function
-		roleFunctions.stream().forEach(newFunction -> {
-			if (!functions.contains(newFunction)) {
-				functions.add(newFunction);
+		// DB 內的角色 ID Map
+		Map<Long, RoleFunction> existMap = this.functions.stream()
+				.collect(Collectors.toMap(RoleFunction::getFunctionId, Function.identity()));
+
+		// 新資料沒有但舊資料有 => 刪除
+		List<RoleFunction> result = this.functions.stream()
+				.filter(existingFunction -> roleFunctions.stream()
+						.noneMatch(newFunction -> newFunction.getFunctionId().equals(existingFunction.getFunctionId())))
+				.peek(function -> {
+					function.delete();
+				}) // peek 在收集到清單之前執行
+				.collect(Collectors.toList());
+		// 遍歷使用者的角色資料蒐集
+		roleFunctions.stream().forEach(e -> {
+			// functionId 對不到 --> 新資料中有但舊資料沒有的資料 => 新增
+			if (Objects.isNull(existMap.get(e.getFunctionId()))) {
+				result.add(e);
+			} else {
+				// 有對到 --> 新蓋舊
+				RoleFunction old = existMap.get(e.getFunctionId());
+				e.update(old.getId(), old.getRoleId(), old.getFunctionId());
+				result.add(e);
 			}
 		});
+		this.functions = result;
+
+//		// 移除 functions 中不存在於 Role Functions 的項目
+//		this.functions.removeIf(
+//				existingFunction -> roleFunctions.stream().noneMatch(newFunc -> newFunc.equals(existingFunction)));
+//		// 增加新的 Role Function
+//		roleFunctions.stream().forEach(newFunction -> {
+//			if (!functions.contains(newFunction)) {
+//				functions.add(newFunction);
+//			}
+//		});
 	}
 
 	/**

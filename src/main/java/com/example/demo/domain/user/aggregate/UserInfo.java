@@ -71,13 +71,11 @@ public class UserInfo {
 	private String refreshToken;
 
 	// 使用懶加載，避免 N+1 query 效能問題
-//	, orphanRemoval = true
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private List<UserRole> roles = new ArrayList<>(); // 角色清單
 
 	// 使用懶加載，避免 N+1 query 效能問題
-//	, orphanRemoval = true
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id")
 	private List<UserGroup> groups = new ArrayList<>(); // 角色所屬群組
@@ -153,8 +151,8 @@ public class UserInfo {
 				result.add(e);
 			} else {
 				// 有對到 --> 新蓋舊
-				UserRole oldUserRole = existMap.get(e.getRoleId());
-				e.update(oldUserRole.getId(), oldUserRole.getUserId(), oldUserRole.getRoleId());
+				UserRole old = existMap.get(e.getRoleId());
+				e.update(old.getId(), old.getUserId(), old.getRoleId());
 				result.add(e);
 			}
 		});

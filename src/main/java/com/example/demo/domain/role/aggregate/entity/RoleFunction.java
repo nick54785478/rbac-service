@@ -52,4 +52,24 @@ public class RoleFunction {
 		this.functionId = functionId;
 		this.activeFlag = YesNo.Y;
 	}
+	
+	/**
+	 * 更新一筆角色功能資料
+	 * 
+	 * @param id
+	 * @param roleId
+	 * @param functionId
+	 */
+	public void update(Long id,  Long roleId, Long functionId) {
+		this.id = id;
+		this.roleId = roleId;
+		this.functionId = functionId;
+	}
+	
+	/**
+	 * 刪除動作
+	 * */
+	public void delete() {
+		this.activeFlag = YesNo.N;
+	}
 }

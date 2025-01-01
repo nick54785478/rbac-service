@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,14 +44,25 @@ public class RoleFunctionService {
 			List<Long> existingIds = role.getFunctions().stream().map(RoleFunction::getFunctionId)
 					.collect(Collectors.toList());
 
+			// 查出該角色功能資料清單
 			List<FunctionInfo> functions = functionInfoRepository.findByActiveFlag(YesNo.Y);
 
+			// 過濾出該角色所沒有的功能資料
 			List<FunctionInfo> filtered = functions.stream().filter(e -> !existingIds.contains(e.getId()))
 					.collect(Collectors.toList());
 
-			List<RoleFunctionQueried> functionRoles = BaseDataTransformer.transformData(filtered,
-					RoleFunctionQueried.class);
-			return functionRoles;
+			// 過濾出該角色 ActiveFlag = 'N' 的功能資料
+			List<Long> inactiveRelatedIds = role.getFunctions().stream()
+					.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.N.getValue()))
+					.map(RoleFunction::getFunctionId).collect(Collectors.toList());
+
+			// 過濾出該角色資料但失效的功能資料 activeFlag = 'N'
+			List<FunctionInfo> inactiveRelated = functions.stream().filter(e -> inactiveRelatedIds.contains(e.getId()))
+					.collect(Collectors.toList());
+
+			// 合併兩者
+			filtered.addAll(inactiveRelated);
+			return BaseDataTransformer.transformData(filtered, RoleFunctionQueried.class);
 
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");
@@ -65,7 +77,7 @@ public class RoleFunctionService {
 	 */
 	public void update(UpdateRoleFunctionsCommand command) {
 		// 透過功能 ID 清單取得功能
-		List<FunctionInfo> functions = functionInfoRepository.findByIdIn(command.getFunctions());
+		List<FunctionInfo> functions = functionInfoRepository.findByIdInAndActiveFlag(command.getFunctions(), YesNo.Y);
 
 		// 建立 Role Function 資料清單
 		List<RoleFunction> roleFunctions = functions.stream().map(function -> {
