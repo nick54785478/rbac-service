@@ -39,9 +39,6 @@ public class GroupRole {
 
 	@Enumerated(EnumType.STRING)
 	private YesNo activeFlag = YesNo.Y; // 是否有效
-	
-	
-	
 
 	/**
 	 * 新增一筆群組角色資料
@@ -54,12 +51,25 @@ public class GroupRole {
 		this.roleId = roleId;
 		this.activeFlag = YesNo.Y;
 	}
-	
+
+	/**
+	 * 更新一筆角色功能資料
+	 * 
+	 * @param id
+	 * @param groupId
+	 * @param roleId
+	 */
+	public void update(Long id, Long groupId, Long roleId) {
+		this.id = id;
+		this.groupId = groupId;
+		this.roleId = roleId;
+	}
+
 	/**
 	 * 變更狀態
 	 * 
 	 * @param activeFlag
-	 * */
+	 */
 	public void updateStatus(YesNo activeFlag) {
 		this.activeFlag = activeFlag;
 	}
@@ -68,5 +78,12 @@ public class GroupRole {
 		this.roleId = roleId;
 		this.groupId = groupId;
 		this.activeFlag = activeFlag;
+	}
+
+	/**
+	 * 刪除角色資料 (ActiveFlag = "N")
+	 */
+	public void delete() {
+		this.activeFlag = YesNo.N;
 	}
 }

@@ -2,6 +2,10 @@ package com.example.demo.domain.group.aggregate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -50,7 +54,7 @@ public class GroupInfo {
 	private String code; // 群組代號
 
 	// 使用懶加載，避免 N+1 query 效能問題
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
 	@JoinColumn(name = "group_id")
 	private List<GroupRole> roles = new ArrayList<>(); // 角色所屬群組
 
@@ -104,20 +108,43 @@ public class GroupInfo {
 	 * @param roleIds 欲變更的群組角色 ID
 	 */
 	public void updateRoles(List<GroupRole> groupRoles) {
-		
-		// 移除 functions 中不存在於 Role Functions 的項目
-		this.roles.removeIf(
-				existingFunction -> groupRoles.stream().noneMatch(newRole -> newRole.equals(existingFunction)));
-		// 增加新的 Role Function
-		groupRoles.stream().forEach(newRole -> {
-			if (!this.roles.contains(newRole)) {
-				this.roles.add(newRole);
+		// DB 內的角色 ID Map
+		Map<Long, GroupRole> existMap = this.roles.stream()
+				.collect(Collectors.toMap(GroupRole::getRoleId, Function.identity()));
+
+		// 新資料沒有但舊資料有 => 刪除
+		List<GroupRole> result = this.roles.stream().filter(existingRole -> groupRoles.stream()
+				.noneMatch(newRole -> newRole.getRoleId().equals(existingRole.getRoleId()))).peek(role -> {
+					role.delete();
+				}) // peek 在收集到清單之前執行
+				.collect(Collectors.toList());
+		// 遍歷使用者的角色資料蒐集
+		groupRoles.stream().forEach(e -> {
+			// functionId 對不到 --> 新資料中有但舊資料沒有的資料 => 新增
+			if (Objects.isNull(existMap.get(e.getRoleId()))) {
+				result.add(e);
+			} else {
+				// 有對到 --> 新蓋舊
+				GroupRole old = existMap.get(e.getRoleId());
+				e.update(old.getId(), old.getGroupId(), old.getRoleId());
+				result.add(e);
 			}
 		});
+		this.roles = result;
+
+//		// 移除 functions 中不存在於 Role Functions 的項目
+//		this.roles.removeIf(
+//				existingFunction -> groupRoles.stream().noneMatch(newRole -> newRole.equals(existingFunction)));
+//		// 增加新的 Role Function
+//		groupRoles.stream().forEach(newRole -> {
+//			if (!this.roles.contains(newRole)) {
+//				this.roles.add(newRole);
+//			}
+//		});
 	}
 
 	/**
-	 * 刪除使用者資料 (ActiveFlag = "N")
+	 * 刪除角色資料 (ActiveFlag = "N")
 	 */
 	public void delete() {
 		this.activeFlag = YesNo.N;

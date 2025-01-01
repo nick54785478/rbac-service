@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +27,7 @@ public class GroupRoleService {
 
 	private RoleInfoRepository roleInfoRepository;
 	private GroupInfoRepository groupInfoRepository;
-	
-	
+
 	/**
 	 * 查詢該群組內部不存在的其他角色
 	 * 
@@ -40,24 +40,34 @@ public class GroupRoleService {
 		if (opt.isPresent()) {
 			GroupInfo group = opt.get();
 
-			// 篩選出該角色有的 Function ID 清單
-			List<Long> existingIds = group.getRoles().stream().map(GroupRole::getRoleId)
-					.collect(Collectors.toList());
+			// 篩選出該角色有的 Role ID 清單
+			List<Long> existingIds = group.getRoles().stream().map(GroupRole::getRoleId).collect(Collectors.toList());
 
 			List<RoleInfo> roles = roleInfoRepository.findByActiveFlag(YesNo.Y);
 
-			List<RoleInfo> filtered = roles.stream().filter(e -> !existingIds.contains(e.getId())).collect(Collectors.toList());
+			// 過濾出該群組所沒有的角色資料
+			List<RoleInfo> filtered = roles.stream().filter(e -> !existingIds.contains(e.getId()))
+					.collect(Collectors.toList());
 
-			List<GroupRoleQueried> groupRoles = BaseDataTransformer.transformData(filtered,
-					GroupRoleQueried.class);
-			return groupRoles;
+			// 過濾出該使用者角色 ActiveFlag = 'N' 的資料
+			List<Long> inactiveRelatedIds = group.getRoles().stream()
+					.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.N.getValue()))
+					.map(GroupRole::getRoleId).collect(Collectors.toList());
+
+			// 過濾出該使用者資料但失效的資料 activeFlag = 'N'
+			List<RoleInfo> inactiveRelated = roles.stream().filter(e -> inactiveRelatedIds.contains(e.getId()))
+					.collect(Collectors.toList());
+
+			// 合併兩者
+			filtered.addAll(inactiveRelated);
+			return BaseDataTransformer.transformData(filtered, GroupRoleQueried.class);
 
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該群組 ID 有誤，查詢失敗");
 		}
 
 	}
-	
+
 	/**
 	 * 更新群組角色
 	 * 
@@ -79,5 +89,5 @@ public class GroupRoleService {
 			groupInfoRepository.save(group);
 		});
 	}
-	
+
 }

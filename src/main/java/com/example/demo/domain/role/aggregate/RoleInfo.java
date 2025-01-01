@@ -160,7 +160,7 @@ public class RoleInfo {
 	}
 
 	/**
-	 * 刪除使用者資料 (ActiveFlag = "N")
+	 * 刪除角色功能資料 (ActiveFlag = "N")
 	 */
 	public void delete() {
 		this.activeFlag = YesNo.N;

@@ -37,7 +37,7 @@ public class GroupRoleController {
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/{id}/others")
-	public ResponseEntity<List<GroupRoleQueriedResource>> query(@PathVariable Long id) {
+	public ResponseEntity<List<GroupRoleQueriedResource>> queryOthers(@PathVariable Long id) {
 		return new ResponseEntity<>(BaseDataTransformer.transformData(groupRoleQueryService.queryOthers(id),
 				GroupRoleQueriedResource.class), HttpStatus.OK);
 	}
