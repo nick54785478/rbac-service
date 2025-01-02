@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS group_info (
 CREATE TABLE IF NOT EXISTS function_info (
     `id` BIGINT(20) AUTO_INCREMENT,
     `type` VARCHAR(30),
+    `action_type` VARCHAR(100),
     `name` VARCHAR(100),
     `code` VARCHAR(100),
     `description` VARCHAR(255),
