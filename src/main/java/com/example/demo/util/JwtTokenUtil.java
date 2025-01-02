@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.config.security.JwtConstants;
-import com.example.demo.domain.share.JwtokenGenerated;
+import com.example.demo.domain.share.JwtTokenGenerated;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -46,10 +46,10 @@ public class JwtTokenUtil {
 	 * @param groups   - 功能清單
 	 * @return JwtokenGenerated
 	 */
-	public JwtokenGenerated generateToken(String username, String email, List<String> roles, List<String> groups) {
+	public JwtTokenGenerated generateToken(String username, String email, List<String> roles, List<String> groups) {
 		String token = this.generateToken(username, email, roles, groups, tokenExpiration);
 		String refreshToken = this.generateToken(username, email, roles, groups, refreshTokenExpiration);
-		return new JwtokenGenerated(token, refreshToken);
+		return new JwtTokenGenerated(token, refreshToken);
 	}
 
 	/**

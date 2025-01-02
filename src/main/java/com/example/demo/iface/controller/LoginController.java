@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domain.user.command.GenerateJwtokenCommand;
 import com.example.demo.domain.user.command.RefreshTokenCommand;
 import com.example.demo.iface.dto.GenerateJwtokenResource;
-import com.example.demo.iface.dto.JwtokenGeneratedResource;
+import com.example.demo.iface.dto.JwtTokenGeneratedResource;
 import com.example.demo.iface.dto.RefreshTokenResource;
 import com.example.demo.service.JwtTokenCommandService;
 import com.example.demo.util.BaseDataTransformer;
@@ -31,10 +31,10 @@ public class LoginController {
 	 * @return ResponseEntity<JwtokenGeneratedResource>
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<JwtokenGeneratedResource> login(@RequestBody GenerateJwtokenResource resource) {
+	public ResponseEntity<JwtTokenGeneratedResource> login(@RequestBody GenerateJwtokenResource resource) {
 		GenerateJwtokenCommand command = BaseDataTransformer.transformData(resource, GenerateJwtokenCommand.class);
 		return new ResponseEntity<>(BaseDataTransformer.transformData(jwtokenService.generateToken(command),
-				JwtokenGeneratedResource.class), HttpStatus.OK);
+				JwtTokenGeneratedResource.class), HttpStatus.OK);
 	}
 
 	/**
@@ -44,10 +44,10 @@ public class LoginController {
 	 * @return ResponseEntity<JwtokenGeneratedResource>
 	 */
 	@PostMapping("/refresh")
-	public ResponseEntity<JwtokenGeneratedResource> login(@RequestBody RefreshTokenResource resource) {
+	public ResponseEntity<JwtTokenGeneratedResource> login(@RequestBody RefreshTokenResource resource) {
 		RefreshTokenCommand command = BaseDataTransformer.transformData(resource, RefreshTokenCommand.class);
 		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(jwtokenService.refresh(command), JwtokenGeneratedResource.class),
+				BaseDataTransformer.transformData(jwtokenService.refresh(command), JwtTokenGeneratedResource.class),
 				HttpStatus.OK);
 	}
 }

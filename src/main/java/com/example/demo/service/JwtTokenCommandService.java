@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.config.security.JwtConstants;
 import com.example.demo.domain.service.UserService;
-import com.example.demo.domain.share.JwtokenGenerated;
+import com.example.demo.domain.share.JwtTokenGenerated;
 import com.example.demo.domain.share.UserGroupQueried;
 import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.aggregate.UserInfo;
@@ -42,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtTokenCommandService {
 
 	@Value("${jwt.secret.key}")
-	private String scretKey;
+	private String secretKey;
 
 	private final UserService userService;
 	private final JwtTokenUtil jwtTokenUtil;
@@ -55,17 +55,16 @@ public class JwtTokenCommandService {
 	 * @return token
 	 */
 	@Transactional
-	public JwtokenGenerated generateToken(GenerateJwtokenCommand command) {
+	public JwtTokenGenerated generateToken(GenerateJwtokenCommand command) {
 		UserInfo userInfo = userInfoRepository.findByUsername(command.getUsername());
-		
+
 		if (Objects.isNull(userInfo)) {
 			throw new ValidationException("VALIDATION_FAILED", "該使用者帳號不存在");// 比對失敗
 		}
-		
+
 		boolean checkPassword = PasswordUtil.checkPassword(command.getPassword(), userInfo.getPassword());
 		log.info("command ", command.getUsername(), command.getPassword());
 
-		
 		// 檢查密碼是否相符
 		if (!checkPassword) {
 			throw new ValidationException("VALIDATION_FAILED", "使用者帳號或密碼有誤");// 比對失敗
@@ -78,7 +77,7 @@ public class JwtTokenCommandService {
 		// 查詢該使用者個人角色
 		List<UserRoleQueried> queryRoles = userService.queryRoles(command.getUsername());
 		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-		JwtokenGenerated resource = jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
+		JwtTokenGenerated resource = jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
 				groups);
 
 		// 若不存在 RefreshToken，設置進去
@@ -102,7 +101,7 @@ public class JwtTokenCommandService {
 	 * @param command
 	 * @return JwtokenGenerated
 	 */
-	public JwtokenGenerated refresh(RefreshTokenCommand command) {
+	public JwtTokenGenerated refresh(RefreshTokenCommand command) {
 		UserInfo userInfo = userInfoRepository.findByRefreshToken(command.getToken());
 		if (!Objects.isNull(userInfo)) {
 			// 查詢該使用者個人角色
@@ -110,7 +109,13 @@ public class JwtTokenCommandService {
 			List<String> groups = queryGroups.stream().map(UserGroupQueried::getCode).collect(Collectors.toList());
 			List<UserRoleQueried> queryRoles = userService.queryRoles(userInfo.getUsername());
 			List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-			return jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles, groups);
+			JwtTokenGenerated tokenGenerated = jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(),
+					roles, groups);
+			// 更新 Refresh Token
+			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+			userInfoRepository.save(userInfo);
+			return tokenGenerated;
+
 		}
 		return null;
 	}
@@ -207,8 +212,8 @@ public class JwtTokenCommandService {
 	 * @return key
 	 */
 	private SecretKey getSigningKey() {
-		log.info("Secret Key: {}", scretKey);
-		byte[] keyBytes = Decoders.BASE64.decode(scretKey);
+		log.info("Secret Key: {}", secretKey);
+		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
