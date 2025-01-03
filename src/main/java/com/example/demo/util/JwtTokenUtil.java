@@ -18,6 +18,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,15 +28,29 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtTokenUtil {
 
 	@Value("${jwt.secret.key}")
-	private String scretKey;
+	private String secretKeyValue;
+	private static String secretKey;
 
 	@Value("${jwt.token-expiration-seconds}")
-	private long tokenExpiration; // 過期時間若是3600L秒，即1個小時
-
+	private long tokenExpirationValue; // 過期時間若是3600L秒，即1個小時
+	private static  long tokenExpiration;
+	
 	@Value("${jwt.refresh-token-expiration-seconds}")
-	private long refreshTokenExpiration; // 過期時間若是3600L秒，即1個小時
-
+	private long refreshTokenExpirationValue; // 過期時間若是3600L秒，即1個小時
+	private static  long refreshTokenExpiration;
+	
 	private static final String ISS = "SYSTEM"; // 簽發者
+
+	/**
+	 * 初始化值，由於 static 值不接受 @Value 傳入的值
+	 */
+	@PostConstruct
+	public void init() {
+		secretKey = secretKeyValue;
+		tokenExpiration = tokenExpirationValue;
+		refreshTokenExpiration = refreshTokenExpirationValue;
+		
+	}
 
 	/**
 	 * 建立 JwtToken & RefreshToken
@@ -46,9 +61,9 @@ public class JwtTokenUtil {
 	 * @param groups   - 功能清單
 	 * @return JwtokenGenerated
 	 */
-	public JwtTokenGenerated generateToken(String username, String email, List<String> roles, List<String> groups) {
-		String token = this.generateToken(username, email, roles, groups, tokenExpiration);
-		String refreshToken = this.generateToken(username, email, roles, groups, refreshTokenExpiration);
+	public static JwtTokenGenerated generateToken(String username, String email, List<String> roles, List<String> groups) {
+		String token = generateToken(username, email, roles, groups, tokenExpiration);
+		String refreshToken = generateToken(username, email, roles, groups, refreshTokenExpiration);
 		return new JwtTokenGenerated(token, refreshToken);
 	}
 
@@ -62,7 +77,7 @@ public class JwtTokenUtil {
 	 * @param expiration 過期時間 (秒)
 	 * @return JWToken
 	 */
-	public String generateToken(String username, String email, List<String> roles, List<String> groups,
+	public static String generateToken(String username, String email, List<String> roles, List<String> groups,
 			long expiration) {
 		log.debug("有效時間: {}", expiration);
 		HashMap<String, Object> map = new HashMap<>();
@@ -91,7 +106,7 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return 使用者名稱
 	 */
-	public String getUsername(String token) {
+	public static String getUsername(String token) {
 		log.info("getUsername: " + getTokenBody(token).getSubject());
 		log.info("TokenBody: " + getTokenBody(token));
 		return getTokenBody(token).getSubject();
@@ -103,7 +118,7 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return 使用者角色
 	 */
-	public List<String> getRoleList(String token) {
+	public static List<String> getRoleList(String token) {
 		return (List<String>) getTokenBody(token).get(JwtConstants.JWT_CLAIMS_KEY_ROLE.getValue());
 	}
 
@@ -113,7 +128,7 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return 使用者信箱
 	 */
-	public String getEmail(String token) {
+	public static String getEmail(String token) {
 		return (String) getTokenBody(token).get(JwtConstants.JWT_CLAIMS_KEY_EMAIL.getValue());
 	}
 
@@ -123,7 +138,7 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return 簽發日
 	 */
-	public Date getIssAt(String token) {
+	public static Date getIssAt(String token) {
 		return getTokenBody(token).getIssuedAt();
 	}
 
@@ -133,7 +148,7 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return 過期日
 	 */
-	public Date getExpDate(String token) {
+	public static Date getExpDate(String token) {
 		return getTokenBody(token).getExpiration();
 	}
 
@@ -143,7 +158,7 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return true/false
 	 */
-	public boolean isExpiration(String token) {
+	public static boolean isExpiration(String token) {
 		return getTokenBody(token).getExpiration().before(new Date());
 	}
 
@@ -153,7 +168,7 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return Claims
 	 */
-	public Claims getTokenBody(String token) {
+	public static Claims getTokenBody(String token) {
 		// 使用 Jwts.parser() 建立 JwtParser 實例
 		return Jwts.parser().verifyWith(getSigningKey()) // 用於設定金鑰，該金鑰用於驗證 JWT 令牌的簽名
 				.build() // 建置 JwtParser 實例
@@ -166,8 +181,8 @@ public class JwtTokenUtil {
 	 * @param token
 	 * @return 解析後的結果 Map
 	 */
-	public Map<String, Object> parseToken(String token) {
-		Claims claims = this.getTokenBody(token);
+	public static Map<String, Object> parseToken(String token) {
+		Claims claims = getTokenBody(token);
 		return claims.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 	}
 
@@ -176,9 +191,9 @@ public class JwtTokenUtil {
 	 * 
 	 * @return key
 	 */
-	private SecretKey getSigningKey() {
-		log.info("Secret Key: {}", scretKey);
-		byte[] keyBytes = Decoders.BASE64.decode(scretKey);
+	private static SecretKey getSigningKey() {
+		log.info("Secret Key: {}", secretKey);
+		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
