@@ -45,7 +45,6 @@ public class JwtTokenCommandService {
 	private String secretKey;
 
 	private final UserService userService;
-	private final JwtTokenUtil jwtTokenUtil;
 	private final UserInfoRepository userInfoRepository;
 
 	/**
@@ -77,7 +76,7 @@ public class JwtTokenCommandService {
 		// 查詢該使用者個人角色
 		List<UserRoleQueried> queryRoles = userService.queryRoles(command.getUsername());
 		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-		JwtTokenGenerated resource = jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
+		JwtTokenGenerated resource = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
 				groups);
 
 		// 若不存在 RefreshToken，設置進去
@@ -85,7 +84,7 @@ public class JwtTokenCommandService {
 			userInfo.updateRefreshToken(resource.getRefreshToken());
 		} else {
 			// 過期日
-			Date expDate = jwtTokenUtil.getExpDate(resource.getRefreshToken());
+			Date expDate = JwtTokenUtil.getExpDate(resource.getRefreshToken());
 			// 現在時間比過期日大
 			if (new Date().after(expDate)) {
 				userInfo.updateRefreshToken(resource.getRefreshToken());
@@ -109,7 +108,7 @@ public class JwtTokenCommandService {
 			List<String> groups = queryGroups.stream().map(UserGroupQueried::getCode).collect(Collectors.toList());
 			List<UserRoleQueried> queryRoles = userService.queryRoles(userInfo.getUsername());
 			List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-			JwtTokenGenerated tokenGenerated = jwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(),
+			JwtTokenGenerated tokenGenerated = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(),
 					roles, groups);
 			// 更新 Refresh Token
 			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
@@ -189,10 +188,7 @@ public class JwtTokenCommandService {
 	 * @return Claims
 	 */
 	public Claims getTokenBody(String token) {
-		// 使用 Jwts.parser() 建立 JwtParser 實例
-		return Jwts.parser().verifyWith(getSigningKey()) // 用於設定金鑰，該金鑰用於驗證 JWT 令牌的簽名
-				.build() // 建置 JwtParser 實例
-				.parseSignedClaims(token).getPayload();
+		return JwtTokenUtil.getTokenBody(token);
 	}
 
 	/**
@@ -204,17 +200,6 @@ public class JwtTokenCommandService {
 	public Map<String, Object> parseToken(String token) {
 		Claims claims = getTokenBody(token);
 		return claims.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-	}
-
-	/**
-	 * 取得 SigningKey
-	 * 
-	 * @return key
-	 */
-	private SecretKey getSigningKey() {
-		log.info("Secret Key: {}", secretKey);
-		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-		return Keys.hmacShaKeyFor(keyBytes);
 	}
 
 	/**

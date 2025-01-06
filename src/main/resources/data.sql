@@ -75,3 +75,25 @@ INSERT INTO `setting` (`id`, `data_type`, `type`, `name`, `description`, `priori
 (25, 'LANGUAGE', 'ZH_CH', '簡中', '簡體中文語系', 3, 'Y'),
 (26, 'FUNCTION', 'MAINTAIN', 'Maintain', '維護頁面功能', 1, 'Y'),
 (29, 'ACTION_TYPE', 'ALL', 'ALL', '全動作權限', NULL, 'Y');
+INSERT INTO `role_function` (`role_id`, `function_id`, `active_flag`) VALUES
+(1, 1, 'Y');
+INSERT INTO `role_function` (`role_id`, `function_id`, `active_flag`) VALUES
+(1, 3, 'Y');
+INSERT INTO `role_function` (`role_id`, `function_id`, `active_flag`) VALUES
+(1, 4, 'Y');
+INSERT INTO `role_function` (`role_id`, `function_id`, `active_flag`) VALUES
+(1, 5, 'Y'),
+(1, 6, 'Y'),
+(1, 7, 'Y'),
+(1, 8, 'Y'),
+(1, 9, 'Y'),
+(1, 10, 'Y'),
+(1, 11, 'Y'),
+(1, 12, 'Y'),
+(1, 13, 'Y'),
+(1, 14, 'Y'),
+(1, 15, 'Y'),
+(1, 16, 'Y');
+INSERT INTO `user_role` (`user_id`, `role_id`, `active_flag`) VALUES
+( 1, 1, 'Y'),
+( 2, 1, 'Y');

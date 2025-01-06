@@ -42,7 +42,7 @@ public class JwtTokenUtil {
 	private static final String ISS = "SYSTEM"; // 簽發者
 
 	/**
-	 * 初始化值，由於 static 值不接受 @Value 傳入的值
+	 * 初始化值，由於 static 值不接受 @Value 傳入的值，在此進行初始化
 	 */
 	@PostConstruct
 	public void init() {
