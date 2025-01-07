@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS user_group (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 群組角色關聯表 (ROLE_GROUP)：定義群組與角色的關聯
-CREATE TABLE IF NOT EXISTS role_group (
+CREATE TABLE IF NOT EXISTS group_role (
     `id` BIGINT(20) AUTO_INCREMENT,
     `role_id` BIGINT(20),
     `group_id` BIGINT(20),
@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS role_function (
     `role_id` BIGINT(20),
     `function_id` BIGINT(20),
     `active_flag` CHAR(1),  
-    CONSTRAINT FK_ROLE_FUNCTION FOREIGN KEY (role_id) REFERENCES function_info(id),
+    CONSTRAINT FK_ROLE_FUNCTION FOREIGN KEY (role_id) REFERENCES role_info(id),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
