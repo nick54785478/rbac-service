@@ -148,6 +148,7 @@ public class UserInfo {
 		userRoles.stream().forEach(e -> {
 			// roleId 對不到 --> 新資料中有但舊資料沒有的資料 => 新增
 			if (Objects.isNull(existMap.get(e.getRoleId()))) {
+				System.out.println("e:"+e);
 				result.add(e);
 			} else {
 				// 有對到 --> 新蓋舊

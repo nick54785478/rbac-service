@@ -43,7 +43,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	 */
 	private static final String[] PUBLIC_PATHS = { "/health", "/favicon.ico", "**/api-docs/**", "**/swagger-ui**",
 			"/api/v1/auth/permissions", "/swagger*", "/swagger-ui/*", "/api/v1/register", "/actuator/**", "/v3/api-docs/**",
-			"/api/v1/login" };
+			"/api/v1/login", "/api/v1/refresh" };
 
 	/**
 	 * 過濾器的核心方法，用於處理 Request 中的授權資訊。
@@ -128,7 +128,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		// 解析 JWT Token
 		Claims claims = jwtTokenService.getTokenBody(token);
 
-		log.debug("JWT claims: {}", claims);
+		log.info("JWT claims: {}", claims);
 
 		if (jwtAuthEnabled) {
 			// 驗證 JWT Token

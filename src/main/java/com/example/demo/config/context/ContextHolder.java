@@ -1,5 +1,8 @@
 package com.example.demo.config.context;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.example.demo.config.security.JwtConstants;
 
 import io.jsonwebtoken.Claims;
@@ -57,6 +60,16 @@ public class ContextHolder {
 	public static String getUsername() {
 		return JWT_CLAIMS.get() != null ? JWT_CLAIMS.get().getSubject() : null;
 	}
+	
+	/**
+	 * 取得目前登入者的角色
+	 * 
+	 * @return 目前登入者的用戶角色
+	 */
+	public static List<String> getRoles() {
+		return JWT_CLAIMS.get() != null ? (List<String>) JWT_CLAIMS.get().get(JwtConstants.JWT_CLAIMS_KEY_ROLE.getValue())
+				: new ArrayList<>();
+		}
 
 	/**
 	 * 取得目前登入者的用戶信箱

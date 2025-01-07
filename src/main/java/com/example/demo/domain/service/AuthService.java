@@ -3,8 +3,10 @@ package com.example.demo.domain.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.config.context.ContextHolder;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
@@ -95,11 +97,21 @@ public class AuthService {
 	 */
 	@Transactional
 	public List<String> getMaintainPermissions(String username) {
+
 		UserInfo userInfo = userInfoRepository.findByUsername(username);
 		// 取出該使用者所具備的角色 ID 清單
 		List<Long> roleIds = userInfo.getRoles().stream().map(UserRole::getRoleId).collect(Collectors.toList());
 		// 透過角色 ID 清單找出所屬角色
 		List<RoleInfo> roleList = roleInfoRepository.findByIdIn(roleIds);
+
+		List<String> roles = roleList.stream().map(RoleInfo::getCode).filter(e -> StringUtils.equals(e, "ADMIN"))
+				.collect(Collectors.toList());
+		// Admin 直接看全部
+		if (roles.contains("ADMIN")) {
+			return functionRepository.findByTypeAndActiveFlag("MAINTAIN", YesNo.Y).stream().map(FunctionInfo::getCode)
+					.collect(Collectors.toList());
+		}
+
 		List<Long> functionIds = roleList.stream()
 				// 使用 flatMap 將每個 role 中的 functionId 集合平鋪到一個流中。
 				.flatMap(role -> role.getFunctions().stream().map(RoleFunction::getFunctionId)).distinct()
