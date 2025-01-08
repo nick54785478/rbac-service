@@ -6,10 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javax.crypto.SecretKey;
-
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.config.security.JwtConstants;
@@ -26,9 +23,6 @@ import com.example.demo.util.JwtTokenUtil;
 import com.example.demo.util.PasswordUtil;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class JwtTokenCommandService {
-
-	@Value("${jwt.secret.key}")
-	private String secretKey;
 
 	private final UserService userService;
 	private final UserInfoRepository userInfoRepository;
