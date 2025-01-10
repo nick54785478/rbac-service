@@ -95,10 +95,11 @@ public class GroupController {
 		PageableResource<GroupInfoQueriedResource> resource = new PageableResource<>();
 		PageResource pageResource = new PageResource();
 		pageResource.setNumber(pageResult.getNumber());
-		pageResource.setNumberOfElements(pageResult.getNumberOfElements());
+		pageResource.setNumberOfElements(pageResult.getNumberOfElements()); // 當前頁實際返回的數據數量
 		pageResource.setFirst(pageResult.getPageable().getPageNumber() == 0); // 判斷是否為第一頁
-		pageResource.setSize(pageResult.getSize());
-		pageResource.setTotalPages(pageResult.getTotalPages());
+		pageResource.setEmpty(pageResult.getSize() == 0); // 判斷當前頁面資料是否為空
+		pageResource.setSize(pageResult.getSize());	// 當前頁面數據大小
+		pageResource.setTotalPages(pageResult.getTotalPages()); // 總頁數
 		resource.setPage(pageResource);
 		resource.setContent(pageResult.getContent());
 

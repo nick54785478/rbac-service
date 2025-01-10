@@ -11,6 +11,7 @@ import lombok.Data;
 public class PageableResource<T> {
 
 	private PageResource page;
+	
 	private List<T> content;
 
 }
