@@ -107,18 +107,4 @@ public class GroupController {
 		return new ResponseEntity<>(new GroupDeletedResource("200", "成功刪除多筆群組資料"), HttpStatus.OK);
 	}
 
-//	/**
-//	 * 將角色加入特定群組
-//	 * 
-//	 * @param resource
-//	 * @return ResponseEntity<UserCreatedResource>
-//	 */
-//	@PostMapping("/addRolesToGroup")
-//	public ResponseEntity<GroupRolesAddedResource> addToGroup(@RequestBody AddRolesToGroupResource resource) {
-//		// 防腐處理 resource -> command
-//		AddRolesToGroupCommand command = BaseDataTransformer.transformData(resource, AddRolesToGroupCommand.class);
-//		return new ResponseEntity<>(BaseDataTransformer.transformData(groupCommandService.addRolesToGroup(command),
-//				GroupRolesAddedResource.class), HttpStatus.OK);
-//	}
-
 }
