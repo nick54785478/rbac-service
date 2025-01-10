@@ -2,6 +2,7 @@ package com.example.demo.iface.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.group.command.CreateGroupCommand;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
+import com.example.demo.domain.share.GroupInfoQueried;
 import com.example.demo.iface.dto.CreateGroupResource;
 import com.example.demo.iface.dto.CreateOrUpdateGroupResource;
 import com.example.demo.iface.dto.GroupCreatedOrUpdatedResource;
 import com.example.demo.iface.dto.GroupCreatedResource;
 import com.example.demo.iface.dto.GroupDeletedResource;
 import com.example.demo.iface.dto.GroupInfoQueriedResource;
+import com.example.demo.iface.dto.PageResource;
+import com.example.demo.iface.dto.PageableResource;
 import com.example.demo.service.GroupCommandService;
 import com.example.demo.service.GroupQueryService;
 import com.example.demo.util.BaseDataTransformer;
@@ -72,13 +76,34 @@ public class GroupController {
 	 * @param type
 	 * @param name
 	 * @param actionFlag
+	 * @param numberOfRows 筆數
+	 * @param pageNumber   頁碼
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<GroupInfoQueriedResource>> query(@RequestParam(required = false) String type,
-			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(groupQueryService.query(type, name, activeFlag),
-				GroupInfoQueriedResource.class), HttpStatus.OK);
+	public ResponseEntity<PageableResource<GroupInfoQueriedResource>> query(@RequestParam(required = false) String type,
+			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag,
+			@RequestParam(value = "numberOfRows", defaultValue = "10") String numberOfRows,
+			@RequestParam(value = "pageNumber", required = true, defaultValue = "0") String pageNumber) {
+
+		Page<GroupInfoQueried> query = groupQueryService.query(type, name, activeFlag, Integer.valueOf(numberOfRows),
+				Integer.valueOf(pageNumber));
+		Page<GroupInfoQueriedResource> pageResult = BaseDataTransformer.transformData(query,
+				GroupInfoQueriedResource.class);
+
+		// DTO 處理
+		PageableResource<GroupInfoQueriedResource> resource = new PageableResource<>();
+		PageResource pageResource = new PageResource();
+		pageResource.setNumber(pageResult.getNumber());
+		pageResource.setNumberOfElements(pageResult.getNumberOfElements());
+		pageResource.setFirst(pageResult.getPageable().getPageNumber() == 0); // 判斷是否為第一頁
+		pageResource.setSize(pageResult.getSize());
+		pageResource.setTotalPages(pageResult.getTotalPages());
+		resource.setPage(pageResource);
+		resource.setContent(pageResult.getContent());
+
+		return new ResponseEntity<>(resource, HttpStatus.OK);
+
 	}
 
 	/**
@@ -106,19 +131,5 @@ public class GroupController {
 		groupCommandService.delete(ids);
 		return new ResponseEntity<>(new GroupDeletedResource("200", "成功刪除多筆群組資料"), HttpStatus.OK);
 	}
-
-//	/**
-//	 * 將角色加入特定群組
-//	 * 
-//	 * @param resource
-//	 * @return ResponseEntity<UserCreatedResource>
-//	 */
-//	@PostMapping("/addRolesToGroup")
-//	public ResponseEntity<GroupRolesAddedResource> addToGroup(@RequestBody AddRolesToGroupResource resource) {
-//		// 防腐處理 resource -> command
-//		AddRolesToGroupCommand command = BaseDataTransformer.transformData(resource, AddRolesToGroupCommand.class);
-//		return new ResponseEntity<>(BaseDataTransformer.transformData(groupCommandService.addRolesToGroup(command),
-//				GroupRolesAddedResource.class), HttpStatus.OK);
-//	}
 
 }

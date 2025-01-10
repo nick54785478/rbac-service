@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.service.GroupService;
@@ -21,12 +20,15 @@ public class GroupQueryService {
 	 * @param type
 	 * @param name
 	 * @param activeFlag
+	 * @param numberOfRows 資料筆數
+	 * @param pageNumber 頁碼
 	 * @return List<GroupInfoQueried>
 	 */
-	public List<GroupInfoQueried> query(String type, String name, String activeFlag) {
-		return groupService.query(type, name, activeFlag);
+	public Page<GroupInfoQueried> query(String type, String name, String activeFlag, Integer numberOfRows,
+			Integer pageNumber) {
+		return groupService.query(type, name, activeFlag, numberOfRows, pageNumber);
 	}
-	
+
 	/**
 	 * 透過 ID 查詢群組資料
 	 * 

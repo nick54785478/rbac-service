@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.spi.MappingContext;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.domain.share.enums.YesNo;
@@ -28,7 +31,7 @@ public class BaseDataTransformer {
 	static {
 		// Simple Date Format
 		var simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
+
 		// 設置 YesNo -> String 的 Converter
 		modelMapper.addConverter(new Converter<YesNo, String>() {
 			@Override
@@ -130,6 +133,25 @@ public class BaseDataTransformer {
 	 */
 	public static <S, T> List<T> transformData(List<S> target, Class<T> clazz) {
 		return target.stream().map(e -> transformData(e, clazz)).collect(Collectors.toList());
+	}
+
+	/**
+	 * Page 資料轉換
+	 *
+	 * @param target 來源 Page 物件
+	 * @param clazz  欲轉換的型別
+	 * @param <S>    來源類型
+	 * @param <T>    目標類型
+	 * @return 轉換後的 Page 物件
+	 */
+	public static <S, T> Page<T> transformData(Page<S> target, Class<T> clazz) {
+		// 轉換 Page 的內容
+		List<T> transformedContent = target.getContent().stream().map(e -> transformData(e, clazz))
+				.collect(Collectors.toList());
+
+		// 保留分頁屬性
+		Pageable pageable = target.getPageable();
+		return new PageImpl<>(transformedContent, pageable, target.getTotalElements());
 	}
 
 }
