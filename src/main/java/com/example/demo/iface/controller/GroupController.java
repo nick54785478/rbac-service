@@ -94,12 +94,13 @@ public class GroupController {
 		// DTO 處理
 		PageableResource<GroupInfoQueriedResource> resource = new PageableResource<>();
 		PageResource pageResource = new PageResource();
-		pageResource.setNumber(pageResult.getNumber());
+		pageResource.setNumber(pageResult.getNumber());	// 當前頁碼（從 0 開始）
 		pageResource.setNumberOfElements(pageResult.getNumberOfElements()); // 當前頁實際返回的數據數量
 		pageResource.setFirst(pageResult.getPageable().getPageNumber() == 0); // 判斷是否為第一頁
 		pageResource.setEmpty(pageResult.getSize() == 0); // 判斷當前頁面資料是否為空
 		pageResource.setSize(pageResult.getSize());	// 當前頁面數據大小
 		pageResource.setTotalPages(pageResult.getTotalPages()); // 總頁數
+		pageResource.setTotalElements(pageResult.getTotalElements());
 		resource.setPage(pageResource);
 		resource.setContent(pageResult.getContent());
 
