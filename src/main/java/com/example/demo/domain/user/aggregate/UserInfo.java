@@ -133,7 +133,6 @@ public class UserInfo {
 	 * @param userRoles 更新後的使用者角色清單
 	 */
 	public void updateRoles(List<UserRole> userRoles) {
-
 		// DB 內的角色 ID Map
 		Map<Long, UserRole> existMap = this.roles.stream()
 				.collect(Collectors.toMap(UserRole::getRoleId, Function.identity()));
@@ -148,7 +147,6 @@ public class UserInfo {
 		userRoles.stream().forEach(e -> {
 			// roleId 對不到 --> 新資料中有但舊資料沒有的資料 => 新增
 			if (Objects.isNull(existMap.get(e.getRoleId()))) {
-				System.out.println("e:"+e);
 				result.add(e);
 			} else {
 				// 有對到 --> 新蓋舊

@@ -63,9 +63,8 @@ public class UserController {
 		// 防腐處理 resource -> command
 		UpdateUserCommand command = BaseDataTransformer.transformData(resource, UpdateUserCommand.class);
 		command.setId(id);
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(userCommandService.update(command), UserUpdatedResource.class),
-				HttpStatus.OK);
+		userCommandService.update(command);
+		return new ResponseEntity<>(new UserUpdatedResource("200", "更新使用者資料成功"), HttpStatus.OK);
 	}
 
 	/**

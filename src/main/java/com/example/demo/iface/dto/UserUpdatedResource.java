@@ -9,17 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserUpdatedResource {
 
-	private Long id;
+	private String code;
 
-	private String name;
-	
-	private String username; // 帳號
-
-	private String email;
-	
-	private String birthday;
-	
-	private String nationalId;
-
-	private String address;
+	private String message;
 }

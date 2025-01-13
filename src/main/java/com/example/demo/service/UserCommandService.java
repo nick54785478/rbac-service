@@ -41,8 +41,8 @@ public class UserCommandService {
 	 * @param command
 	 * @return UserInfoUpdated
 	 */
-	public UserInfoUpdated update(UpdateUserCommand command) {
-		return userService.update(command);
+	public void update(UpdateUserCommand command) {
+		userService.update(command);
 	}
 
 	/**

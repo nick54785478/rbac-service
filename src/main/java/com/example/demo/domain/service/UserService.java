@@ -113,13 +113,12 @@ public class UserService {
 	 * @param command
 	 * @return UserInfoCreated
 	 */
-	public UserInfoUpdated update(UpdateUserCommand command) {
+	public void update(UpdateUserCommand command) {
 		Optional<UserInfo> opt = userRepository.findById(command.getId());
 		if (opt.isPresent()) {
 			var userInfo = opt.get();
 			userInfo.update(command);
 			userRepository.save(userInfo);
-			return BaseDataTransformer.transformData(command, UserInfoUpdated.class);
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "查無此資料 id，更新失敗");
 		}
