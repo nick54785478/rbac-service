@@ -67,22 +67,25 @@ public class JwtTokenCommandService {
 		// 查詢該使用者個人角色
 		List<UserRoleQueried> queryRoles = userService.queryRoles(command.getUsername());
 		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-		JwtTokenGenerated resource = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
+		JwtTokenGenerated token = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
 				groups);
+		// 更新 Refresh Token
+		userInfo.updateRefreshToken(token.getRefreshToken());
+		userInfoRepository.save(userInfo);
+
 
 		// 若不存在 RefreshToken，設置進去
-		if (StringUtils.isBlank(userInfo.getRefreshToken())) {
-			userInfo.updateRefreshToken(resource.getRefreshToken());
-		} else {
-			// 過期日
-			Date expDate = JwtTokenUtil.getExpDate(resource.getRefreshToken());
-			// 現在時間比過期日大
-			if (new Date().after(expDate)) {
-				userInfo.updateRefreshToken(resource.getRefreshToken());
-			}
-		}
-		userInfoRepository.save(userInfo);
-		return resource;
+//		if (StringUtils.isBlank(userInfo.getRefreshToken())) {
+//			userInfo.updateRefreshToken(resource.getRefreshToken());
+//		} else {
+//			// 過期日
+//			Date expDate = JwtTokenUtil.getExpDate(resource.getRefreshToken());
+//			// 現在時間比過期日大
+//			if (new Date().after(expDate)) {
+//				userInfo.updateRefreshToken(resource.getRefreshToken());
+//			}
+//		}
+		return token;
 	}
 
 	/**
@@ -101,8 +104,22 @@ public class JwtTokenCommandService {
 			List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
 			JwtTokenGenerated tokenGenerated = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(),
 					roles, groups);
-			// 更新 Refresh Token
-			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+			
+			// 若不存在 RefreshToken，設置進去
+			if (StringUtils.isBlank(userInfo.getRefreshToken())) {
+				userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+			} else {
+				// 過期日
+				Date expDate = JwtTokenUtil.getExpDate(tokenGenerated.getRefreshToken());
+				// 現在時間比過期日大 (Refresh Token 過期)
+				if (new Date().after(expDate)) {
+					userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+				// Refresh Token 未過期，沿用舊 Token
+				} else {
+					tokenGenerated.setRefreshToken(userInfo.getRefreshToken());
+				}
+			}
+		
 			userInfoRepository.save(userInfo);
 			return tokenGenerated;
 
