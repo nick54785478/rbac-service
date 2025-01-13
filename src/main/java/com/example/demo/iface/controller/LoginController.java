@@ -44,7 +44,8 @@ public class LoginController {
 	 * @return ResponseEntity<JwtokenGeneratedResource>
 	 */
 	@PostMapping("/refresh")
-	public ResponseEntity<JwtTokenGeneratedResource> login(@RequestBody RefreshTokenResource resource) {
+	public ResponseEntity<JwtTokenGeneratedResource> refresh(@RequestBody RefreshTokenResource resource) {
+
 		RefreshTokenCommand command = BaseDataTransformer.transformData(resource, RefreshTokenCommand.class);
 		return new ResponseEntity<>(
 				BaseDataTransformer.transformData(jwtokenService.refresh(command), JwtTokenGeneratedResource.class),
