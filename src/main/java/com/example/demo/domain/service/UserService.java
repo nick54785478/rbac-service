@@ -200,12 +200,16 @@ public class UserService {
 
 		UserInfo userInfo = userRepository.findByUsername(username);
 		// 取得 Group ID 清單
-		List<Long> groupIds = userInfo.getGroups().stream().map(UserGroup::getGroupId).collect(Collectors.toList());
+		List<Long> groupIds = userInfo.getGroups().stream()
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(UserGroup::getGroupId).collect(Collectors.toList());
 		// 取得 Role ID 清單
-		List<Long> roleIds = userInfo.getRoles().stream().map(UserRole::getRoleId).collect(Collectors.toList());
+		List<Long> roleIds = userInfo.getRoles().stream()
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(UserRole::getRoleId).collect(Collectors.toList());
 
-		List<GroupInfo> groups = groupRepository.findByIdIn(groupIds);
-		List<RoleInfo> roles = roleRepository.findByIdIn(roleIds);
+		List<GroupInfo> groups = groupRepository.findByIdInAndActiveFlag(groupIds, YesNo.Y);
+		List<RoleInfo> roles = roleRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y);
 
 		// 取得個人權限
 		funcMap.put("PERSONALITY", this.getFuncList(roles));
@@ -213,7 +217,7 @@ public class UserService {
 		// 群組角色權限
 		List<Long> groupRoleIds = groups.stream().flatMap(g -> g.getRoles().stream().map(GroupRole::getRoleId))
 				.distinct().collect(Collectors.toList());
-		List<RoleInfo> groupRoles = roleRepository.findByIdIn(groupRoleIds);
+		List<RoleInfo> groupRoles = roleRepository.findByIdInAndActiveFlag(groupRoleIds, YesNo.Y);
 		// 取得群組權限
 		funcMap.put("GROUP", this.getFuncList(groupRoles));
 
