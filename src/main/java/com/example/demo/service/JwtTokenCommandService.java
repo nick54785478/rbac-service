@@ -67,25 +67,23 @@ public class JwtTokenCommandService {
 		// 查詢該使用者個人角色
 		List<UserRoleQueried> queryRoles = userService.queryRoles(command.getUsername());
 		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-		JwtTokenGenerated token = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
+		JwtTokenGenerated tokenGenerated = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
 				groups);
 		// 更新 Refresh Token
-		userInfo.updateRefreshToken(token.getRefreshToken());
+		userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
 		userInfoRepository.save(userInfo);
 
 
 		// 若不存在 RefreshToken，設置進去
-//		if (StringUtils.isBlank(userInfo.getRefreshToken())) {
-//			userInfo.updateRefreshToken(resource.getRefreshToken());
-//		} else {
-//			// 過期日
-//			Date expDate = JwtTokenUtil.getExpDate(resource.getRefreshToken());
-//			// 現在時間比過期日大
-//			if (new Date().after(expDate)) {
-//				userInfo.updateRefreshToken(resource.getRefreshToken());
-//			}
-//		}
-		return token;
+		if (StringUtils.isBlank(userInfo.getRefreshToken())) {
+			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+		}
+		
+		// 如果 RefreshToken 過期
+		if (isExpiration(userInfo.getRefreshToken())) {
+			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+		}
+		return tokenGenerated;
 	}
 
 	/**
@@ -109,16 +107,17 @@ public class JwtTokenCommandService {
 			if (StringUtils.isBlank(userInfo.getRefreshToken())) {
 				userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
 			} else {
-				// 過期日
-				Date expDate = JwtTokenUtil.getExpDate(tokenGenerated.getRefreshToken());
-				// 現在時間比過期日大 (Refresh Token 過期)
-				if (new Date().after(expDate)) {
+				
+				// 若 Refresh Token 過期，更新該 Refresh Token
+				if (isExpiration(userInfo.getRefreshToken())) {
 					userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
 				// Refresh Token 未過期，沿用舊 Token
 				} else {
 					tokenGenerated.setRefreshToken(userInfo.getRefreshToken());
 				}
 			}
+			
+			
 		
 			userInfoRepository.save(userInfo);
 			return tokenGenerated;
