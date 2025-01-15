@@ -75,6 +75,7 @@ public class SettingController {
 	/**
 	 * 修改 設定
 	 * 
+	 * @param id
 	 * @param resource
 	 * @return ResponseEntity<UserCreatedResource>
 	 */
@@ -91,7 +92,7 @@ public class SettingController {
 	/**
 	 * 刪除特定設定
 	 * 
-	 * @param resource
+	 * @param id
 	 * @return ResponseEntity<SettingDeletedResource>
 	 */
 	@DeleteMapping("/{id}")
