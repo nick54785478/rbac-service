@@ -20,7 +20,6 @@ import com.example.demo.domain.share.UserGroupQueried;
 import com.example.demo.domain.share.UserInfoCreated;
 import com.example.demo.domain.share.UserInfoDetailQueried;
 import com.example.demo.domain.share.UserInfoQueried;
-import com.example.demo.domain.share.UserInfoUpdated;
 import com.example.demo.domain.share.UserOptionQueried;
 import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.share.UserRolesGranted;
