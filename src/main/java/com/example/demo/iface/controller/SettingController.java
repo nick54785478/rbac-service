@@ -43,7 +43,7 @@ public class SettingController {
 	 * 新增 設定
 	 * 
 	 * @param resource
-	 * @return ResponseEntity<UserCreatedResource>
+	 * @return ResponseEntity<SettingCreatedResource>
 	 */
 	@PostMapping("")
 	public ResponseEntity<SettingCreatedResource> create(@RequestBody CreateSettingResource resource) {
@@ -77,7 +77,7 @@ public class SettingController {
 	 * 
 	 * @param id
 	 * @param resource
-	 * @return ResponseEntity<UserCreatedResource>
+	 * @return ResponseEntity<SettingUpdatedResource>
 	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<SettingUpdatedResource> update(@PathVariable Long id,

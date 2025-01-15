@@ -41,7 +41,7 @@ public class OptionController {
 	 * 查詢使用者相關的設定 (AutoComplete)
 	 * 
 	 * @param str 使用者相關字串
-	 * return ResponseEntity<List<OptionQueriedResource>>
+	 * return ResponseEntity<List<UserOptionQueriedResource>>
 	 */
 	@GetMapping("/getUserOptions")
 	public ResponseEntity<List<UserOptionQueriedResource>> getUserOptions(@RequestParam("queryStr") String str) {
@@ -54,7 +54,7 @@ public class OptionController {
 	 * 查詢角色相關的設定 (AutoComplete)
 	 * 
 	 * @param str 角色相關字串
-	 * return ResponseEntity<List<OptionQueriedResource>>
+	 * return ResponseEntity<List<RoleOptionQueriedResource>>
 	 */
 	@GetMapping("/roles")
 	public ResponseEntity<List<RoleOptionQueriedResource>> getRoleOptions(@RequestParam("queryStr") String str) {
@@ -67,7 +67,7 @@ public class OptionController {
 	 * 查詢角色相關的設定 (AutoComplete)
 	 * 
 	 * @param str 群組相關字串
-	 * return ResponseEntity<List<OptionQueriedResource>>
+	 * return ResponseEntity<List<GroupOptionQueriedResource>>
 	 */
 	@GetMapping("/groups")
 	public ResponseEntity<List<GroupOptionQueriedResource>> getGroupOptions(@RequestParam("queryStr") String str) {

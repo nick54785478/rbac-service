@@ -34,7 +34,7 @@ public class GroupRoleController {
 	 * 
 	 * @param type
 	 * @param name
-	 * @return ResponseEntity<List<RoleQueriedResource>>
+	 * @return ResponseEntity<List<GroupRoleQueriedResource>>
 	 */
 	@GetMapping("/{id}/others")
 	public ResponseEntity<List<GroupRoleQueriedResource>> queryOthers(@PathVariable Long id) {
@@ -46,7 +46,7 @@ public class GroupRoleController {
 	 * 更新群組內的角色
 	 * 
 	 * @param resource
-	 * @return ResponseEntity<RoleFunctionsUpdatedResource>
+	 * @return ResponseEntity<GroupRolesUpdatedResource>
 	 */
 	@PostMapping("/update")
 	public ResponseEntity<GroupRolesUpdatedResource> update(

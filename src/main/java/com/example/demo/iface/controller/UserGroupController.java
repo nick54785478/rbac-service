@@ -50,7 +50,7 @@ public class UserGroupController {
 	 * 
 	 * @param type
 	 * @param name
-	 * @return ResponseEntity<List<RoleQueriedResource>>
+	 * @return ResponseEntity<List<UserGroupQueriedResource>>
 	 */
 	@GetMapping("/{usernmae}/others")
 	public ResponseEntity<List<UserGroupQueriedResource>> query(@PathVariable String usernmae) {

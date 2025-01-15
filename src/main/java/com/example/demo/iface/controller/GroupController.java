@@ -54,7 +54,7 @@ public class GroupController {
 	 * 新增/更新多筆群組資料
 	 * 
 	 * @param resource
-	 * @return ResponseEntity<RoleCreatedResource>
+	 * @return ResponseEntity<GroupCreatedOrUpdatedResource>
 	 */
 	@PostMapping("/saveList")
 	public ResponseEntity<GroupCreatedOrUpdatedResource> create(
@@ -72,7 +72,7 @@ public class GroupController {
 	 * @param type
 	 * @param name
 	 * @param actionFlag
-	 * @return ResponseEntity<List<RoleQueriedResource>>
+	 * @return ResponseEntity<List<GroupInfoQueriedResource>>
 	 */
 	@GetMapping("/query")
 	public ResponseEntity<List<GroupInfoQueriedResource>> query(@RequestParam(required = false) String type,
@@ -99,7 +99,7 @@ public class GroupController {
 	 * 刪除多筆群組資料
 	 * 
 	 * @param ids 要被刪除的 id 清單
-	 * @return ResponseEntity<RoleDeletedResource>
+	 * @return ResponseEntity<GroupDeletedResource>
 	 */
 	@DeleteMapping("")
 	public ResponseEntity<GroupDeletedResource> delete(@RequestBody List<Long> ids) {

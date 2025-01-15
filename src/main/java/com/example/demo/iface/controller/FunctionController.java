@@ -52,7 +52,7 @@ public class FunctionController {
 	 * 新增/更新多筆功能資料
 	 * 
 	 * @param resource
-	 * @return ResponseEntity<RoleCreatedResource>
+	 * @return ResponseEntity<FunctionCreatedOrUpdatedResource>
 	 */
 	@PostMapping("/saveList")
 	public ResponseEntity<FunctionCreatedOrUpdatedResource> save(
@@ -68,7 +68,7 @@ public class FunctionController {
 	 * 刪除多筆功能資料
 	 * 
 	 * @param ids 要被刪除的 id 清單
-	 * @return ResponseEntity<RoleDeletedResource>
+	 * @return ResponseEntity<FunctionDeletedResource>
 	 */
 	@DeleteMapping("")
 	public ResponseEntity<FunctionDeletedResource> delete(@RequestBody List<Long> ids) {
@@ -79,11 +79,8 @@ public class FunctionController {
 	/**
 	 * 查詢角色功能資料
 	 * 
-	 * @param actionType
-	 * @param type
-	 * @param name
-	 * @param actionFlag
-	 * @return ResponseEntity<List<RoleQueriedResource>>
+	 * @param queryStr
+	 * @return ResponseEntity<List<FunctionInfoQueriedResource>>
 	 */
 	@GetMapping("/queryRoleFunc")
 	public ResponseEntity<List<FunctionInfoQueriedResource>> query(@RequestParam String queryStr) {

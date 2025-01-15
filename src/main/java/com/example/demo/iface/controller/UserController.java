@@ -56,7 +56,7 @@ public class UserController {
 	 * 更新 使用者資料
 	 * 
 	 * @param resource
-	 * @return ResponseEntity<UserCreatedResource>
+	 * @return ResponseEntity<UserUpdatedResource>
 	 */
 	@PutMapping("/{id}")
 	public ResponseEntity<UserUpdatedResource> update(@RequestBody UpdateUserResource resource, @PathVariable Long id) {
@@ -69,6 +69,8 @@ public class UserController {
 
 	/**
 	 * 查詢該使用者相關群組資訊
+	 * @param username
+	 * @return ResponseEntity<List<UserGroupQueriedResource>>
 	 */
 	@GetMapping("/{username}/groups")
 	public ResponseEntity<List<UserGroupQueriedResource>> queryGroups(@PathVariable String username) {
@@ -94,7 +96,7 @@ public class UserController {
 	 * 查詢該使用者相關資訊(含權限、角色)
 	 * 
 	 * @param username
-	 * @return ResponseEntity<UserInfoQueriedResource>
+	 * @return ResponseEntity<UserInfoDetailQueriedResource>
 	 */
 	@GetMapping("/{username}/details")
 	public ResponseEntity<UserInfoDetailQueriedResource> queryUserDetails(@PathVariable String username) {

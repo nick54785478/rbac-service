@@ -48,13 +48,12 @@ public class UserRoleController {
 	/**
 	 * 查詢不屬於該使用者的群組資料
 	 * 
-	 * @param type
-	 * @param name
+	 * @param username
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/{usernmae}/others")
-	public ResponseEntity<List<UserRoleQueriedResource>> queryOthers(@PathVariable String usernmae) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoleQueryService.queryOthers(usernmae),
+	public ResponseEntity<List<UserRoleQueriedResource>> queryOthers(@PathVariable String username) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoleQueryService.queryOthers(username),
 				UserRoleQueriedResource.class), HttpStatus.OK);
 	}
 
