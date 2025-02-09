@@ -38,7 +38,6 @@ public class UserCommandService {
 	 * 更新使用者資料
 	 * 
 	 * @param command
-	 * @return UserInfoUpdated
 	 */
 	public void update(UpdateUserCommand command) {
 		userService.update(command);
@@ -48,7 +47,7 @@ public class UserCommandService {
 	 * 更新 使用者角色資料
 	 * 
 	 * @param command
-	 * @return UserRolesGranted
+	 * @return UserRolesGranted 
 	 */
 	public UserRolesGranted grant(UpdateUserRolesCommand command) {
 		return userService.grant(command);

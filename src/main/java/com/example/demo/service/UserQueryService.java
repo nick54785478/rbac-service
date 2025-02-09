@@ -11,7 +11,9 @@ import com.example.demo.domain.share.UserInfoQueried;
 import com.example.demo.domain.share.UserRoleQueried;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class UserQueryService {
@@ -22,7 +24,7 @@ public class UserQueryService {
 	 * 取得特定使用者所在的 Group 資料
 	 * 
 	 * @param username 使用者帳號
-	 * @return List<UserGroupQueried>
+	 * @return List<UserGroupQueried> 使用者群組清單
 	 */
 	public List<UserGroupQueried> queryGroups(String username) {
 		List<UserGroupQueried> groups = userService.queryGroups(username);
@@ -38,7 +40,7 @@ public class UserQueryService {
 	 */
 	public List<UserRoleQueried> queryRoles(String username) {
 		List<UserRoleQueried> roles = userService.queryRoles(username);
-		System.out.println(roles);
+		log.debug("roles: {}", roles);
 		return roles;
 	}
 

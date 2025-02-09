@@ -22,19 +22,17 @@ public class SettingCommandService {
 	 * 建立設定
 	 * 
 	 * @param command
-	 * @return SettingCreated
 	 */
 	public void create(CreateSettingCommand command) {
 		// 檢查設定
 		settingService.checkSetting(command);
 		settingService.create(command);
 	}
-	
+
 	/**
 	 * 修改設定
 	 * 
 	 * @param command
-	 * @return SettingCreated
 	 */
 	public void update(UpdateSettingCommand command) {
 		// 檢查設定

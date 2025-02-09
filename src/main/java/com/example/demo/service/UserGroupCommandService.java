@@ -21,7 +21,6 @@ public class UserGroupCommandService {
 	 * 將使用者們加入特定群組
 	 * 
 	 * @param command
-	 * @return UserGroupAdded
 	 */
 	public void update(UpdateUserGroupsCommand command) {
 		userGroupService.update(command);

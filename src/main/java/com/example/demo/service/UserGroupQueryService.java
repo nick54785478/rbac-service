@@ -19,7 +19,7 @@ public class UserGroupQueryService {
 	 * 查詢該群組內部不存在的其他角色
 	 * 
 	 * @param username
-	 * @return List<GroupRoleQueried>
+	 * @return List<GroupRoleQueried> 群組角色清單
 	 */
 	public List<UserGroupQueried> queryOthers(String username) {
 		return userGroupService.queryOthers(username);

@@ -22,7 +22,7 @@ public class SettingQueryService {
 	 * @param type
 	 * @param name
 	 * @param activeFlag
-	 * @return
+	 * @return List<SettingQueried> 設定清單
 	 */
 	public List<SettingQueried> query(String dataType, String type, String name, String activeFlag) {
 		return service.query(dataType, type, name, activeFlag);

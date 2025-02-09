@@ -12,15 +12,14 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class RoleFunctionQueryService {
-	
+
 	private RoleFunctionService roleFunctionService;
-	
 
 	/**
 	 * 查詢其他(不屬於該角色)的功能
 	 * 
 	 * @param id
-	 * @return
+	 * @return List<RoleFunctionQueried> 角色功能清單
 	 */
 	public List<RoleFunctionQueried> queryOthers(Long id) {
 		return roleFunctionService.queryOthers(id);

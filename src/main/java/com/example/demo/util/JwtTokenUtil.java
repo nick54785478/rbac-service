@@ -22,6 +22,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * JWT 工具類
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -33,12 +36,12 @@ public class JwtTokenUtil {
 
 	@Value("${jwt.token-expiration-seconds}")
 	private long tokenExpirationValue; // 過期時間若是3600L秒，即1個小時
-	private static  long tokenExpiration;
-	
+	private static long tokenExpiration;
+
 	@Value("${jwt.refresh-token-expiration-seconds}")
 	private long refreshTokenExpirationValue; // 過期時間若是3600L秒，即1個小時
-	private static  long refreshTokenExpiration;
-	
+	private static long refreshTokenExpiration;
+
 	private static final String ISS = "SYSTEM"; // 簽發者
 
 	/**
@@ -46,10 +49,9 @@ public class JwtTokenUtil {
 	 */
 	@PostConstruct
 	public void init() {
-		secretKey = secretKeyValue;
-		tokenExpiration = tokenExpirationValue;
-		refreshTokenExpiration = refreshTokenExpirationValue;
-		
+		secretKey = this.secretKeyValue;
+		tokenExpiration = this.tokenExpirationValue;
+		refreshTokenExpiration = this.refreshTokenExpirationValue;
 	}
 
 	/**
@@ -61,7 +63,8 @@ public class JwtTokenUtil {
 	 * @param groups   - 功能清單
 	 * @return JwtokenGenerated
 	 */
-	public static JwtTokenGenerated generateToken(String username, String email, List<String> roles, List<String> groups) {
+	public static JwtTokenGenerated generateToken(String username, String email, List<String> roles,
+			List<String> groups) {
 		String token = generateToken(username, email, roles, groups, tokenExpiration);
 		String refreshToken = generateToken(username, email, roles, groups, refreshTokenExpiration);
 		return new JwtTokenGenerated(token, refreshToken);

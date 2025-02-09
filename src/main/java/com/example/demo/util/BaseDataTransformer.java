@@ -18,6 +18,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 資料轉換工具類，封裝 ModelMapper 進行轉換
+ */
 @Slf4j
 @Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -28,7 +31,7 @@ public class BaseDataTransformer {
 	static {
 		// Simple Date Format
 		var simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
+
 		// 設置 YesNo -> String 的 Converter
 		modelMapper.addConverter(new Converter<YesNo, String>() {
 			@Override

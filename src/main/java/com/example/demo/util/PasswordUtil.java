@@ -8,6 +8,9 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 密碼工具類
+ */
 @Slf4j
 @Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,7 +24,7 @@ public class PasswordUtil {
 	 */
 	public static String encode(String target) {
 		if (StringUtils.isNotBlank(target)) {
-			 return BCrypt.hashpw(target, BCrypt.gensalt());
+			return BCrypt.hashpw(target, BCrypt.gensalt());
 		}
 		log.warn("轉換失敗，回傳原值");
 		return "";
@@ -30,7 +33,7 @@ public class PasswordUtil {
 	/**
 	 * 解密密碼
 	 * 
-	 * @param target 密碼
+	 * @param target          密碼
 	 * @param encodedPassword 加密後的密碼
 	 * @return boolean 兩者是否一致
 	 */

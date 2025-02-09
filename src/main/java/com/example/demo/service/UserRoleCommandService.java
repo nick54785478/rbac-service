@@ -21,7 +21,6 @@ public class UserRoleCommandService {
 	 * 將使用者們加入特定群組
 	 * 
 	 * @param command
-	 * @return UserGroupAdded
 	 */
 	public void update(UpdateUserRolesCommand command) {
 		userRoleService.update(command);
