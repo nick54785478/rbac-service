@@ -4,15 +4,20 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.service.GroupService;
 import com.example.demo.domain.share.GroupInfoQueried;
+import com.example.demo.infra.repository.GroupInfoRepository;
+import com.example.demo.util.BaseDataTransformer;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
 public class GroupQueryService {
 
+	private GroupInfoRepository groupInfoRepository;
 	private GroupService groupService;
 
 	/**
@@ -23,8 +28,10 @@ public class GroupQueryService {
 	 * @param activeFlag
 	 * @return List<GroupInfoQueried>
 	 */
+	@Transactional
 	public List<GroupInfoQueried> query(String type, String name, String activeFlag) {
-		return groupService.query(type, name, activeFlag);
+		List<GroupInfo> groups = groupInfoRepository.findAllWithSpecification(type, name, activeFlag);
+		return BaseDataTransformer.transformData(groups, GroupInfoQueried.class);
 	}
 	
 	/**
@@ -33,6 +40,7 @@ public class GroupQueryService {
 	 * @param id
 	 * @return List<GroupInfoQueried>
 	 */
+	@Transactional
 	public GroupInfoQueried query(Long id) {
 		return groupService.query(id);
 	}

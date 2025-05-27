@@ -44,8 +44,8 @@ public class FunctionController {
 	public ResponseEntity<FunctionCreatedResource> create(@RequestBody CreateFunctionResource resource) {
 		// 防腐處理 resource -> command
 		CreateFunctionCommand command = BaseDataTransformer.transformData(resource, CreateFunctionCommand.class);
-		return new ResponseEntity<>(BaseDataTransformer.transformData(functionCommandService.create(command),
-				FunctionCreatedResource.class), HttpStatus.CREATED);
+		functionCommandService.create(command);
+		return new ResponseEntity<>(new FunctionCreatedResource("200", "新增成功"), HttpStatus.CREATED);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class FunctionController {
 		functionCommandService.delete(ids);
 		return new ResponseEntity<>(new FunctionDeletedResource("200", "成功刪除多筆功能資料"), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 查詢角色功能資料
 	 * 
@@ -84,8 +84,8 @@ public class FunctionController {
 	 */
 	@GetMapping("/queryRoleFunc")
 	public ResponseEntity<List<FunctionInfoQueriedResource>> query(@RequestParam String queryStr) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(
-				functionQueryService.query(queryStr), FunctionInfoQueriedResource.class), HttpStatus.OK);
+		return new ResponseEntity<>(BaseDataTransformer.transformData(functionQueryService.query(queryStr),
+				FunctionInfoQueriedResource.class), HttpStatus.OK);
 	}
 
 	/**
@@ -99,9 +99,11 @@ public class FunctionController {
 	 */
 	@GetMapping("/query")
 	public ResponseEntity<List<FunctionInfoQueriedResource>> query(@RequestParam(required = false) String actionType,
-			@RequestParam(required = false) String type,
-			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(
-				functionQueryService.query(actionType, type, name, activeFlag), FunctionInfoQueriedResource.class), HttpStatus.OK);
+			@RequestParam(required = false) String type, @RequestParam(required = false) String name,
+			@RequestParam(required = false) String activeFlag) {
+		return new ResponseEntity<>(
+				BaseDataTransformer.transformData(functionQueryService.query(actionType, type, name, activeFlag),
+						FunctionInfoQueriedResource.class),
+				HttpStatus.OK);
 	}
 }

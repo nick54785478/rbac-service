@@ -17,7 +17,6 @@ import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.share.GroupCreated;
 import com.example.demo.domain.share.GroupInfoQueried;
-import com.example.demo.domain.share.GroupOptionQueried;
 import com.example.demo.domain.share.GroupRoleQueried;
 import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.exception.ValidationException;
@@ -35,19 +34,6 @@ public class GroupService {
 	private GroupInfoRepository groupInfoRepository;
 	private RoleInfoRepository roleInfoRepository;
 
-	/**
-	 * 建立一筆群組資料
-	 * 
-	 * @param command
-	 * @return GroupCreated
-	 */
-	public GroupCreated create(CreateGroupCommand command) {
-		GroupInfo group = new GroupInfo();
-		group.create(command);
-		GroupInfo saved = groupInfoRepository.save(group);
-		return BaseDataTransformer.transformData(saved, GroupCreated.class);
-	}
-	
 	/**
 	 * 建立多筆群組資訊(僅限於前端使用 Inline-Edit)
 	 * 
@@ -83,19 +69,6 @@ public class GroupService {
 	}
 	
 
-	/**
-	 * 查詢符合條件的群組資料
-	 * 
-	 * @param type
-	 * @param name
-	 * @param activeFlag
-	 * @return List<GroupInfoQueried>
-	 */
-	@Transactional
-	public List<GroupInfoQueried> query(String type, String name, String activeFlag) {
-		List<GroupInfo> groups = groupInfoRepository.findAllWithSpecification(type, name, activeFlag);
-		return BaseDataTransformer.transformData(groups, GroupInfoQueried.class);
-	}
 
 	/**
 	 * 查詢符合條件的群組資料
@@ -103,7 +76,6 @@ public class GroupService {
 	 * @param id
 	 * @return GroupInfoQueried
 	 */
-	@Transactional
 	public GroupInfoQueried query(Long id) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(id);
 		if (opt.isPresent()) {
@@ -164,16 +136,5 @@ public class GroupService {
 			group.delete();
 		});
 		groupInfoRepository.saveAll(groups);
-	}
-	
-	/**
-	 * 查詢群組下拉選單資訊
-	 * 
-	 * @param str 群組資訊字串
-	 * @return List<GroupOptionQueried>
-	 */
-	public List<GroupOptionQueried> getGroupInfoOtions(String str) {
-		return BaseDataTransformer.transformData(groupInfoRepository.findAllWithSpecification(str),
-				GroupOptionQueried.class);
 	}
 }

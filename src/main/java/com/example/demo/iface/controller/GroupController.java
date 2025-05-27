@@ -45,9 +45,8 @@ public class GroupController {
 	public ResponseEntity<GroupCreatedResource> create(@RequestBody CreateGroupResource resource) {
 		// 防腐處理 resource -> command
 		CreateGroupCommand command = BaseDataTransformer.transformData(resource, CreateGroupCommand.class);
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(groupCommandService.create(command), GroupCreatedResource.class),
-				HttpStatus.OK);
+		groupCommandService.create(command);
+		return new ResponseEntity<>(new GroupCreatedResource("200", "成功新增一筆群組資料"), HttpStatus.OK);
 	}
 
 	/**

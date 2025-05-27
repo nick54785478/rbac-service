@@ -1,18 +1,20 @@
 package com.example.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
 import com.example.demo.domain.role.command.CreateRoleCommand;
 import com.example.demo.domain.role.command.UpdateRoleCommand;
 import com.example.demo.domain.service.RoleService;
-import com.example.demo.domain.share.RoleInfoCreated;
-import com.example.demo.domain.share.RoleInfoUpdated;
+import com.example.demo.exception.ValidationException;
+import com.example.demo.infra.repository.RoleInfoRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -21,6 +23,7 @@ import lombok.AllArgsConstructor;
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
 public class RoleCommandService {
 
+	private RoleInfoRepository roleInfoRepository;
 	private RoleService roleService;
 
 	/**
@@ -29,8 +32,10 @@ public class RoleCommandService {
 	 * @param command
 	 * @return RoleInfoCreated
 	 */
-	public RoleInfoCreated create(CreateRoleCommand command) {
-		return roleService.create(command);
+	public void create(CreateRoleCommand command) {
+		RoleInfo roleInfo = new RoleInfo();
+		roleInfo.create(command);
+		roleInfoRepository.save(roleInfo);
 	}
 
 	/**
@@ -49,18 +54,29 @@ public class RoleCommandService {
 	 * @param command
 	 * @return RoleInfoCreated
 	 */
-	public RoleInfoUpdated update(UpdateRoleCommand command) {
-		return roleService.update(command);
+	public void update(UpdateRoleCommand command) {
+
+		Optional<RoleInfo> opt = roleInfoRepository.findById(command.getId());
+		if (opt.isPresent()) {
+			RoleInfo roleInfo = opt.get();
+			roleInfo.update(command);
+			roleInfoRepository.save(roleInfo);
+		} else {
+			throw new ValidationException("VALIDATION_FAILED", "查無此角色資料 id，更新失敗");
+		}
 	}
 
 	/**
 	 * 刪除多筆角色資料
 	 * 
-	 * @param ids  要被刪除的 id 清單
-	 * */
+	 * @param ids 要被刪除的 id 清單
+	 */
 	public void delete(List<Long> ids) {
-		roleService.delete(ids);
+		List<RoleInfo> roles = roleInfoRepository.findByIdIn(ids);
+		roles.stream().forEach(role -> {
+			role.delete();
+		});
+		roleInfoRepository.saveAll(roles);
 	}
 
-	
 }

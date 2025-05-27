@@ -7,10 +7,11 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.function.command.CreateFunctionCommand;
 import com.example.demo.domain.function.command.CreateOrUpdateFunctionCommand;
 import com.example.demo.domain.service.FunctionService;
-import com.example.demo.domain.share.FunctionCreated;
+import com.example.demo.infra.repository.FunctionInfoRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -20,6 +21,7 @@ import lombok.AllArgsConstructor;
 public class FunctionCommandService {
 
 	private FunctionService functionService;
+	private FunctionInfoRepository functionRepository;
 
 	/**
 	 * 建立一筆功能資料
@@ -27,10 +29,12 @@ public class FunctionCommandService {
 	 * @param command
 	 * @return FunctionCreated
 	 */
-	public FunctionCreated create(CreateFunctionCommand command) {
-		return functionService.create(command);
+	public void create(CreateFunctionCommand command) {
+		FunctionInfo function = new FunctionInfo();
+		function.create(command);
+		functionRepository.save(function);
 	}
-	
+
 	/**
 	 * 建立多筆功能資料
 	 * 
@@ -39,14 +43,18 @@ public class FunctionCommandService {
 	public void createOrUpdate(List<CreateOrUpdateFunctionCommand> commands) {
 		functionService.createOrUpdate(commands);
 	}
-	
+
 	/**
 	 * 刪除多筆功能資料
 	 * 
-	 * @param ids  要被刪除的 id 清單
-	 * */
+	 * @param ids 要被刪除的 id 清單
+	 */
 	public void delete(List<Long> ids) {
-		functionService.delete(ids);
+		List<FunctionInfo> functions = functionRepository.findByIdIn(ids);
+		functions.stream().forEach(function -> {
+			function.delete();
+		});
+		functionRepository.saveAll(functions);
 	}
-	
+
 }

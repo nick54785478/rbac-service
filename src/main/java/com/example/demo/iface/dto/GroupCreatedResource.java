@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GroupCreatedResource {
 
-	private Long id;
-
-	private String name; // 名稱
+	private String code;
 	
-	private String code; // 群組代號
-	
-	private String description; // 敘述
+	private String message;
 }

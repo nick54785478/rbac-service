@@ -1,5 +1,7 @@
 package com.example.demo.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -7,10 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.service.UserService;
 import com.example.demo.domain.share.UserRolesGranted;
+import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
 import com.example.demo.exception.ValidationException;
+import com.example.demo.infra.repository.UserInfoRepository;
 
 import lombok.AllArgsConstructor;
 
@@ -20,6 +24,7 @@ import lombok.AllArgsConstructor;
 public class UserCommandService {
 
 	private UserService userService;
+	private UserInfoRepository userRepository;
 
 	/**
 	 * 建立使用者資料
@@ -30,8 +35,9 @@ public class UserCommandService {
 		if (!userService.checkIsRegistered(command)) {
 			throw new ValidationException("VALIDATION_FAILED", "該使用者相關資訊已註冊");
 		}
-
-		userService.create(command);
+		UserInfo userInfo = new UserInfo();
+		userInfo.create(command);
+		userRepository.save(userInfo);
 	}
 
 	/**
@@ -40,7 +46,14 @@ public class UserCommandService {
 	 * @param command
 	 */
 	public void update(UpdateUserCommand command) {
-		userService.update(command);
+		Optional<UserInfo> opt = userRepository.findById(command.getId());
+		if (opt.isPresent()) {
+			var userInfo = opt.get();
+			userInfo.update(command);
+			userRepository.save(userInfo);
+		} else {
+			throw new ValidationException("VALIDATION_FAILED", "查無此資料 id，更新失敗");
+		}
 	}
 
 	/**

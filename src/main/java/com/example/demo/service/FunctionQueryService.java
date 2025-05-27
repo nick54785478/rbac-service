@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.service.FunctionService;
+import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.share.FunctionInfoQueried;
+import com.example.demo.infra.repository.FunctionInfoRepository;
+import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
 
@@ -13,7 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FunctionQueryService {
 
-	private FunctionService functionService;
+	private FunctionInfoRepository functionInfoRepository;
 
 	/**
 	 * 查詢符合條件的群組資料
@@ -25,9 +27,10 @@ public class FunctionQueryService {
 	 * @return List<GroupInfoQueried>
 	 */
 	public List<FunctionInfoQueried> query(String actionType, String type, String name, String activeFlag) {
-		return functionService.query(actionType, type, name, activeFlag);
+		List<FunctionInfo> functions = functionInfoRepository.findAllWithSpecification(actionType, type, name,
+				activeFlag);
+		return BaseDataTransformer.transformData(functions, FunctionInfoQueried.class);
 	}
-	
 
 	/**
 	 * 模糊查詢符合條件的群組資料
@@ -36,6 +39,7 @@ public class FunctionQueryService {
 	 * @return List<GroupInfoQueried>
 	 */
 	public List<FunctionInfoQueried> query(String queryStr) {
-		return functionService.query(queryStr);
+		List<FunctionInfo> functions = functionInfoRepository.findAllWithSpecification(queryStr);
+		return BaseDataTransformer.transformData(functions, FunctionInfoQueried.class);
 	}
 }

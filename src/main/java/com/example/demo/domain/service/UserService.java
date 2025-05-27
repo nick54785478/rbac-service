@@ -51,30 +51,6 @@ public class UserService {
 	private RoleInfoRepository roleRepository;
 	private FunctionInfoRepository functionRepository;
 
-	/**
-	 * 建立使用者資訊
-	 * 
-	 * @param command
-	 * @return UserInfoCreated
-	 */
-	public UserInfoCreated create(CreateUserCommand command) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.create(command);
-		UserInfo saved = userRepository.save(userInfo);
-		return BaseDataTransformer.transformData(saved, UserInfoCreated.class);
-	}
-
-	/**
-	 * 查詢該使用者資料
-	 * 
-	 * @param username
-	 * @return UserInfoQueried
-	 */
-	@Transactional
-	public UserInfoQueried queryByUsername(String username) {
-		UserInfo userInfo = userRepository.findByUsername(username);
-		return BaseDataTransformer.transformData(userInfo, UserInfoQueried.class);
-	}
 
 	/**
 	 * 更新使用者角色資料
@@ -106,43 +82,17 @@ public class UserService {
 		return userRoleCreated;
 	}
 
-	/**
-	 * 更新使用者資訊
-	 * 
-	 * @param command
-	 * @return UserInfoCreated
-	 */
-	public void update(UpdateUserCommand command) {
-		Optional<UserInfo> opt = userRepository.findById(command.getId());
-		if (opt.isPresent()) {
-			var userInfo = opt.get();
-			userInfo.update(command);
-			userRepository.save(userInfo);
-		} else {
-			throw new ValidationException("VALIDATION_FAILED", "查無此資料 id，更新失敗");
-		}
-	}
 
-	/**
-	 * 查詢使用者下拉選單資訊
-	 * 
-	 * @param str 使用者資訊字串
-	 * @return UserOtionInfoQueried
-	 */
-	public List<UserOptionQueried> getUserInfoOtions(String str) {
-		return BaseDataTransformer.transformData(userRepository.findAllWithSpecification(str), UserOptionQueried.class);
-	}
+//	/**
+//	 * 查詢使用者下拉選單資訊
+//	 * 
+//	 * @param str 使用者資訊字串
+//	 * @return UserOtionInfoQueried
+//	 */
+//	public List<UserOptionQueried> getUserInfoOtions(String str) {
+//		return BaseDataTransformer.transformData(userRepository.findAllWithSpecification(str), UserOptionQueried.class);
+//	}
 
-	/**
-	 * 查詢使用者資訊(模糊查詢)
-	 * 
-	 * @param username 使用者帳號
-	 * @return UserOtionInfoQueried
-	 */
-	public List<UserInfoQueried> getUserInfoList(String username) {
-		return BaseDataTransformer.transformData(userRepository.findAllWithSpecification(username),
-				UserInfoQueried.class);
-	}
 
 	/**
 	 * 取得特定使用者所在的群組資料

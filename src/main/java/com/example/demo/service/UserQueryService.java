@@ -9,7 +9,11 @@ import com.example.demo.domain.share.UserGroupQueried;
 import com.example.demo.domain.share.UserInfoDetailQueried;
 import com.example.demo.domain.share.UserInfoQueried;
 import com.example.demo.domain.share.UserRoleQueried;
+import com.example.demo.domain.user.aggregate.UserInfo;
+import com.example.demo.infra.repository.UserInfoRepository;
+import com.example.demo.util.BaseDataTransformer;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserQueryService {
 
 	private UserService userService;
+	private UserInfoRepository userRepository;
 
 	/**
 	 * 取得特定使用者所在的 Group 資料
@@ -50,8 +55,10 @@ public class UserQueryService {
 	 * @param username 使用者帳號
 	 * @return UserInfoQueried
 	 */
+	@Transactional
 	public UserInfoQueried query(String username) {
-		return userService.queryByUsername(username);
+		UserInfo userInfo = userRepository.findByUsername(username);
+		return BaseDataTransformer.transformData(userInfo, UserInfoQueried.class);
 	}
 	
 	/**

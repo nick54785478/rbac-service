@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FunctionCreatedResource {
 
-	private Long id;
-
-	private String code; // Code
-
-	private String description; // 敘述
+	private String code;
+	
+	private String message;
 }
