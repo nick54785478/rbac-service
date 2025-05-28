@@ -51,7 +51,7 @@ public class UserRoleController {
 	 * @param username
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
-	@GetMapping("/{usernmae}/others")
+	@GetMapping("/{username}/others")
 	public ResponseEntity<List<UserRoleQueriedResource>> queryOthers(@PathVariable String username) {
 		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoleQueryService.queryOthers(username),
 				UserRoleQueriedResource.class), HttpStatus.OK);
