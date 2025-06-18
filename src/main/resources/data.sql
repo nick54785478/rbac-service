@@ -59,8 +59,8 @@ INSERT INTO `setting` (`id`, `data_type`, `type`, `name`, `description`, `priori
 (9, 'FUNCTION', 'USER', 'User', '使用者相關功能', 2, 'Y'),
 (10, 'FUNCTION', 'ROLE', 'Role', '角色相關功能', 3, 'Y'),
 (11, 'FUNCTION', 'GROUP', 'Group', '群組相關功能', 4, 'Y'),
-(12, 'FUNCTION', 'CUSTOMER', 'Customer', '客戶配置相關功能', 5, 'Y'),
-(13, 'FUNCTION', 'SETTING', 'Setting', '設定配置的功能', 6, 'Y'),
+(12, 'FUNCTION', 'CUSTOMER', '客戶配置', '客戶配置相關功能', 5, 'Y'),
+(13, 'FUNCTION', 'SETTING', '設定配置', '設定配置的功能', 6, 'Y'),
 (14, 'GROUP', 'GUEST', 'Guest', '訪客群組', 3, 'Y'),
 (15, 'ACTION_TYPE', 'B', 'BROWSER', '瀏覽（Browse， 回傳多筆資料的 READ)', 1, 'Y'),
 (16, 'ACTION_TYPE', 'R', 'READ', '讀取（Read）', 2, 'Y'),
@@ -74,7 +74,20 @@ INSERT INTO `setting` (`id`, `data_type`, `type`, `name`, `description`, `priori
 (24, 'LANGUAGE', 'ZH_TW', '繁中', '繁體中文語系', 2, 'Y'),
 (25, 'LANGUAGE', 'ZH_CH', '簡中', '簡體中文語系', 3, 'Y'),
 (26, 'FUNCTION', 'MAINTAIN', 'Maintain', '維護頁面功能', 1, 'Y'),
-(29, 'ACTION_TYPE', 'ALL', 'ALL', '全動作權限', NULL, 'Y');
+(29, 'ACTION_TYPE', 'ALL', 'ALL', '全動作權限', NULL, 'Y'),
+(32, 'GROUP', 'TEST', 'TEST', '測試群組', 4, 'Y'),
+(33, 'FUNCTION', 'TEST', '測試', '測試功能', 1, 'Y'),
+(34, 'ROLE', 'QC', '品管人員', '品管人員', 4, 'Y'),
+(35, 'GROUP', 'QC', 'QC', '品質管理人員群組', 5, 'Y'),
+(36, 'FUNCTION', 'QC', 'QC', 'QC 相關權限', 1, 'Y'),
+(37, 'FUNCTION', 'DEVELOPMENT', '開發', '開發', 1, 'Y'),
+(38, 'GROUP', 'DEVELOPMENT', '開發', '開發群組', 1, 'Y'),
+(39, 'ROLE', 'DEVELOPMENT', '開發人員', '開發人員', 1, 'Y'),
+(40, 'DESCRIPTION', 'STEP1', 'Step1 敘述', '用戶進行登入動作，取得攜帶該用戶資訊的 JWToken，如: 群組(GROUP)、角色(ROLE) 等 ，在後續進行動作時會根據其 Token 記錄的群組 (GROUP) 資料以及個人角色 (ROLE) 資料進行功能 (FUNCTION) 權限檢查。', 1, 'Y'),
+(41, 'DESCRIPTION', 'STEP2', 'Step2 敘述', '使用者所屬的群組擁有一組\"預設\"的權限，該權限是透過群組角色 (GROUP_ROLE) 與群組功能 (ROLE_FUNCTION) 的設定，讓使用者能根據其設定來獲得該群組所設定的功能權限。', 2, 'Y'),
+(42, 'DESCRIPTION', 'STEP3', 'Step3 敘述', '除了群組角色權限，使用者也能設定個人的角色權限，這些權限是由使用者與角色的關聯表 (USER_ROLE) 來進行設定，這些個人角色權限會在群組權限基礎上進行\"再擴展\"。', 3, 'Y'),
+(43, 'DESCRIPTION', 'STEP4', 'Step4 敘述', '登錄系統後，系統會檢查用戶所屬的群組 (GROUP) 及其對應的角色權限(ROLE)，然後再檢查用戶的個人角色 (ROLE) 權限。最後，使用者的權限由群組角色 (GROUP_ROLE) 權限和個人角色 (ROLE) 權限所設定的功能 (FUNCTION) 權限合併形成。', 4, 'Y');
+
 INSERT INTO `role_function` (`role_id`, `function_id`, `active_flag`) VALUES
 (1, 1, 'Y');
 INSERT INTO `role_function` (`role_id`, `function_id`, `active_flag`) VALUES
