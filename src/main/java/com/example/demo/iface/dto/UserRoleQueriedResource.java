@@ -1,7 +1,5 @@
 package com.example.demo.iface.dto;
 
-import com.example.demo.domain.share.enums.YesNo;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +10,9 @@ import lombok.NoArgsConstructor;
 public class UserRoleQueriedResource {
 
 	private Long id;
-	
+
+	private String service;
+
 	private String code;
 
 	private String name;
@@ -21,5 +21,5 @@ public class UserRoleQueriedResource {
 
 	private String description; // 敘述
 
-	private YesNo activeFlag;
+	private String activeFlag;
 }

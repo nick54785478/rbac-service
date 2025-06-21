@@ -2,7 +2,7 @@ package com.example.demo.domain.user.aggregate.entity;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.constant.YesNo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,10 +44,10 @@ public class UserGroup {
 	/**
 	 * 建立使用者所在群組資訊
 	 * 
-	 * @param groupId 群組 ID
 	 * @param userId  使用者 ID
+	 * @param groupId 群組 ID
 	 */
-	public void create(Long groupId, Long userId) {
+	public void create(Long userId, Long groupId) {
 		this.userId = userId;
 		this.groupId = groupId;
 		this.activeFlag = YesNo.Y;

@@ -2,9 +2,9 @@ package com.example.demo.domain.setting.aggregate;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.setting.command.CreateSettingCommand;
 import com.example.demo.domain.setting.command.UpdateSettingCommand;
-import com.example.demo.domain.share.enums.YesNo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +32,9 @@ public class ConfigurableSetting {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name = "service")
+	private String service;
+	
 	@Column(name = "data_type")
 	private String dataType;	// 資料類型
 
@@ -54,6 +57,7 @@ public class ConfigurableSetting {
 	 * @param command
 	 */
 	public void create(CreateSettingCommand command) {
+		this.service = command.getService();
 		this.dataType = command.getDataType();
 		this.type = command.getType();
 		this.name = command.getName();

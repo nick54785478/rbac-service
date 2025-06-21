@@ -23,14 +23,15 @@ public class GroupQueryService {
 	/**
 	 * 查詢符合條件的群組資料
 	 * 
+	 * @param service
 	 * @param type
 	 * @param name
 	 * @param activeFlag
 	 * @return List<GroupInfoQueried>
 	 */
 	@Transactional
-	public List<GroupInfoQueried> query(String type, String name, String activeFlag) {
-		List<GroupInfo> groups = groupInfoRepository.findAllWithSpecification(type, name, activeFlag);
+	public List<GroupInfoQueried> query(String service, String type, String name, String activeFlag) {
+		List<GroupInfo> groups = groupInfoRepository.findAllWithSpecification(service, type, name, activeFlag);
 		return BaseDataTransformer.transformData(groups, GroupInfoQueried.class);
 	}
 	

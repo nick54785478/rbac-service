@@ -98,11 +98,13 @@ public class FunctionController {
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<FunctionInfoQueriedResource>> query(@RequestParam(required = false) String actionType,
+	public ResponseEntity<List<FunctionInfoQueriedResource>> query(
+			@RequestParam(required = true) String service,
+			@RequestParam(required = false) String actionType,
 			@RequestParam(required = false) String type, @RequestParam(required = false) String name,
 			@RequestParam(required = false) String activeFlag) {
 		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(functionQueryService.query(actionType, type, name, activeFlag),
+				BaseDataTransformer.transformData(functionQueryService.query(service, actionType, type, name, activeFlag),
 						FunctionInfoQueriedResource.class),
 				HttpStatus.OK);
 	}

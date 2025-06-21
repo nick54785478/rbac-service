@@ -2,7 +2,7 @@ package com.example.demo.domain.user.aggregate.entity;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.constant.YesNo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -8,8 +8,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
-import com.example.demo.domain.share.enums.YesNo;
 
 import jakarta.persistence.criteria.Predicate;
 
@@ -17,21 +17,25 @@ import jakarta.persistence.criteria.Predicate;
 public interface FunctionInfoRepository extends JpaRepository<FunctionInfo, Long> {
 
 	List<FunctionInfo> findByIdIn(List<Long> ids);
-	
+
 	List<FunctionInfo> findByActiveFlag(YesNo activeFlag);
 
 	List<FunctionInfo> findByTypeAndActiveFlag(String type, YesNo activeFlag);
 
 	List<FunctionInfo> findByIdInAndActiveFlag(List<Long> ids, YesNo activeFlag);
-	
+
 	List<FunctionInfo> findByIdInAndTypeAndActiveFlag(List<Long> ids, String type, YesNo activeFlag);
-	
+
 	List<FunctionInfo> findAll(Specification<FunctionInfo> specification);
 
-	default List<FunctionInfo> findAllWithSpecification(String actionType, String type, String name,
+	default List<FunctionInfo> findAllWithSpecification(String service, String actionType, String type, String name,
 			String activeFlag) {
 		Specification<FunctionInfo> specification = ((root, query, cb) -> {
 			List<Predicate> predicates = new ArrayList<>();
+
+			if (StringUtils.isNotBlank(service)) {
+				predicates.add(cb.equal(root.get("service"), service));
+			}
 
 			if (StringUtils.isNotBlank(type)) {
 				predicates.add(cb.equal(root.get("type"), type));

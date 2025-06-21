@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.share.UserGroupQueried;
-import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.iface.dto.CreateUserResource;
@@ -22,7 +22,6 @@ import com.example.demo.iface.dto.UserCreatedResource;
 import com.example.demo.iface.dto.UserGroupQueriedResource;
 import com.example.demo.iface.dto.UserInfoDetailQueriedResource;
 import com.example.demo.iface.dto.UserInfoQueriedResource;
-import com.example.demo.iface.dto.UserRoleQueriedResource;
 import com.example.demo.iface.dto.UserUpdatedResource;
 import com.example.demo.service.UserCommandService;
 import com.example.demo.service.UserQueryService;
@@ -69,6 +68,7 @@ public class UserController {
 
 	/**
 	 * 查詢該使用者相關群組資訊
+	 * 
 	 * @param username
 	 * @return ResponseEntity<List<UserGroupQueriedResource>>
 	 */
@@ -80,34 +80,24 @@ public class UserController {
 	}
 
 	/**
-	 * 查詢該使用者相關角色資訊
-	 * 
-	 * @param username
-	 * @return ResponseEntity<List<UserRoleQueriedResource>>
-	 */
-	@GetMapping("/{username}/roles")
-	public ResponseEntity<List<UserRoleQueriedResource>> queryRoles(@PathVariable String username) {
-		List<UserRoleQueried> userRoles = userQueryService.queryRoles(username);
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoles, UserRoleQueriedResource.class),
-				HttpStatus.OK);
-	}
-
-	/**
 	 * 查詢該使用者相關資訊(含權限、角色)
 	 * 
 	 * @param username
 	 * @return ResponseEntity<UserInfoDetailQueriedResource>
 	 */
 	@GetMapping("/{username}/details")
-	public ResponseEntity<UserInfoDetailQueriedResource> queryUserDetails(@PathVariable String username) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userQueryService.getUserDetails(username),
-				UserInfoDetailQueriedResource.class), HttpStatus.OK);
+	public ResponseEntity<UserInfoDetailQueriedResource> queryUserDetails(@PathVariable String username,
+			@RequestParam String service) {
+		return new ResponseEntity<>(BaseDataTransformer
+				.transformData(userQueryService.getUserDetails(username, service), UserInfoDetailQueriedResource.class),
+				HttpStatus.OK);
 	}
 
 	/**
 	 * 查詢該使用者資料
 	 * 
 	 * @param username
+	 * @param service
 	 * @return ResponseEntity<List<UserInfoQueriedResource>>
 	 */
 	@GetMapping("/{username}")

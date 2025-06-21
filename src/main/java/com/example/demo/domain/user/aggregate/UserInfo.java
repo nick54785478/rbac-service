@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
 import com.example.demo.domain.user.command.CreateUserCommand;
@@ -136,7 +136,6 @@ public class UserInfo {
 		// DB 內的角色 ID Map
 		Map<Long, UserRole> existMap = this.roles.stream()
 				.collect(Collectors.toMap(UserRole::getRoleId, Function.identity()));
-
 		// 新資料沒有但舊資料有 => 刪除
 		List<UserRole> result = this.roles.stream().filter(existingRole -> userRoles.stream()
 				.noneMatch(newRole -> newRole.getRoleId().equals(existingRole.getRoleId()))).peek(role -> {
@@ -157,14 +156,6 @@ public class UserInfo {
 		});
 		this.roles = result;
 
-//		// 移除 functions 中不存在於 Role Functions 的項目
-//		this.roles.removeIf(existingRole -> userRoles.stream().noneMatch(newRole -> newRole.equals(existingRole)));
-//		// 增加新的 Role Function
-//		userRoles.stream().forEach(newRole -> {
-//			if (!roles.contains(newRole)) {
-//				this.roles.add(newRole);
-//			}
-//		});
 	}
 
 	/**
@@ -198,16 +189,6 @@ public class UserInfo {
 			}
 		});
 		this.groups = result;
-
-		// 移除 functions 中不存在於 Role Functions 的項目
-//		this.groups
-//				.removeIf(existingGroup -> userGroups.stream().noneMatch(newGroup -> newGroup.equals(existingGroup)));
-//		// 增加新的使用者群組
-//		userGroups.stream().forEach(newGroup -> {
-//			if (!this.groups.contains(newGroup)) {
-//				this.groups.add(newGroup);
-//			}
-//		});
 	}
 
 	/**

@@ -20,14 +20,15 @@ public class FunctionQueryService {
 	/**
 	 * 查詢符合條件的群組資料
 	 * 
+	 * @param service
 	 * @param actionType
 	 * @param type
 	 * @param name
 	 * @param activeFlag
 	 * @return List<GroupInfoQueried>
 	 */
-	public List<FunctionInfoQueried> query(String actionType, String type, String name, String activeFlag) {
-		List<FunctionInfo> functions = functionInfoRepository.findAllWithSpecification(actionType, type, name,
+	public List<FunctionInfoQueried> query(String service, String actionType, String type, String name, String activeFlag) {
+		List<FunctionInfo> functions = functionInfoRepository.findAllWithSpecification(service, actionType, type, name,
 				activeFlag);
 		return BaseDataTransformer.transformData(functions, FunctionInfoQueried.class);
 	}

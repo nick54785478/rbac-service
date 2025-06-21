@@ -1,6 +1,6 @@
 package com.example.demo.domain.share;
 
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.constant.YesNo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class UserGroupQueried {
 
 	private Long id;
+	
+	private String service; 
 	
 	private String type;
 

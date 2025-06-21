@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
 import com.example.demo.domain.role.command.CreateRoleCommand;
 import com.example.demo.domain.role.command.UpdateRoleCommand;
-import com.example.demo.domain.share.enums.YesNo;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -47,6 +47,8 @@ public class RoleInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String service; // 服務名稱
 
 	private String code; // 角色 Code
 
@@ -71,6 +73,7 @@ public class RoleInfo {
 	 */
 	public void create(CreateRoleCommand command) {
 		this.code = command.getCode();
+		this.service = command.getService();
 		this.name = command.getName();
 		this.description = command.getDescription();
 		this.type = command.getType();
@@ -84,6 +87,7 @@ public class RoleInfo {
 	 */
 	public void create(CreateOrUpdateRoleCommand command) {
 		this.code = command.getCode();
+		this.service = command.getService();
 		this.name = command.getName();
 		this.description = command.getDescription();
 		this.type = command.getType();
@@ -97,6 +101,7 @@ public class RoleInfo {
 	 */
 	public void update(UpdateRoleCommand command) {
 		this.code = command.getCode();
+		this.service = command.getService();
 		this.name = command.getName();
 		this.type = command.getType();
 		this.description = command.getDescription();
@@ -110,6 +115,7 @@ public class RoleInfo {
 	public void update(CreateOrUpdateRoleCommand command) {
 		this.id = command.getId();
 		this.code = command.getCode();
+		this.service = command.getService();
 		this.name = command.getName();
 		this.type = command.getType();
 		this.description = command.getDescription();

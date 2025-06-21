@@ -7,20 +7,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateOrUpdateRoleResource {
+public class UserGroupDetailsQueriedResource {
 
 	private Long id;
 
+	private String authType;
+
 	private String service;
-	
-	private String code;
-	
-	private String name;
-	
+
 	private String type;
-	
-	private String description;
-	
+
+	private String name; // 名稱
+
+	private String code; // 群組代號
+
+	private String description; // 敘述
+
 	private String activeFlag;
-	
 }

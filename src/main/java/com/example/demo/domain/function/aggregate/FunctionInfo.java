@@ -2,10 +2,10 @@ package com.example.demo.domain.function.aggregate;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.function.aggregate.vo.ActionType;
 import com.example.demo.domain.function.command.CreateFunctionCommand;
 import com.example.demo.domain.function.command.CreateOrUpdateFunctionCommand;
-import com.example.demo.domain.share.enums.YesNo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,6 +36,8 @@ public class FunctionInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String service; // 服務名稱
 
 	private String type; // 種類
 
@@ -45,7 +47,7 @@ public class FunctionInfo {
 
 	private String code; // Code
 	
-	private String name; // Code
+	private String name; // Name
 
 	private String description; // 敘述
 
@@ -61,6 +63,7 @@ public class FunctionInfo {
 	public void create(CreateFunctionCommand command) {
 		this.type = command.getType();
 		this.name = command.getName();
+		this.service = command.getService();
 		this.actionType = ActionType.fromLabel(command.getActionType());
 		this.code = command.getCode();
 		this.description = command.getDescription();
@@ -75,6 +78,7 @@ public class FunctionInfo {
 	public void create(CreateOrUpdateFunctionCommand command) {
 		this.code = command.getCode();
 		this.name = command.getName();
+		this.service = command.getService();
 		this.description = command.getDescription();
 		this.actionType = ActionType.fromLabel(command.getActionType());
 		this.type = command.getType();
@@ -89,6 +93,7 @@ public class FunctionInfo {
 	public void update(CreateOrUpdateFunctionCommand command) {
 		this.id = command.getId();
 		this.code = command.getCode();
+		this.service = command.getService();
 		this.name = command.getName();
 		this.type = command.getType();
 		this.actionType = ActionType.fromLabel(command.getActionType());

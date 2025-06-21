@@ -25,9 +25,9 @@ public class UserInfoDetailQueried {
 	
 	private String nationalIdNo;
 
-	private List<UserGroupQueried> groups;
+	private List<UserGroupDetailsQueried> groups;
 
-	private List<UserRoleQueried> roles;
+	private List<UserRoleDetailsQueried> roles;
 	
 	private List<FunctionInfoDetailQueried> functions;
 

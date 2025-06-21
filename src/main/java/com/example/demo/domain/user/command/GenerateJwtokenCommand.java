@@ -12,4 +12,6 @@ public class GenerateJwtokenCommand {
 	private String username;
 	
 	private String password;
+	
+	
 }

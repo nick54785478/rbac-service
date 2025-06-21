@@ -63,11 +63,11 @@ public class SettingController {
 	 * @return ResponseEntity<List<SettingQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<SettingQueriedResource>> query(@RequestParam(required = false) String dataType,
-			@RequestParam(required = false) String type, @RequestParam(required = false) String name,
-			@RequestParam(required = false) String activeFlag) {
+	public ResponseEntity<List<SettingQueriedResource>> query(@RequestParam(required = false) String service,
+			@RequestParam(required = false) String dataType, @RequestParam(required = false) String type,
+			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
 		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(settingQueryService.query(dataType, type, name, activeFlag),
+				BaseDataTransformer.transformData(settingQueryService.query(service, dataType, type, name, activeFlag),
 						SettingQueriedResource.class),
 				HttpStatus.OK);
 	}

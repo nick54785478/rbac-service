@@ -13,19 +13,20 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SettingQueryService {
 
-	private SettingService service;
+	private SettingService settingService;
 
 	/**
 	 * 根據條件查詢 Setting
 	 * 
+	 * @param service
 	 * @param dataType
 	 * @param type
 	 * @param name
 	 * @param activeFlag
 	 * @return List<SettingQueried> 設定清單
 	 */
-	public List<SettingQueried> query(String dataType, String type, String name, String activeFlag) {
-		return service.query(dataType, type, name, activeFlag);
+	public List<SettingQueried> query(String service, String dataType, String type, String name, String activeFlag) {
+		return settingService.query(service, dataType, type, name, activeFlag);
 	}
 
 }

@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class CreateOrUpdateFunctionResource {
 
 	private Long id;
+	
+	private String service; // 服務配置
 
 	private String code;
 	

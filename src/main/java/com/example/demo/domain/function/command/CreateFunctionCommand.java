@@ -8,10 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateFunctionCommand {
-
+	
 	private String type; // 種類
 	
 	private String name;
+	
+	private String service; // 服務配置
 	
 	private String actionType;
 	

@@ -3,7 +3,7 @@ package com.example.demo.domain.share;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.constant.YesNo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 public class RoleInfoQueried {
 
 	private Long id;
+	
+	private String service;
 
 	private String code; // 角色 Code
 

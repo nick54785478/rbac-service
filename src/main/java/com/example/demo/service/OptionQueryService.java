@@ -5,11 +5,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.share.GroupOptionQueried;
 import com.example.demo.domain.share.OptionQueried;
 import com.example.demo.domain.share.RoleOptionQueried;
 import com.example.demo.domain.share.UserOptionQueried;
-import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.infra.repository.SettingRepository;
@@ -30,11 +30,12 @@ public class OptionQueryService {
 	/**
 	 * 查詢相關的設定
 	 * 
+	 * @param service
 	 * @param type 設定種類
 	 * @return List<OptionQueried>
 	 */
-	public List<OptionQueried> getSettingTypes(String type) {
-		return settingRepository.findByDataTypeAndActiveFlag(type, YesNo.Y).stream().map(setting -> {
+	public List<OptionQueried> getSettingTypes(String service, String type) {
+		return settingRepository.findByServiceAndDataTypeAndActiveFlag(service, type, YesNo.Y).stream().map(setting -> {
 			return new OptionQueried(setting.getId(), setting.getType(), setting.getType());
 		}).collect(Collectors.toList());
 	}
@@ -72,4 +73,5 @@ public class OptionQueryService {
 		return BaseDataTransformer.transformData(groupInfoRepository.findAllWithSpecification(str),
 				GroupOptionQueried.class);
 	}
+	
 }

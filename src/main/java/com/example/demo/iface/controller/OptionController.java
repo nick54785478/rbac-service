@@ -2,6 +2,7 @@ package com.example.demo.iface.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.constant.ServiceType;
 import com.example.demo.iface.dto.GroupOptionQueriedResource;
 import com.example.demo.iface.dto.OptionQueriedResource;
 import com.example.demo.iface.dto.RoleOptionQueriedResource;
@@ -32,8 +34,12 @@ public class OptionController {
 	 * @return ResponseEntity<List<OptionQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<OptionQueriedResource>> query(@RequestParam String type) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getSettingTypes(type),
+	public ResponseEntity<List<OptionQueriedResource>> query(@RequestParam(required = false) String service, @RequestParam String type) {
+		if (StringUtils.isBlank(service)) {
+			service = ServiceType.AUTH_SERVICE.getValue();
+		}
+		
+		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getSettingTypes(service, type),
 				OptionQueriedResource.class), HttpStatus.OK);
 	}
 

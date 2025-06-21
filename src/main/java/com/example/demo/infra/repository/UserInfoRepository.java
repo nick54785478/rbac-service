@@ -14,7 +14,7 @@ import jakarta.persistence.criteria.Predicate;;
 
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
-
+	
 	List<UserInfo> findByIdIn(List<Long> ids);
 	
 	UserInfo findByUsername(String username);

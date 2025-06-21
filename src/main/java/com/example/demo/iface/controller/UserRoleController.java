@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
 import com.example.demo.iface.dto.UpdateUserRolesResource;
 import com.example.demo.iface.dto.UserRoleQueriedResource;
@@ -28,7 +30,7 @@ public class UserRoleController {
 
 	private UserRoleQueryService userRoleQueryService;
 	private UserRoleCommandService userRoleCommandService;
-	
+
 	/**
 	 * 更新使用者角色權限
 	 * 
@@ -40,8 +42,21 @@ public class UserRoleController {
 		// 防腐處理 resource -> command
 		UpdateUserRolesCommand command = BaseDataTransformer.transformData(resource, UpdateUserRolesCommand.class);
 		userRoleCommandService.update(command);
-		return new ResponseEntity<>(
-				new UserRolesUpdatedResource("200", "成功更新使用者角色權限"),
+		return new ResponseEntity<>(new UserRolesUpdatedResource("200", "成功更新使用者角色權限"), HttpStatus.OK);
+	}
+
+	/**
+	 * 查詢該使用者相關角色資訊
+	 * 
+	 * @param username
+	 * @param service
+	 * @return ResponseEntity<List<UserRoleQueriedResource>>
+	 */
+	@GetMapping("/{username}")
+	public ResponseEntity<List<UserRoleQueriedResource>> queryRoles(@PathVariable String username,
+			@RequestParam(required = true) String service) {
+		List<UserRoleQueried> userRoles = userRoleQueryService.queryRoles(username, service);
+		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoles, UserRoleQueriedResource.class),
 				HttpStatus.OK);
 	}
 
@@ -52,8 +67,9 @@ public class UserRoleController {
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/{username}/others")
-	public ResponseEntity<List<UserRoleQueriedResource>> queryOthers(@PathVariable String username) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoleQueryService.queryOthers(username),
+	public ResponseEntity<List<UserRoleQueriedResource>> queryOthers(@PathVariable String username,
+			@RequestParam(required = true) String service) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoleQueryService.queryOthers(username, service),
 				UserRoleQueriedResource.class), HttpStatus.OK);
 	}
 

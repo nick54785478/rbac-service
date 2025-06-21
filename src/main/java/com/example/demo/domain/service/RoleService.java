@@ -9,18 +9,16 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
-import com.example.demo.domain.share.RoleFunctionQueried;
 import com.example.demo.domain.share.RoleInfoQueried;
-import com.example.demo.domain.share.RoleOptionQueried;
-import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.exception.ValidationException;
+import com.example.demo.infra.assembler.RoleAssembler;
 import com.example.demo.infra.repository.FunctionInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
-import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
 
@@ -28,14 +26,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class RoleService {
 
+	private RoleAssembler roleAssembler;
 	private FunctionInfoRepository functionInfoRepository;
 	private RoleInfoRepository roleInfoRepository;
-
 
 	/**
 	 * 建立多筆角色資訊(僅限於前端使用 Inline-Edit)
 	 * 
-	 * @param command
+	 * @param commands
 	 */
 	public void createOrUpdate(List<CreateOrUpdateRoleCommand> commands) {
 
@@ -49,9 +47,8 @@ public class RoleService {
 		Map<Long, RoleInfo> map = roles.stream().collect(Collectors.toMap(RoleInfo::getId, Function.identity()));
 
 		List<RoleInfo> roleList = commands.stream().map(command -> {
-
 			// 修改
-			if (!Objects.isNull(command.getId()) && !Objects.isNull(map.get(command.getId()))) {
+			if (!Objects.isNull(command.getId()) && map.containsKey(command.getId())) {
 				RoleInfo role = map.get(command.getId());
 				role.update(command);
 				return role;
@@ -66,7 +63,6 @@ public class RoleService {
 		roleInfoRepository.saveAll(roleList);
 	}
 
-
 	/**
 	 * 查詢符合條件的角色資料
 	 * 
@@ -77,20 +73,14 @@ public class RoleService {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
-			RoleInfoQueried roleQueried = BaseDataTransformer.transformData(role, RoleInfoQueried.class);
 			List<Long> funcIds = role.getFunctions().stream().filter(e -> Objects.equals(e.getActiveFlag(), YesNo.Y))
 					.map(RoleFunction::getFunctionId).collect(Collectors.toList());
 			List<FunctionInfo> functions = functionInfoRepository.findByIdInAndActiveFlag(funcIds, YesNo.Y);
-			List<RoleFunctionQueried> functionRoles = BaseDataTransformer.transformData(functions,
-					RoleFunctionQueried.class);
-			roleQueried.setFunctions(functionRoles);
-			return roleQueried;
+			
+			return roleAssembler.assembleRoleQueried(role, functions);
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");
 		}
 	}
-
-
-
 
 }

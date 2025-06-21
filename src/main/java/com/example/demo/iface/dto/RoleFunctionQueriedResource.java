@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class RoleFunctionQueriedResource {
 
 	private Long id;
+	
+	private String service; 
 
 	private String type;
 

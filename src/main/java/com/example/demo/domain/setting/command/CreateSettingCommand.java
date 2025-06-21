@@ -1,7 +1,5 @@
 package com.example.demo.domain.setting.command;
 
-import com.example.demo.domain.share.enums.YesNo;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateSettingCommand {
-	
+
+	private String service;
+
 	private String dataType; // 資料種類
 
 	private String type; // 種類
@@ -21,5 +21,5 @@ public class CreateSettingCommand {
 
 	private Integer priorityNo; // 順序號(從 1 開始)
 
-	private YesNo activeFlag = YesNo.Y; // 是否有效
+	private String activeFlag; // 是否有效
 }

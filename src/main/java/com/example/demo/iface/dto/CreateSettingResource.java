@@ -1,7 +1,5 @@
 package com.example.demo.iface.dto;
 
-import com.example.demo.domain.share.enums.YesNo;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateSettingResource {
+	
+	private String service;
 		
 	private String dataType; // 資料種類
 
@@ -21,5 +21,5 @@ public class CreateSettingResource {
 
 	private Integer priorityNo; // 順序號(從 1 開始)
 
-	private YesNo activeFlag = YesNo.Y; // 是否有效
+	private String activeFlag; // 是否有效
 }

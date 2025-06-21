@@ -14,6 +14,8 @@ public class CreateOrUpdateFunctionCommand {
 	private String code;
 	
 	private String name;
+	
+	private String service;
 
 	private String type;
 	

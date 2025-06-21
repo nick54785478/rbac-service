@@ -1,5 +1,7 @@
 package com.example.demo.domain.share;
 
+import com.example.demo.constant.YesNo;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,21 +9,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FunctionInfoQueried {
+public class UserGroupDetailsQueried {
 
 	private Long id;
+	
+	private String service; 
+	
+	private String type;
 
-	private String service;
+	private String name; // 名稱
 
-	private String type; // 配置種類
-
-	private String code; // Code
-
-	private String name;
-
-	private String actionType;
+	private String code; // 群組代號
 
 	private String description; // 敘述
 
-	private String activeFlag; // 是否有效
+	private YesNo activeFlag;
 }

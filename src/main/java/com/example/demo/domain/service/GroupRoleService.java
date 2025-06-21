@@ -8,12 +8,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.group.command.UpdateGroupRolesCommand;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.share.GroupRoleQueried;
-import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.exception.ValidationException;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;

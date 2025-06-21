@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.example.demo.constant.YesNo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.group.command.CreateGroupCommand;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
-import com.example.demo.domain.share.enums.YesNo;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -46,6 +46,8 @@ public class GroupInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String service; // 服務名稱
 
 	private String type; // 群組種類
 
@@ -70,6 +72,7 @@ public class GroupInfo {
 	 */
 	public void create(CreateGroupCommand command) {
 		this.type = command.getType();
+		this.service = command.getService();
 		this.name = command.getName();
 		this.code = command.getCode();
 		this.description = command.getDescription();
@@ -83,6 +86,7 @@ public class GroupInfo {
 	 */
 	public void create(CreateOrUpdateGroupCommand command) {
 		this.type = command.getType();
+		this.service = command.getService();
 		this.name = command.getName();
 		this.code = command.getCode();
 		this.description = command.getDescription();
@@ -96,6 +100,7 @@ public class GroupInfo {
 	 */
 	public void update(CreateOrUpdateGroupCommand command) {
 		this.name = command.getName();
+		this.service = command.getService();
 		this.type = command.getType();
 		this.code = command.getCode();
 		this.description = command.getDescription();
