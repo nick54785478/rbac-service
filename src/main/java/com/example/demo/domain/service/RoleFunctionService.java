@@ -86,7 +86,7 @@ public class RoleFunctionService {
 			return roleFunction;
 		}).collect(Collectors.toList());
 
-		// 透過 Role Id 取的 角色資料
+		// 透過 Role Id 取得 角色資料
 		roleInfoRepository.findById(command.getRoleId()).ifPresent(role -> {
 			role.updateFunctions(roleFunctions);
 			roleInfoRepository.save(role);

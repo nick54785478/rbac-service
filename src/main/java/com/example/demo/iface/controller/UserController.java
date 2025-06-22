@@ -19,8 +19,8 @@ import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.iface.dto.CreateUserResource;
 import com.example.demo.iface.dto.UpdateUserResource;
 import com.example.demo.iface.dto.UserCreatedResource;
-import com.example.demo.iface.dto.UserGroupQueriedResource;
-import com.example.demo.iface.dto.UserInfoDetailQueriedResource;
+import com.example.demo.iface.dto.UserGroupDetailsQueriedResource;
+import com.example.demo.iface.dto.UserInfoDetailsQueriedResource;
 import com.example.demo.iface.dto.UserInfoQueriedResource;
 import com.example.demo.iface.dto.UserRoleQueriedResource;
 import com.example.demo.iface.dto.UserUpdatedResource;
@@ -73,9 +73,9 @@ public class UserController {
 	 * @return ResponseEntity<List<UserGroupQueriedResource>>
 	 */
 	@GetMapping("/{username}/groups")
-	public ResponseEntity<List<UserGroupQueriedResource>> queryGroups(@PathVariable String username) {
+	public ResponseEntity<List<UserGroupDetailsQueriedResource>> queryGroups(@PathVariable String username) {
 		List<UserGroupQueried> userGroups = userQueryService.queryGroups(username);
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userGroups, UserGroupQueriedResource.class),
+		return new ResponseEntity<>(BaseDataTransformer.transformData(userGroups, UserGroupDetailsQueriedResource.class),
 				HttpStatus.OK);
 	}
 
@@ -99,9 +99,9 @@ public class UserController {
 	 * @return ResponseEntity<UserInfoDetailQueriedResource>
 	 */
 	@GetMapping("/{username}/details")
-	public ResponseEntity<UserInfoDetailQueriedResource> queryUserDetails(@PathVariable String username) {
+	public ResponseEntity<UserInfoDetailsQueriedResource> queryUserDetails(@PathVariable String username) {
 		return new ResponseEntity<>(BaseDataTransformer.transformData(userQueryService.getUserDetails(username),
-				UserInfoDetailQueriedResource.class), HttpStatus.OK);
+				UserInfoDetailsQueriedResource.class), HttpStatus.OK);
 	}
 
 	/**

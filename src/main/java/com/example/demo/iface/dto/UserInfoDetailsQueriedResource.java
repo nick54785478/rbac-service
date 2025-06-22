@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoDetailQueriedResource {
+public class UserInfoDetailsQueriedResource {
 
 	private Long id;
 
@@ -25,10 +25,10 @@ public class UserInfoDetailQueriedResource {
 	
 	private String nationalIdNo;
 
-	private List<UserGroupQueriedResource> groups;
+	private List<UserGroupDetailsQueriedResource> groups;
 
-	private List<UserRoleQueriedResource> roles;
+	private List<UserRoleDetailsQueriedResource> roles;
 	
-	private List<FunctionInfoDetailQueriedResource> functions;
+	private List<FunctionInfoDetailsQueriedResource> functions;
 
 }

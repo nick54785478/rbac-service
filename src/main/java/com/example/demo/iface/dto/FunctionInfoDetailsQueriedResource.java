@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.iface.dto;
 
 import com.example.demo.domain.share.enums.YesNo;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FunctionInfoDetailQueried {
+public class FunctionInfoDetailsQueriedResource {
 
 	private Long id;
 

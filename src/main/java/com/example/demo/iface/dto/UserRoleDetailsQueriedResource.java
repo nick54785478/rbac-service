@@ -9,21 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FunctionInfoDetailQueriedResource {
+public class UserRoleDetailsQueriedResource {
 
 	private Long id;
-
-	private String type; // 配置種類
-
-	private String code; // Code
+	
+	private String code;
 
 	private String name;
-	
-	private String actionType;
+
+	private String type; // 權限種類
 
 	private String description; // 敘述
-	
-	private String label; // 權限(群組角色、個人角色)
 
-	private YesNo activeFlag = YesNo.Y; // 是否有效
+	private YesNo activeFlag;
 }

@@ -1,5 +1,7 @@
 package com.example.demo.domain.share;
 
+import com.example.demo.domain.share.enums.YesNo;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,20 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoUpdated {
+public class UserRoleDetailsQueried {
 
 	private Long id;
+	
+	private String code;
 
 	private String name;
-	
-	private String username; // 帳號
 
-	private String email;
-	
-	private String birthday;
-	
-	private String nationalId;
+	private String type; // 權限種類
 
-	private String address;
-	
+	private String description; // 敘述
+
+	private YesNo activeFlag;
 }

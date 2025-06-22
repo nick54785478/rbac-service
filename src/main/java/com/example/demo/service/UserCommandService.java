@@ -60,9 +60,8 @@ public class UserCommandService {
 	 * 更新 使用者角色資料
 	 * 
 	 * @param command
-	 * @return UserRolesGranted 
 	 */
-	public UserRolesGranted grant(UpdateUserRolesCommand command) {
-		return userService.grant(command);
+	public void grant(UpdateUserRolesCommand command) {
+		userService.grant(command);
 	}
 }

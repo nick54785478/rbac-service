@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
-import com.example.demo.domain.group.command.CreateGroupCommand;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
 import com.example.demo.domain.role.aggregate.RoleInfo;
-import com.example.demo.domain.share.GroupCreated;
 import com.example.demo.domain.share.GroupInfoQueried;
 import com.example.demo.domain.share.GroupRoleQueried;
 import com.example.demo.domain.share.enums.YesNo;

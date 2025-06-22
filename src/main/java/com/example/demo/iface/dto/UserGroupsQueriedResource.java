@@ -21,6 +21,6 @@ public class UserGroupsQueriedResource {
 
 	private String address;
 
-	private List<UserGroupQueriedResource> groups;
+	private List<UserGroupDetailsQueriedResource> groups;
 
 }

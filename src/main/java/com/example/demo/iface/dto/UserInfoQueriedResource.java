@@ -26,7 +26,7 @@ public class UserInfoQueriedResource {
 	
 	private Date birthday; // 出生年月日
 
-	private List<UserGroupQueriedResource> groups;
+	private List<UserGroupDetailsQueriedResource> groups;
 
 	private List<UserRoleQueriedResource> roles;
 

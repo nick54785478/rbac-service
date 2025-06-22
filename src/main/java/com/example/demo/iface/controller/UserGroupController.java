@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.user.command.UpdateUserGroupsCommand;
 import com.example.demo.iface.dto.UpdateUserGroupsResource;
-import com.example.demo.iface.dto.UserGroupQueriedResource;
+import com.example.demo.iface.dto.UserGroupDetailsQueriedResource;
 import com.example.demo.iface.dto.UserGroupUpdatedResource;
 import com.example.demo.service.UserGroupCommandService;
 import com.example.demo.service.UserGroupQueryService;
@@ -53,9 +53,9 @@ public class UserGroupController {
 	 * @return ResponseEntity<List<UserGroupQueriedResource>>
 	 */
 	@GetMapping("/{usernmae}/others")
-	public ResponseEntity<List<UserGroupQueriedResource>> query(@PathVariable String usernmae) {
+	public ResponseEntity<List<UserGroupDetailsQueriedResource>> query(@PathVariable String usernmae) {
 		return new ResponseEntity<>(BaseDataTransformer.transformData(userGroupQueryService.queryOthers(usernmae),
-				UserGroupQueriedResource.class), HttpStatus.OK);
+				UserGroupDetailsQueriedResource.class), HttpStatus.OK);
 	}
 
 }

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,20 +14,17 @@ import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
-import com.example.demo.domain.share.FunctionInfoDetailQueried;
+import com.example.demo.domain.share.FunctionInfoDetailsQueried;
+import com.example.demo.domain.share.UserGroupDetailsQueried;
 import com.example.demo.domain.share.UserGroupQueried;
-import com.example.demo.domain.share.UserInfoCreated;
-import com.example.demo.domain.share.UserInfoDetailQueried;
-import com.example.demo.domain.share.UserInfoQueried;
-import com.example.demo.domain.share.UserOptionQueried;
+import com.example.demo.domain.share.UserInfoDetailsQueried;
+import com.example.demo.domain.share.UserRoleDetailsQueried;
 import com.example.demo.domain.share.UserRoleQueried;
-import com.example.demo.domain.share.UserRolesGranted;
 import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
 import com.example.demo.domain.user.command.CreateUserCommand;
-import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
 import com.example.demo.exception.ValidationException;
 import com.example.demo.infra.repository.FunctionInfoRepository;
@@ -51,14 +47,13 @@ public class UserService {
 	private RoleInfoRepository roleRepository;
 	private FunctionInfoRepository functionRepository;
 
-
 	/**
 	 * 更新使用者角色資料
 	 * 
 	 * @param command
 	 * @return UserRoleGranted
 	 */
-	public UserRolesGranted grant(UpdateUserRolesCommand command) {
+	public void grant(UpdateUserRolesCommand command) {
 		UserInfo user = userRepository.findByUsername(command.getUsername());
 		if (Objects.isNull(user)) {
 			log.error("該使用者名稱不合法");
@@ -74,25 +69,9 @@ public class UserService {
 		}).collect(Collectors.toList());
 
 		user.updateRoles(userRoles);
-		UserInfo saved = userRepository.save(user);
+		userRepository.save(user);
 
-		UserRolesGranted userRoleCreated = new UserRolesGranted();
-		userRoleCreated.setUsername(saved.getUsername());
-		userRoleCreated.setRoles(roleList.stream().map(RoleInfo::getName).collect(Collectors.toList()));
-		return userRoleCreated;
 	}
-
-
-//	/**
-//	 * 查詢使用者下拉選單資訊
-//	 * 
-//	 * @param str 使用者資訊字串
-//	 * @return UserOtionInfoQueried
-//	 */
-//	public List<UserOptionQueried> getUserInfoOtions(String str) {
-//		return BaseDataTransformer.transformData(userRepository.findAllWithSpecification(str), UserOptionQueried.class);
-//	}
-
 
 	/**
 	 * 取得特定使用者所在的群組資料
@@ -144,8 +123,8 @@ public class UserService {
 	 * @return UserInfoDetailQueried
 	 */
 	@Transactional
-	public UserInfoDetailQueried getUserDetails(String username) {
-		Map<String, List<FunctionInfoDetailQueried>> funcMap = new HashMap<>();
+	public UserInfoDetailsQueried getUserDetails(String username) {
+		Map<String, List<FunctionInfoDetailsQueried>> funcMap = new HashMap<>();
 
 		UserInfo userInfo = userRepository.findByUsername(username);
 		// 取得 Group ID 清單
@@ -171,7 +150,7 @@ public class UserService {
 		funcMap.put("GROUP", this.getFuncList(groupRoles));
 
 		// 合併功能權限(群組角色功能、個人角色功能)
-		List<FunctionInfoDetailQueried> functions = funcMap.entrySet().stream().flatMap(entry -> {
+		List<FunctionInfoDetailsQueried> functions = funcMap.entrySet().stream().flatMap(entry -> {
 			String key = entry.getKey();
 			// 遍歷 Functions 資料，將 key 值設置進去
 			entry.getValue().forEach(e -> {
@@ -180,14 +159,14 @@ public class UserService {
 			return entry.getValue().stream();
 		}).collect(Collectors.toList());
 
-		List<UserGroupQueried> groupList = groups.stream()
-				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueried.class))
+		List<UserGroupDetailsQueried> groupList = groups.stream()
+				.map(group -> BaseDataTransformer.transformData(group, UserGroupDetailsQueried.class))
 				.collect(Collectors.toList());
-		List<UserRoleQueried> roleList = roles.stream()
-				.map(role -> BaseDataTransformer.transformData(role, UserRoleQueried.class))
+		List<UserRoleDetailsQueried> roleList = roles.stream()
+				.map(role -> BaseDataTransformer.transformData(role, UserRoleDetailsQueried.class))
 				.collect(Collectors.toList());
 
-		UserInfoDetailQueried resource = BaseDataTransformer.transformData(userInfo, UserInfoDetailQueried.class);
+		UserInfoDetailsQueried resource = BaseDataTransformer.transformData(userInfo, UserInfoDetailsQueried.class);
 		resource.setRoles(roleList);
 		resource.setGroups(groupList);
 		resource.setFunctions(functions);
@@ -199,13 +178,14 @@ public class UserService {
 	 * 透過角色清單取得該角色所屬功能
 	 * 
 	 * @param roles
+	 * @return List<FunctionInfoDetailsQueried>
 	 */
-	private List<FunctionInfoDetailQueried> getFuncList(List<RoleInfo> roles) {
+	private List<FunctionInfoDetailsQueried> getFuncList(List<RoleInfo> roles) {
 		// 個人角色權限 ID 清單
 		List<Long> funcIds = roles.stream().flatMap(r -> r.getFunctions().stream().map(RoleFunction::getFunctionId))
 				.distinct().collect(Collectors.toList());
 		List<FunctionInfo> personalFuncs = functionRepository.findByIdIn(funcIds);
-		return BaseDataTransformer.transformData(personalFuncs, FunctionInfoDetailQueried.class);
+		return BaseDataTransformer.transformData(personalFuncs, FunctionInfoDetailsQueried.class);
 
 	}
 

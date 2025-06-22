@@ -29,7 +29,6 @@ public class AuthController {
 	 */
 	@GetMapping("/permissions")
 	public ResponseEntity<MaintainPermissionQueriedResource> getMaintainPermissions(@RequestParam(required = false) String username) {
-//		String username = ContextHolder.getUsername();
 		List<String> permissions = authQueryService.getMaintainPermissions(username);
 		return new ResponseEntity<>(new MaintainPermissionQueriedResource(permissions), HttpStatus.OK);
 	}

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.service.UserService;
 import com.example.demo.domain.share.UserGroupQueried;
-import com.example.demo.domain.share.UserInfoDetailQueried;
+import com.example.demo.domain.share.UserInfoDetailsQueried;
 import com.example.demo.domain.share.UserInfoQueried;
 import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.aggregate.UserInfo;
@@ -67,7 +67,7 @@ public class UserQueryService {
 	 * @param username
 	 * @return UserInfoQueried
 	 */
-	public UserInfoDetailQueried getUserDetails(String username) {
+	public UserInfoDetailsQueried getUserDetails(String username) {
 		return userService.getUserDetails(username);
 	}
 
