@@ -23,6 +23,11 @@ public class ContextHolder {
 	 * JWT Claims 的 Key，用於指定 JWT 的 Acc
 	 */
 	public static final String CLAIM_KEY_ACC = "acc";
+	
+	/**
+	 * Service Header Key
+	 */
+	public static final String SERVICE_HEADER_KEY = "service-header";
 
 	/**
 	 * 儲存從 JWT Token 解析出來的 Claims 內容
@@ -32,6 +37,15 @@ public class ContextHolder {
 	/** 儲存目前使用者傳入的 JWT Token */
 	private static final ThreadLocal<String> JWT_TOKEN = new ThreadLocal<>();
 
+	/** 儲存目前使用者傳入的 Service Header */
+	private static final ThreadLocal<String> SERVICE_HEADER = new ThreadLocal<>();
+
+	/**
+	 * 設置 Service Header
+	 */
+	public static void setServiceHeader(String service) {
+		SERVICE_HEADER.set(service);
+	}
 
 	/**
 	 * 將 JWT Claims 設定到 ThreadLocal 內。
@@ -53,6 +67,15 @@ public class ContextHolder {
 	}
 
 	/**
+	 * 取得要取得哪個服務的請求頭
+	 * 
+	 * @return 服務的請求頭
+	 */
+	public static String getServiceHeader() {
+		return SERVICE_HEADER.get() != null ? SERVICE_HEADER.get() : null;
+	}
+
+	/**
 	 * 取得目前登入者的用戶帳號
 	 * 
 	 * @return 目前登入者的用戶帳號
@@ -60,16 +83,17 @@ public class ContextHolder {
 	public static String getUsername() {
 		return JWT_CLAIMS.get() != null ? JWT_CLAIMS.get().getSubject() : null;
 	}
-	
+
 	/**
 	 * 取得目前登入者的角色
 	 * 
 	 * @return 目前登入者的用戶角色
 	 */
 	public static List<String> getRoles() {
-		return JWT_CLAIMS.get() != null ? (List<String>) JWT_CLAIMS.get().get(JwtConstants.JWT_CLAIMS_KEY_ROLE.getValue())
+		return JWT_CLAIMS.get() != null
+				? (List<String>) JWT_CLAIMS.get().get(JwtConstants.JWT_CLAIMS_KEY_ROLE.getValue())
 				: new ArrayList<>();
-		}
+	}
 
 	/**
 	 * 取得目前登入者的用戶信箱

@@ -65,7 +65,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 			chain.doFilter(request, response);
 			return;
 		}
-
+		
 		// 未開直接放行
 		if (!jwtAuthEnabled) {
 			// 測試用: 10 年的 Token
