@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.service.UserService;
-import com.example.demo.domain.share.UserRolesGranted;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserCommand;
