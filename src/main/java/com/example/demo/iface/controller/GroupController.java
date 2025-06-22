@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.group.command.CreateGroupCommand;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
-import com.example.demo.iface.dto.CreateGroupResource;
 import com.example.demo.iface.dto.CreateOrUpdateGroupResource;
 import com.example.demo.iface.dto.GroupCreatedOrUpdatedResource;
-import com.example.demo.iface.dto.GroupCreatedResource;
 import com.example.demo.iface.dto.GroupDeletedResource;
 import com.example.demo.iface.dto.GroupInfoQueriedResource;
 import com.example.demo.service.GroupCommandService;
@@ -34,20 +31,6 @@ public class GroupController {
 
 	private GroupQueryService groupQueryService;
 	private GroupCommandService groupCommandService;
-
-	/**
-	 * 新增 群組資料
-	 * 
-	 * @param resource
-	 * @return ResponseEntity<GroupCreatedResource>
-	 */
-	@PostMapping("")
-	public ResponseEntity<GroupCreatedResource> create(@RequestBody CreateGroupResource resource) {
-		// 防腐處理 resource -> command
-		CreateGroupCommand command = BaseDataTransformer.transformData(resource, CreateGroupCommand.class);
-		groupCommandService.create(command);
-		return new ResponseEntity<>(new GroupCreatedResource("200", "成功新增一筆群組資料"), HttpStatus.OK);
-	}
 
 	/**
 	 * 新增/更新多筆群組資料

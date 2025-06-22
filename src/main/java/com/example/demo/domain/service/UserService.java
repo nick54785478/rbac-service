@@ -77,48 +77,48 @@ public class UserService {
 
 	}
 
-	/**
-	 * 取得特定使用者所在的群組資料
-	 * 
-	 * @param username 使用者帳號
-	 * @return List<UserGroupQueried>
-	 */
-	@Transactional
-	public List<UserGroupQueried> queryGroups(String username) {
-		UserInfo userInfo = userRepository.findByUsername(username);
-		// 取得 User Group 的 GroupId
-		List<Long> groupIds = userInfo.getGroups().stream()
-				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
-				.map(UserGroup::getGroupId).collect(Collectors.toList());
-		// 透過 ID 取得 Group 資料
-		return groupRepository.findByIdInAndActiveFlag(groupIds, YesNo.Y).stream()
-				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueried.class))
-				.collect(Collectors.toList());
-	}
+//	/**
+//	 * 取得特定使用者所在的群組資料
+//	 * 
+//	 * @param username 使用者帳號
+//	 * @return List<UserGroupQueried>
+//	 */
+//	@Transactional
+//	public List<UserGroupQueried> queryGroups(String username) {
+//		UserInfo userInfo = userRepository.findByUsername(username);
+//		// 取得 User Group 的 GroupId
+//		List<Long> groupIds = userInfo.getGroups().stream()
+//				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+//				.map(UserGroup::getGroupId).collect(Collectors.toList());
+//		// 透過 ID 取得 Group 資料
+//		return groupRepository.findByIdInAndActiveFlag(groupIds, YesNo.Y).stream()
+//				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueried.class))
+//				.collect(Collectors.toList());
+//	}
+
+//	/**
+//	 * 取得特定使用者的角色資料
+//	 * 
+//	 * @param username 使用者帳號
+//	 * @param service  服務
+//	 * @return List<UserRoleQueried>
+//	 */
+//	@Transactional
+//	public List<UserRoleQueried> queryRoles(String username) {
+//		UserInfo user = userRepository.findByUsername(username);
+//		// 取得該使用者的 RoleId 清單
+//		List<Long> roleIds = user.getRoles().stream()
+//				// 過濾 UserRole 的 activeFlag = 'N' 者
+//				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+//				.map(UserRole::getRoleId).collect(Collectors.toList());
+//		// 查詢使用者角色資料
+//		return roleRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y).stream()
+//				.map(role -> BaseDataTransformer.transformData(role, UserRoleQueried.class))
+//				.collect(Collectors.toList());
+//	}
 
 	/**
-	 * 取得特定使用者的角色資料
-	 * 
-	 * @param username 使用者帳號
-	 * @param service  服務
-	 * @return List<UserRoleQueried>
-	 */
-	@Transactional
-	public List<UserRoleQueried> queryRoles(String username) {
-		UserInfo user = userRepository.findByUsername(username);
-		// 取得該使用者的 RoleId 清單
-		List<Long> roleIds = user.getRoles().stream()
-				// 過濾 UserRole 的 activeFlag = 'N' 者
-				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
-				.map(UserRole::getRoleId).collect(Collectors.toList());
-		// 查詢使用者角色資料
-		return roleRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y).stream()
-				.map(role -> BaseDataTransformer.transformData(role, UserRoleQueried.class))
-				.collect(Collectors.toList());
-	}
-
-	/**
-	 * 取得使用者詳細資訊
+	 * 取得特定服務的使用者詳細資訊
 	 * 
 	 * @param username
 	 * @param service

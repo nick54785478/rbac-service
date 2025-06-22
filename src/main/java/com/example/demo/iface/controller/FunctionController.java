@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.function.command.CreateFunctionCommand;
 import com.example.demo.domain.function.command.CreateOrUpdateFunctionCommand;
-import com.example.demo.iface.dto.CreateFunctionResource;
 import com.example.demo.iface.dto.CreateOrUpdateFunctionResource;
 import com.example.demo.iface.dto.FunctionCreatedOrUpdatedResource;
-import com.example.demo.iface.dto.FunctionCreatedResource;
 import com.example.demo.iface.dto.FunctionDeletedResource;
 import com.example.demo.iface.dto.FunctionInfoQueriedResource;
 import com.example.demo.service.FunctionCommandService;
@@ -33,20 +30,6 @@ public class FunctionController {
 
 	private FunctionCommandService functionCommandService;
 	private FunctionQueryService functionQueryService;
-
-	/**
-	 * 新增 功能資料
-	 * 
-	 * @param resource
-	 * @return ResponseEntity<FunctionCreatedResource>
-	 */
-	@PostMapping("")
-	public ResponseEntity<FunctionCreatedResource> create(@RequestBody CreateFunctionResource resource) {
-		// 防腐處理 resource -> command
-		CreateFunctionCommand command = BaseDataTransformer.transformData(resource, CreateFunctionCommand.class);
-		functionCommandService.create(command);
-		return new ResponseEntity<>(new FunctionCreatedResource("200", "新增成功"), HttpStatus.CREATED);
-	}
 
 	/**
 	 * 新增/更新多筆功能資料
@@ -77,18 +60,6 @@ public class FunctionController {
 	}
 
 	/**
-	 * 查詢角色功能資料
-	 * 
-	 * @param queryStr
-	 * @return ResponseEntity<List<FunctionInfoQueriedResource>>
-	 */
-	@GetMapping("/queryRoleFunc")
-	public ResponseEntity<List<FunctionInfoQueriedResource>> query(@RequestParam String queryStr) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(functionQueryService.query(queryStr),
-				FunctionInfoQueriedResource.class), HttpStatus.OK);
-	}
-
-	/**
 	 * 查詢功能資料
 	 * 
 	 * @param actionType
@@ -98,14 +69,11 @@ public class FunctionController {
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<FunctionInfoQueriedResource>> query(
-			@RequestParam(required = true) String service,
-			@RequestParam(required = false) String actionType,
-			@RequestParam(required = false) String type, @RequestParam(required = false) String name,
-			@RequestParam(required = false) String activeFlag) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(functionQueryService.query(service, actionType, type, name, activeFlag),
-						FunctionInfoQueriedResource.class),
-				HttpStatus.OK);
+	public ResponseEntity<List<FunctionInfoQueriedResource>> query(@RequestParam(required = true) String service,
+			@RequestParam(required = false) String actionType, @RequestParam(required = false) String type,
+			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(
+				functionQueryService.query(service, actionType, type, name, activeFlag),
+				FunctionInfoQueriedResource.class), HttpStatus.OK);
 	}
 }

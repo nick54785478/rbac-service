@@ -39,19 +39,6 @@ public class RoleController {
 	private RoleQueryService roleQueryService;
 	private RoleCommandService roleCommandService;
 
-	/**
-	 * 新增 角色資料
-	 * 
-	 * @param resource
-	 * @return ResponseEntity<RoleCreatedResource>
-	 */
-	@PostMapping("")
-	public ResponseEntity<RoleCreatedResource> create(@RequestBody CreateRoleResource resource) {
-		// 防腐處理 resource -> command
-		CreateRoleCommand command = BaseDataTransformer.transformData(resource, CreateRoleCommand.class);
-		roleCommandService.create(command);
-		return new ResponseEntity<>(new RoleCreatedResource("201", "成功新增一筆角色資料"), HttpStatus.CREATED);
-	}
 
 	/**
 	 * 新增/更新多筆角色資料
@@ -68,20 +55,6 @@ public class RoleController {
 		return new ResponseEntity<>(new RoleCreatedOrUpdatedResource("200", "新增/更新多筆角色資料"), HttpStatus.OK);
 	}
 
-	/**
-	 * 更新 角色資料
-	 * 
-	 * @param resource
-	 * @return ResponseEntity<RoleCreatedResource>
-	 */
-	@PutMapping("/{id}")
-	public ResponseEntity<RoleUpdatedResource> update(@RequestBody UpdateRoleResource resource, @PathVariable Long id) {
-		// 防腐處理 resource -> command
-		UpdateRoleCommand command = BaseDataTransformer.transformData(resource, UpdateRoleCommand.class);
-		command.setId(id);
-		roleCommandService.update(command);
-		return new ResponseEntity<>(new RoleUpdatedResource("200", "更新角色成功"), HttpStatus.OK);
-	}
 
 	/**
 	 * 刪除多筆角色資料
@@ -94,19 +67,6 @@ public class RoleController {
 		roleCommandService.delete(ids);
 		return new ResponseEntity<>(new RoleDeletedResource("200", "成功刪除多筆角色資料"), HttpStatus.OK);
 	}
-
-//	/**
-//	 * 透過 ID 查詢角色資料
-//	 * 
-//	 * @param id
-//	 * @return ResponseEntity<List<RoleQueriedResource>>
-//	 */
-//	@GetMapping("/{id}")
-//	public ResponseEntity<RoleInfoQueriedResource> query(@PathVariable Long id) {
-//		return new ResponseEntity<>(
-//				BaseDataTransformer.transformData(roleQueryService.query(id), RoleInfoQueriedResource.class),
-//				HttpStatus.OK);
-//	}
 
 	/**
 	 * 查詢角色資料

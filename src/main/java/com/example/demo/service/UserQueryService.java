@@ -25,29 +25,29 @@ public class UserQueryService {
 	private UserService userService;
 	private UserInfoRepository userRepository;
 
-	/**
-	 * 取得特定使用者所在的 Group 資料
-	 * 
-	 * @param username 使用者帳號
-	 * @return List<UserGroupQueried> 使用者群組清單
-	 */
-	public List<UserGroupQueried> queryGroups(String username) {
-		List<UserGroupQueried> groups = userService.queryGroups(username);
-		return groups;
-	}
-
-	/**
-	 * 取得特定使用者所在的 Role 資料
-	 * 
-	 * @param username 使用者帳號
-	 * @param service  服務
-	 * @return List<UserRoleQueried>
-	 */
-	public List<UserRoleQueried> queryRoles(String username, String service) {
-		List<UserRoleQueried> roles = userService.queryRoles(username);
-		log.debug("roles: {}", roles);
-		return roles;
-	}
+//	/**
+//	 * 取得特定使用者所在的 Group 資料
+//	 * 
+//	 * @param username 使用者帳號
+//	 * @return List<UserGroupQueried> 使用者群組清單
+//	 */
+//	public List<UserGroupQueried> queryGroups(String username) {
+//		List<UserGroupQueried> groups = userService.queryGroups(username);
+//		return groups;
+//	}
+//
+//	/**
+//	 * 取得特定使用者所在的 Role 資料
+//	 * 
+//	 * @param username 使用者帳號
+//	 * @param service  服務
+//	 * @return List<UserRoleQueried>
+//	 */
+//	public List<UserRoleQueried> queryRoles(String username, String service) {
+//		List<UserRoleQueried> roles = userService.queryRoles(username);
+//		log.debug("roles: {}", roles);
+//		return roles;
+//	}
 
 	/**
 	 * 查詢該使用者資訊

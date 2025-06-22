@@ -1,7 +1,5 @@
 package com.example.demo.iface.controller;
 
-import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.share.UserGroupQueried;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.iface.dto.CreateUserResource;
 import com.example.demo.iface.dto.UpdateUserResource;
 import com.example.demo.iface.dto.UserCreatedResource;
-import com.example.demo.iface.dto.UserGroupQueriedResource;
 import com.example.demo.iface.dto.UserInfoDetailQueriedResource;
-import com.example.demo.iface.dto.UserInfoQueriedResource;
 import com.example.demo.iface.dto.UserUpdatedResource;
 import com.example.demo.service.UserCommandService;
 import com.example.demo.service.UserQueryService;
@@ -67,19 +62,6 @@ public class UserController {
 	}
 
 	/**
-	 * 查詢該使用者相關群組資訊
-	 * 
-	 * @param username
-	 * @return ResponseEntity<List<UserGroupQueriedResource>>
-	 */
-	@GetMapping("/{username}/groups")
-	public ResponseEntity<List<UserGroupQueriedResource>> queryGroups(@PathVariable String username) {
-		List<UserGroupQueried> userGroups = userQueryService.queryGroups(username);
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userGroups, UserGroupQueriedResource.class),
-				HttpStatus.OK);
-	}
-
-	/**
 	 * 查詢該使用者相關資訊(含權限、角色)
 	 * 
 	 * @param username
@@ -90,20 +72,6 @@ public class UserController {
 			@RequestParam String service) {
 		return new ResponseEntity<>(BaseDataTransformer
 				.transformData(userQueryService.getUserDetails(username, service), UserInfoDetailQueriedResource.class),
-				HttpStatus.OK);
-	}
-
-	/**
-	 * 查詢該使用者資料
-	 * 
-	 * @param username
-	 * @param service
-	 * @return ResponseEntity<List<UserInfoQueriedResource>>
-	 */
-	@GetMapping("/{username}")
-	public ResponseEntity<UserInfoQueriedResource> query(@PathVariable String username) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(userQueryService.query(username), UserInfoQueriedResource.class),
 				HttpStatus.OK);
 	}
 
