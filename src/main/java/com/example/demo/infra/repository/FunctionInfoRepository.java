@@ -1,6 +1,7 @@
 package com.example.demo.infra.repository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.constant.YesNo;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
+import com.example.demo.domain.share.RoleFunctionQueried;
 
 import jakarta.persistence.criteria.Predicate;
 
@@ -82,5 +84,9 @@ public interface FunctionInfoRepository extends JpaRepository<FunctionInfo, Long
 
 		return findAll(specification);
 	}
+
+	List<FunctionInfo> findByServiceNot(String service);
+
+	List<FunctionInfo> findByIdInAndServiceAndActiveFlag(List<Long> funcIds, String service, YesNo activeFlag);
 
 }

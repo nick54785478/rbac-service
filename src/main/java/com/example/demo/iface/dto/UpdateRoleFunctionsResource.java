@@ -13,5 +13,7 @@ public class UpdateRoleFunctionsResource {
 
 	private Long roleId;
 	
+	private String service;
+	
 	private List<Long> functions;
 }

@@ -95,19 +95,18 @@ public class RoleController {
 		return new ResponseEntity<>(new RoleDeletedResource("200", "成功刪除多筆角色資料"), HttpStatus.OK);
 	}
 
-	/**
-	 * 透過 ID 查詢角色資料
-	 * 
-	 * @param type
-	 * @param name
-	 * @return ResponseEntity<List<RoleQueriedResource>>
-	 */
-	@GetMapping("/{id}")
-	public ResponseEntity<RoleInfoQueriedResource> query(@PathVariable Long id) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(roleQueryService.query(id), RoleInfoQueriedResource.class),
-				HttpStatus.OK);
-	}
+//	/**
+//	 * 透過 ID 查詢角色資料
+//	 * 
+//	 * @param id
+//	 * @return ResponseEntity<List<RoleQueriedResource>>
+//	 */
+//	@GetMapping("/{id}")
+//	public ResponseEntity<RoleInfoQueriedResource> query(@PathVariable Long id) {
+//		return new ResponseEntity<>(
+//				BaseDataTransformer.transformData(roleQueryService.query(id), RoleInfoQueriedResource.class),
+//				HttpStatus.OK);
+//	}
 
 	/**
 	 * 查詢角色資料

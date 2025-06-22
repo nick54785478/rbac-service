@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.demo.constant.YesNo;
 import com.example.demo.domain.group.aggregate.GroupInfo;
+import com.example.demo.domain.group.aggregate.entity.GroupRole;
 
 import jakarta.persistence.criteria.Predicate;
 
@@ -77,4 +78,5 @@ public interface GroupInfoRepository extends JpaRepository<GroupInfo, Long> {
 		});
 		return findAll(specification);
 	}
+	
 }

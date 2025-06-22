@@ -34,11 +34,12 @@ public class OptionController {
 	 * @return ResponseEntity<List<OptionQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<OptionQueriedResource>> query(@RequestParam(required = false) String service, @RequestParam String type) {
+	public ResponseEntity<List<OptionQueriedResource>> query(@RequestParam(required = false) String service,
+			@RequestParam String type) {
 		if (StringUtils.isBlank(service)) {
 			service = ServiceType.AUTH_SERVICE.getValue();
 		}
-		
+
 		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getSettingTypes(service, type),
 				OptionQueriedResource.class), HttpStatus.OK);
 	}
@@ -46,40 +47,35 @@ public class OptionController {
 	/**
 	 * 查詢使用者相關的設定 (AutoComplete)
 	 * 
-	 * @param str 使用者相關字串
-	 * return ResponseEntity<List<UserOptionQueriedResource>>
+	 * @param str 使用者相關字串 return ResponseEntity<List<UserOptionQueriedResource>>
 	 */
 	@GetMapping("/getUserOptions")
 	public ResponseEntity<List<UserOptionQueriedResource>> getUserOptions(@RequestParam("queryStr") String str) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(optionQueryService.getUserOptions(str), UserOptionQueriedResource.class),
-				HttpStatus.OK);
+		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getUserOptions(str),
+				UserOptionQueriedResource.class), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 查詢角色相關的設定 (AutoComplete)
 	 * 
-	 * @param str 角色相關字串
-	 * return ResponseEntity<List<RoleOptionQueriedResource>>
+	 * @param str 角色相關字串 return ResponseEntity<List<RoleOptionQueriedResource>>
 	 */
 	@GetMapping("/roles")
-	public ResponseEntity<List<RoleOptionQueriedResource>> getRoleOptions(@RequestParam("queryStr") String str) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(optionQueryService.getRoleOptions(str), RoleOptionQueriedResource.class),
-				HttpStatus.OK);
+	public ResponseEntity<List<RoleOptionQueriedResource>> getRoleOptions(@RequestParam("service") String service,
+			@RequestParam("queryStr") String str) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getRoleOptions(service, str),
+				RoleOptionQueriedResource.class), HttpStatus.OK);
 	}
-	
+
 	/**
 	 * 查詢角色相關的設定 (AutoComplete)
 	 * 
-	 * @param str 群組相關字串
-	 * return ResponseEntity<List<GroupOptionQueriedResource>>
+	 * @param str 群組相關字串 return ResponseEntity<List<GroupOptionQueriedResource>>
 	 */
 	@GetMapping("/groups")
 	public ResponseEntity<List<GroupOptionQueriedResource>> getGroupOptions(@RequestParam("queryStr") String str) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(optionQueryService.getGroupOptions(str), GroupOptionQueriedResource.class),
-				HttpStatus.OK);
+		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getGroupOptions(str),
+				GroupOptionQueriedResource.class), HttpStatus.OK);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.example.demo.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +21,9 @@ import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class RoleFunctionService {
@@ -29,13 +32,38 @@ public class RoleFunctionService {
 	private FunctionInfoRepository functionInfoRepository;
 
 	/**
+	 * 取得特定角色的功能資料
+	 * 
+	 * @param roleId  角色 ID
+	 * @param service 服務
+	 * @return List<UserRoleQueried>
+	 */
+	@Transactional
+	public List<RoleFunctionQueried> queryRoles(Long roleId, String service) {
+		RoleInfo roleInfo = roleInfoRepository.findById(roleId).orElseThrow(() -> {
+			throw new ValidationException("VALIDATE_FAILED", "查無該角色資料， id: " + roleId);
+		});
+
+		// 取得該角色的 funcId 清單
+		List<Long> funcIds = roleInfo.getFunctions().stream()
+				// 過濾 UserRole 的 activeFlag = 'N' 者
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(RoleFunction::getFunctionId).collect(Collectors.toList());
+		// 查詢使用者角色資料
+		return functionInfoRepository.findByIdInAndServiceAndActiveFlag(funcIds, service, YesNo.Y).stream()
+				.map(func -> BaseDataTransformer.transformData(func, RoleFunctionQueried.class))
+				.collect(Collectors.toList());
+	}
+
+	/**
 	 * 查詢該角色不具備的其他功能
 	 * 
-	 * @param id
+	 * @param id      角色 ID
+	 * @param service 服務
 	 * @return List<RoleFunctionQueried>
 	 */
 	@Transactional
-	public List<RoleFunctionQueried> queryOthers(Long id) {
+	public List<RoleFunctionQueried> queryOthers(Long id, String service) {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
@@ -48,7 +76,8 @@ public class RoleFunctionService {
 			List<FunctionInfo> functions = functionInfoRepository.findByActiveFlag(YesNo.Y);
 
 			// 過濾出該角色所沒有的功能資料
-			List<FunctionInfo> filtered = functions.stream().filter(e -> !existingIds.contains(e.getId()))
+			List<FunctionInfo> filtered = functions.stream()
+					.filter(e -> !existingIds.contains(e.getId()) && StringUtils.equals(e.getService(), service))
 					.collect(Collectors.toList());
 
 			// 過濾出該角色 ActiveFlag = 'N' 的功能資料
@@ -57,7 +86,8 @@ public class RoleFunctionService {
 					.map(RoleFunction::getFunctionId).collect(Collectors.toList());
 
 			// 過濾出該角色資料但失效的功能資料 activeFlag = 'N'
-			List<FunctionInfo> inactiveRelated = functions.stream().filter(e -> inactiveRelatedIds.contains(e.getId()))
+			List<FunctionInfo> inactiveRelated = functions.stream()
+					.filter(e -> inactiveRelatedIds.contains(e.getId()) && StringUtils.equals(e.getService(), service))
 					.collect(Collectors.toList());
 
 			// 合併兩者
@@ -65,6 +95,7 @@ public class RoleFunctionService {
 			return BaseDataTransformer.transformData(filtered, RoleFunctionQueried.class);
 
 		} else {
+			log.error("該角色 ID 有誤，查詢失敗");
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");
 		}
 
@@ -76,21 +107,44 @@ public class RoleFunctionService {
 	 * @param command
 	 */
 	public void update(UpdateRoleFunctionsCommand command) {
-		// 透過功能 ID 清單取得功能
+
+		RoleInfo roleInfo = roleInfoRepository.findById(command.getRoleId()).orElseThrow(() -> {
+			log.error("查無該角色資料，id:{}", command.getRoleId());
+			throw new ValidationException("VALIDATE_FAAILED", "查無該角色資料");
+		});
+
+		// 透過功能 ID 清單取得功能 -> 要被更新的 Function 資料
 		List<FunctionInfo> functions = functionInfoRepository.findByIdInAndActiveFlag(command.getFunctions(), YesNo.Y);
 
-		// 建立 Role Function 資料清單
-		List<RoleFunction> roleFunctions = functions.stream().map(function -> {
-			RoleFunction roleFunction = new RoleFunction();
-			roleFunction.create(command.getRoleId(), function.getId());
-			return roleFunction;
-		}).collect(Collectors.toList());
+		// 取出非該服務的 Function
+		List<FunctionInfo> otherFunctions = functionInfoRepository.findByServiceNot(command.getService());
 
-		// 透過 Role Id 取的 角色資料
-		roleInfoRepository.findById(command.getRoleId()).ifPresent(role -> {
-			role.updateFunctions(roleFunctions);
-			roleInfoRepository.save(role);
-		});
+		// 處理要被更新的 Role 資料
+		List<RoleFunction> roleFunctions = this.processUpdatedFuncData(roleInfo, functions, otherFunctions);
+		
+		roleInfo.updateFunctions(roleFunctions);
+		roleInfoRepository.save(roleInfo);
+
+	}
+
+	/**
+	 * 處理要被更新的 Role 資料
+	 * 
+	 * @param userInfo
+	 * @param roles
+	 * @param otherRoles
+	 */
+	private List<RoleFunction> processUpdatedFuncData(RoleInfo roleInfo, List<FunctionInfo> functions,
+			List<FunctionInfo> otherFunctions) {
+		List<FunctionInfo> funcList = new ArrayList<>();
+		funcList.addAll(functions);
+		funcList.addAll(otherFunctions);
+		// 將角色資料轉為 UserRole
+		return funcList.stream().map(function -> {
+			RoleFunction roleFunc = new RoleFunction();
+			roleFunc.create(roleInfo.getId(), function.getId());
+			return roleFunc;
+		}).collect(Collectors.toList());
 	}
 
 }

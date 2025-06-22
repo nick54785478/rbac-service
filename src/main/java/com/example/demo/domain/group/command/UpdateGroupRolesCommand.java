@@ -13,5 +13,7 @@ public class UpdateGroupRolesCommand {
 
 	private Long groupId;
 	
+	private String service;
+	
 	private List<Long> roleIds;
 }

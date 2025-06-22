@@ -1,5 +1,6 @@
 package com.example.demo.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +21,9 @@ import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class GroupRoleService {
@@ -29,13 +32,38 @@ public class GroupRoleService {
 	private GroupInfoRepository groupInfoRepository;
 
 	/**
+	 * 取得特定群組的角色資料
+	 * 
+	 * @param groupId 群組 ID
+	 * @param service 服務
+	 * @return List<UserRoleQueried>
+	 */
+	@Transactional
+	public List<GroupRoleQueried> queryRoles(Long groupId, String service) {
+		GroupInfo groupInfo = groupInfoRepository.findById(groupId).orElseThrow(() -> {
+			throw new ValidationException("VALIDATE_FAILED", "查無該角色資料， id: " + groupId);
+		});
+
+		// 取得該角色的 roleId 清單
+		List<Long> roleIds = groupInfo.getRoles().stream()
+				// 過濾 UserRole 的 activeFlag = 'N' 者
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(GroupRole::getRoleId).collect(Collectors.toList());
+		// 查詢群組角色資料
+		return roleInfoRepository.findByIdInAndServiceAndActiveFlag(roleIds, service, YesNo.Y).stream()
+				.map(role -> BaseDataTransformer.transformData(role, GroupRoleQueried.class))
+				.collect(Collectors.toList());
+	}
+
+	/**
 	 * 查詢該群組內部不存在的其他角色
 	 * 
 	 * @param id
+	 * @param service
 	 * @return List<GroupRoleQueried>
 	 */
 	@Transactional
-	public List<GroupRoleQueried> queryOthers(Long id) {
+	public List<GroupRoleQueried> queryOthers(Long id, String service) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			GroupInfo group = opt.get();
@@ -46,7 +74,8 @@ public class GroupRoleService {
 			List<RoleInfo> roles = roleInfoRepository.findByActiveFlag(YesNo.Y);
 
 			// 過濾出該群組所沒有的角色資料
-			List<RoleInfo> filtered = roles.stream().filter(e -> !existingIds.contains(e.getId()))
+			List<RoleInfo> filtered = roles.stream()
+					.filter(e -> !existingIds.contains(e.getId()) && StringUtils.equals(e.getService(), service))
 					.collect(Collectors.toList());
 
 			// 過濾出該使用者角色 ActiveFlag = 'N' 的資料
@@ -55,7 +84,8 @@ public class GroupRoleService {
 					.map(GroupRole::getRoleId).collect(Collectors.toList());
 
 			// 過濾出該使用者資料但失效的資料 activeFlag = 'N'
-			List<RoleInfo> inactiveRelated = roles.stream().filter(e -> inactiveRelatedIds.contains(e.getId()))
+			List<RoleInfo> inactiveRelated = roles.stream()
+					.filter(e -> inactiveRelatedIds.contains(e.getId()) && StringUtils.equals(e.getService(), service))
 					.collect(Collectors.toList());
 
 			// 合併兩者
@@ -63,6 +93,7 @@ public class GroupRoleService {
 			return BaseDataTransformer.transformData(filtered, GroupRoleQueried.class);
 
 		} else {
+			log.error("該群組 ID 有誤，查詢失敗");
 			throw new ValidationException("VALIDATION_FAILED", "該群組 ID 有誤，查詢失敗");
 		}
 
@@ -74,20 +105,43 @@ public class GroupRoleService {
 	 * @param command
 	 */
 	public void update(UpdateGroupRolesCommand command) {
-		// 透過 Role id 清單找出 Role 資料
-		List<RoleInfo> roleList = roleInfoRepository.findByIdInAndActiveFlag(command.getRoleIds(), YesNo.Y);
-		// 透過 group id 找到 Group 資料
-		groupInfoRepository.findById(command.getGroupId()).ifPresent(group -> {
-			List<GroupRole> groupRoles = roleList.stream().map(role -> {
-				GroupRole groupRole = new GroupRole();
-				groupRole.create(group.getId(), role.getId());
-				return groupRole;
-			}).collect(Collectors.toList());
 
-			// 變更群組角色
-			group.updateRoles(groupRoles);
-			groupInfoRepository.save(group);
+		GroupInfo groupInfo = groupInfoRepository.findById(command.getGroupId()).orElseThrow(() -> {
+			log.error("查無該角色資料，id:{}", command.getGroupId());
+			throw new ValidationException("VALIDATE_FAAILED", "查無該角色資料");
 		});
+
+		// 透過 RoleId 清單找出 Role 資料 -> 要被更新的 Role 資料
+		List<RoleInfo> roleList = roleInfoRepository.findByIdInAndActiveFlag(command.getRoleIds(), YesNo.Y);
+
+		// 取出非該服務的 Role
+		List<RoleInfo> otherRoles = roleInfoRepository.findByServiceNot(command.getService());
+
+		List<GroupRole> groupRoles = this.processUpdatedRoleData(groupInfo, roleList, otherRoles);
+
+		// 變更群組角色
+		groupInfo.updateRoles(groupRoles);
+		groupInfoRepository.save(groupInfo);
+
 	}
 
+	/**
+	 * 處理要被更新的群組角色資料
+	 * 
+	 * @param groupInfo
+	 * @param roles
+	 * @param otherRoles
+	 */
+	private List<GroupRole> processUpdatedRoleData(GroupInfo groupInfo, List<RoleInfo> roles,
+			List<RoleInfo> otherRoles) {
+		List<RoleInfo> roleList = new ArrayList<>();
+		roleList.addAll(roles);
+		roleList.addAll(otherRoles);
+		// 將角色資料轉為 UserRole
+		return roles.stream().map(role -> {
+			GroupRole groupRole = new GroupRole();
+			groupRole.create(groupInfo.getId(), role.getId());
+			return groupRole;
+		}).collect(Collectors.toList());
+	}
 }

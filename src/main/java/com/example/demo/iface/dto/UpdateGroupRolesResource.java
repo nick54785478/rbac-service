@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class UpdateGroupRolesResource {
 
 	private Long groupId; // 群組 ID
+	
+	private String service;
 
 	private List<Long> roleIds; // 角色清單
 }
