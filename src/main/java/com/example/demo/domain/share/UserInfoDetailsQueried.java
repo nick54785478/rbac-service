@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoDetailQueried {
+public class UserInfoDetailsQueried {
 
 	private Long id;
 
@@ -29,6 +29,6 @@ public class UserInfoDetailQueried {
 
 	private List<UserRoleDetailsQueried> roles;
 	
-	private List<FunctionInfoDetailQueried> functions;
+	private List<FunctionInfoDetailsQueried> functions;
 
 }

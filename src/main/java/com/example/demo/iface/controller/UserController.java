@@ -16,7 +16,8 @@ import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.iface.dto.CreateUserResource;
 import com.example.demo.iface.dto.UpdateUserResource;
 import com.example.demo.iface.dto.UserCreatedResource;
-import com.example.demo.iface.dto.UserInfoDetailQueriedResource;
+import com.example.demo.iface.dto.UserInfoDetailsQueriedResource;
+import com.example.demo.iface.dto.UserInfoSummaryQueriedResource;
 import com.example.demo.iface.dto.UserUpdatedResource;
 import com.example.demo.service.UserCommandService;
 import com.example.demo.service.UserQueryService;
@@ -68,11 +69,23 @@ public class UserController {
 	 * @return ResponseEntity<UserInfoDetailQueriedResource>
 	 */
 	@GetMapping("/{username}/details")
-	public ResponseEntity<UserInfoDetailQueriedResource> queryUserDetails(@PathVariable String username,
+	public ResponseEntity<UserInfoDetailsQueriedResource> queryUserDetails(@PathVariable String username,
 			@RequestParam String service) {
 		return new ResponseEntity<>(BaseDataTransformer
-				.transformData(userQueryService.getUserDetails(username, service), UserInfoDetailQueriedResource.class),
+				.transformData(userQueryService.getUserDetails(username, service), UserInfoDetailsQueriedResource.class),
 				HttpStatus.OK);
+	}
+
+	/**
+	 * 查詢該使用者個人總覽
+	 * 
+	 * @param username
+	 * @return ResponseEntity<UserInfoDetailQueriedResource>
+	 */
+	@GetMapping("/{username}/summary")
+	public ResponseEntity<UserInfoSummaryQueriedResource> queryUserDetails(@PathVariable String username) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(userQueryService.getUserSummary(username),
+				UserInfoSummaryQueriedResource.class), HttpStatus.OK);
 	}
 
 }

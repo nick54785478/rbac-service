@@ -17,19 +17,19 @@ import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
-import com.example.demo.domain.share.FunctionInfoDetailQueried;
+import com.example.demo.domain.share.FunctionInfoDetailsQueried;
 import com.example.demo.domain.share.UserGroupDetailsQueried;
-import com.example.demo.domain.share.UserGroupQueried;
-import com.example.demo.domain.share.UserInfoDetailQueried;
+import com.example.demo.domain.share.UserInfoDetailsQueried;
+import com.example.demo.domain.share.UserInfoSummaryQueried;
 import com.example.demo.domain.share.UserRoleDetailsQueried;
-import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
 import com.example.demo.exception.ValidationException;
-import com.example.demo.infra.assembler.UserDetailsAssembler;
+import com.example.demo.iface.dto.FunctionInfoSummaryQueried;
+import com.example.demo.infra.assembler.UserAssembler;
 import com.example.demo.infra.repository.FunctionInfoRepository;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
@@ -45,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class UserService {
 
-	private UserDetailsAssembler userDetailsAssembler;
+	private UserAssembler userDetailsAssembler;
 	private GroupInfoRepository groupRepository;
 	private UserInfoRepository userRepository;
 	private RoleInfoRepository roleRepository;
@@ -77,45 +77,33 @@ public class UserService {
 
 	}
 
-//	/**
-//	 * 取得特定使用者所在的群組資料
-//	 * 
-//	 * @param username 使用者帳號
-//	 * @return List<UserGroupQueried>
-//	 */
-//	@Transactional
-//	public List<UserGroupQueried> queryGroups(String username) {
-//		UserInfo userInfo = userRepository.findByUsername(username);
-//		// 取得 User Group 的 GroupId
-//		List<Long> groupIds = userInfo.getGroups().stream()
-//				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
-//				.map(UserGroup::getGroupId).collect(Collectors.toList());
-//		// 透過 ID 取得 Group 資料
-//		return groupRepository.findByIdInAndActiveFlag(groupIds, YesNo.Y).stream()
-//				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueried.class))
-//				.collect(Collectors.toList());
-//	}
+	/**
+	 * 取得所有服務的使用者詳細資訊
+	 * 
+	 * @param username
+	 * @return UserInfoSummaryQueried
+	 */
+	@Transactional
+	public UserInfoSummaryQueried getUserSummary(String username) {
 
-//	/**
-//	 * 取得特定使用者的角色資料
-//	 * 
-//	 * @param username 使用者帳號
-//	 * @param service  服務
-//	 * @return List<UserRoleQueried>
-//	 */
-//	@Transactional
-//	public List<UserRoleQueried> queryRoles(String username) {
-//		UserInfo user = userRepository.findByUsername(username);
-//		// 取得該使用者的 RoleId 清單
-//		List<Long> roleIds = user.getRoles().stream()
-//				// 過濾 UserRole 的 activeFlag = 'N' 者
-//				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
-//				.map(UserRole::getRoleId).collect(Collectors.toList());
-//		// 查詢使用者角色資料
-//		return roleRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y).stream()
-//				.map(role -> BaseDataTransformer.transformData(role, UserRoleQueried.class))
-//				.collect(Collectors.toList());
-//	}
+		UserInfo userInfo = userRepository.findByUsername(username);
+
+		// 取得 Role ID 清單
+		List<Long> roleIds = userInfo.getRoles().stream()
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(UserRole::getRoleId).collect(Collectors.toList());
+
+		// 取得個人角色
+		List<RoleInfo> roles = roleRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y);
+
+		// 取得 Group ID 清單
+		List<Long> groupIds = userInfo.getGroups().stream()
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(UserGroup::getGroupId).collect(Collectors.toList());
+		List<GroupInfo> groups = groupRepository.findByIdInAndActiveFlag(groupIds, YesNo.Y);
+
+		return userDetailsAssembler.assemblerUserInfoSummary(userInfo, roles, groups);
+	}
 
 	/**
 	 * 取得特定服務的使用者詳細資訊
@@ -125,9 +113,9 @@ public class UserService {
 	 * @return UserInfoDetailQueried
 	 */
 	@Transactional
-	public UserInfoDetailQueried getUserDetails(String username, String service) {
+	public UserInfoDetailsQueried getUserDetails(String username, String service) {
 
-		Map<String, List<FunctionInfoDetailQueried>> funcMap = new HashMap<>();
+		Map<String, List<FunctionInfoDetailsQueried>> funcMap = new HashMap<>();
 
 		UserInfo userInfo = userRepository.findByUsername(username);
 
@@ -156,7 +144,7 @@ public class UserService {
 		funcMap.put(RoleType.GROUP.getName(), this.getFuncList(groupRoles));
 
 		// 合併功能權限(群組角色功能、個人角色功能)
-		List<FunctionInfoDetailQueried> functions = funcMap.entrySet().stream().flatMap(entry -> {
+		List<FunctionInfoDetailsQueried> functions = funcMap.entrySet().stream().flatMap(entry -> {
 			String key = entry.getKey();
 			return entry.getValue().stream().filter(e -> StringUtils.equals(service, e.getService())) // 過濾指定 service
 					.peek(e -> e.setLabel(RoleType.getValueByName(key))); // 設定 label
@@ -180,7 +168,7 @@ public class UserService {
 	 * @param personalRoles
 	 * @return groupRoles
 	 */
-	public List<UserRoleDetailsQueried> getRoleList(String service, List<RoleInfo> personalRoles,
+	private List<UserRoleDetailsQueried> getRoleList(String service, List<RoleInfo> personalRoles,
 			List<RoleInfo> groupRoles) {
 		List<UserRoleDetailsQueried> roleList = new ArrayList<>();
 		// 個人角色處理
@@ -211,12 +199,12 @@ public class UserService {
 	 * @param roles
 	 * @return List<FunctionInfoDetailQueried>
 	 */
-	private List<FunctionInfoDetailQueried> getFuncList(List<RoleInfo> roles) {
+	private List<FunctionInfoDetailsQueried> getFuncList(List<RoleInfo> roles) {
 		// 個人角色權限 ID 清單
 		List<Long> funcIds = roles.stream().flatMap(r -> r.getFunctions().stream().map(RoleFunction::getFunctionId))
 				.distinct().collect(Collectors.toList());
 		List<FunctionInfo> functionList = functionRepository.findByIdIn(funcIds);
-		return BaseDataTransformer.transformData(functionList, FunctionInfoDetailQueried.class);
+		return BaseDataTransformer.transformData(functionList, FunctionInfoDetailsQueried.class);
 	}
 
 	/**

@@ -58,7 +58,7 @@ public class JwtTokenCommandService {
 		}
 
 		boolean checkPassword = PasswordUtil.checkPassword(command.getPassword(), userInfo.getPassword());
-		log.info("command ", command.getUsername(), command.getPassword());
+		log.info("command:{}, {} ", command.getUsername(), command.getPassword());
 
 		// 檢查密碼是否相符
 		if (!checkPassword) {

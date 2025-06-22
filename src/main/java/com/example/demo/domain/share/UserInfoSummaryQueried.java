@@ -1,4 +1,4 @@
-package com.example.demo.iface.dto;
+package com.example.demo.domain.share;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoDetailQueriedResource {
+public class UserInfoSummaryQueried {
 
 	private Long id;
 
@@ -25,10 +25,8 @@ public class UserInfoDetailQueriedResource {
 	
 	private String nationalIdNo;
 
-	private List<UserGroupDetailsQueriedResource> groups;
+	private List<UserGroupSummaryQueried> groups;
 
-	private List<UserRoleDetailsQueriedResource> roles;
+	private List<UserRoleSummaryQueried> roles;
 	
-	private List<FunctionInfoDetailQueriedResource> functions;
-
 }

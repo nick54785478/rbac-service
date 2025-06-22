@@ -3,8 +3,9 @@ package com.example.demo.service;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.service.UserService;
-import com.example.demo.domain.share.UserInfoDetailQueried;
+import com.example.demo.domain.share.UserInfoDetailsQueried;
 import com.example.demo.domain.share.UserInfoQueried;
+import com.example.demo.domain.share.UserInfoSummaryQueried;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.infra.repository.UserInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
@@ -40,8 +41,18 @@ public class UserQueryService {
 	 * @param service
 	 * @return UserInfoQueried
 	 */
-	public UserInfoDetailQueried getUserDetails(String username, String service) {
+	public UserInfoDetailsQueried getUserDetails(String username, String service) {
 		return userService.getUserDetails(username, service);
+	}
+
+	/**
+	 * 取得使用所有資訊(跨服務)
+	 * 
+	 * @param username
+	 * @return UserInfoSummaryQueried
+	 */
+	public UserInfoSummaryQueried getUserSummary(String username) {
+		return userService.getUserSummary(username);
 	}
 
 }
