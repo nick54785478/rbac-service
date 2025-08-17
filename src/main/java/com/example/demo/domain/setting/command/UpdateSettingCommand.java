@@ -16,6 +16,10 @@ public class UpdateSettingCommand {
 	private String type; // 種類
 
 	private String name; // 名稱
+	
+	private String code; // 代碼
+	
+	private String value; // 值
 
 	private String description; // 敘述
 

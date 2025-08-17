@@ -34,10 +34,14 @@ public class ConfigurableSetting {
 	
 	@Column(name = "data_type")
 	private String dataType;	// 資料類型
-
+	
 	private String type; // 種類
 
 	private String name; // 名稱
+
+	private String code; // 代碼
+	
+	private String value; // 值
 
 	private String description; // 敘述
 
@@ -57,6 +61,8 @@ public class ConfigurableSetting {
 		this.dataType = command.getDataType();
 		this.type = command.getType();
 		this.name = command.getName();
+		this.value = command.getValue();
+		this.code = command.getCode();
 		this.description = command.getDescription();
 		this.priorityNo = command.getPriorityNo();
 		this.activeFlag = YesNo.Y;
@@ -71,6 +77,8 @@ public class ConfigurableSetting {
 		this.dataType = command.getDataType();
 		this.type = command.getType();
 		this.name = command.getName();
+		this.value = command.getValue();
+		this.code = command.getCode();
 		this.description = command.getDescription();
 		this.priorityNo = command.getPriorityNo();
 		this.activeFlag = YesNo.valueOf(command.getActiveFlag());

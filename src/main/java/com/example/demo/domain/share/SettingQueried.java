@@ -10,12 +10,16 @@ import lombok.NoArgsConstructor;
 public class SettingQueried {
 
 	private Long id;
-	
+
 	private String dataType; // 資料種類
 
 	private String type; // 種類
 
 	private String name; // 名稱
+
+	private String code;
+
+	private String value;
 
 	private String description; // 敘述
 
