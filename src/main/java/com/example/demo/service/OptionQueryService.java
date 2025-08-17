@@ -30,11 +30,12 @@ public class OptionQueryService {
 	/**
 	 * 查詢相關的設定
 	 * 
+	 * @param service 服務
 	 * @param type 設定種類
 	 * @return List<OptionQueried>
 	 */
-	public List<OptionQueried> getSettingTypes(String type) {
-		return settingRepository.findByDataTypeAndActiveFlag(type, YesNo.Y).stream().map(setting -> {
+	public List<OptionQueried> getSettingTypes(String service, String type) {
+		return settingRepository.findByServiceAndDataTypeAndActiveFlag(service, type, YesNo.Y).stream().map(setting -> {
 			return new OptionQueried(setting.getId(), setting.getType(), setting.getType());
 		}).collect(Collectors.toList());
 	}

@@ -31,18 +31,26 @@ public class ConfigurableSetting {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	@Column(name = "service")
+	private String service;
+
 	@Column(name = "data_type")
-	private String dataType;	// 資料類型
-	
+	private String dataType; // 資料類型
+
+	@Column(name = "type")
 	private String type; // 種類
 
+	@Column(name = "name")
 	private String name; // 名稱
 
+	@Column(name = "code")
 	private String code; // 代碼
-	
+
+	@Column(name = "value")
 	private String value; // 值
 
+	@Column(name = "description")
 	private String description; // 敘述
 
 	@Column(name = "priority_no")
@@ -58,6 +66,7 @@ public class ConfigurableSetting {
 	 * @param command
 	 */
 	public void create(CreateSettingCommand command) {
+		this.service = command.getService();
 		this.dataType = command.getDataType();
 		this.type = command.getType();
 		this.name = command.getName();
@@ -67,13 +76,14 @@ public class ConfigurableSetting {
 		this.priorityNo = command.getPriorityNo();
 		this.activeFlag = YesNo.Y;
 	}
-	
+
 	/**
 	 * 修改一筆 Setting
 	 * 
 	 * @param command
 	 */
 	public void update(UpdateSettingCommand command) {
+		this.service = command.getService();
 		this.dataType = command.getDataType();
 		this.type = command.getType();
 		this.name = command.getName();
@@ -83,10 +93,10 @@ public class ConfigurableSetting {
 		this.priorityNo = command.getPriorityNo();
 		this.activeFlag = YesNo.valueOf(command.getActiveFlag());
 	}
-	
+
 	/**
 	 * 刪除 (更改 activeFlag = 'N')
-	 * */
+	 */
 	public void delete() {
 		this.activeFlag = YesNo.N;
 	}

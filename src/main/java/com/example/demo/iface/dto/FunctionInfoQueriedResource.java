@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class FunctionInfoQueriedResource {
 
 	private Long id;
+	
+	private String service;
 
 	private String type; // 配置種類
 

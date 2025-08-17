@@ -23,17 +23,18 @@ public class RoleQueryService {
 	/**
 	 * 查詢符合條件的角色資料
 	 * 
-	 * @param type
-	 * @param name
-	 * @param activeFlag
+	 * @param service    服務
+	 * @param type       角色種類
+	 * @param name       角色名稱
+	 * @param activeFlag 是否生效
 	 * @return List<RoleInfoQueried>
 	 */
 	@Transactional
-	public List<RoleInfoQueried> query(String type, String name, String activeFlag) {
-		List<RoleInfo> roles = roleInfoRepository.findAllWithSpecification(type, name, activeFlag);
+	public List<RoleInfoQueried> query(String service, String type, String name, String activeFlag) {
+		List<RoleInfo> roles = roleInfoRepository.findAllWithSpecification(service, type, name, activeFlag);
 		return BaseDataTransformer.transformData(roles, RoleInfoQueried.class);
 	}
-	
+
 	/**
 	 * 透過 ID 查詢角色資料
 	 * 

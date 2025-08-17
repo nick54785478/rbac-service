@@ -25,10 +25,14 @@ public interface RoleInfoRepository extends JpaRepository<RoleInfo, Long> {
 
 	List<RoleInfo> findAll(Specification<RoleInfo> specification);
 
-	default List<RoleInfo> findAllWithSpecification(String type, String name, String activeFlag) {
+	default List<RoleInfo> findAllWithSpecification(String service, String type, String name, String activeFlag) {
 		Specification<RoleInfo> specification = ((root, query, cb) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
+			if (StringUtils.isNotBlank(service)) {
+				predicates.add(cb.equal(root.get("service"), service));
+			}
+			
 			if (StringUtils.isNotBlank(type)) {
 				predicates.add(cb.equal(root.get("type"), type));
 			}

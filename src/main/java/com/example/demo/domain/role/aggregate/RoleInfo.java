@@ -48,6 +48,8 @@ public class RoleInfo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	private String service;
+
 	private String code; // 角色 Code
 
 	private String name;
@@ -71,6 +73,7 @@ public class RoleInfo {
 	 */
 	public void create(CreateRoleCommand command) {
 		this.code = command.getCode();
+		this.service = command.getService();
 		this.name = command.getName();
 		this.description = command.getDescription();
 		this.type = command.getType();
@@ -83,6 +86,7 @@ public class RoleInfo {
 	 * @param command
 	 */
 	public void create(CreateOrUpdateRoleCommand command) {
+		this.service = command.getService();
 		this.code = command.getCode();
 		this.name = command.getName();
 		this.description = command.getDescription();
@@ -96,6 +100,7 @@ public class RoleInfo {
 	 * @param command
 	 */
 	public void update(UpdateRoleCommand command) {
+		this.service = command.getService();
 		this.code = command.getCode();
 		this.name = command.getName();
 		this.type = command.getType();
@@ -109,6 +114,7 @@ public class RoleInfo {
 	 */
 	public void update(CreateOrUpdateRoleCommand command) {
 		this.id = command.getId();
+		this.service = command.getService();
 		this.code = command.getCode();
 		this.name = command.getName();
 		this.type = command.getType();

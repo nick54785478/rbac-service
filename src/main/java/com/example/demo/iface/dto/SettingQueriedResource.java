@@ -11,6 +11,8 @@ public class SettingQueriedResource {
 
 	private Long id;
 	
+	private String service; // 服務
+	
 	private String dataType; // 資料種類
 
 	private String type; // 種類

@@ -49,17 +49,18 @@ public class SettingService {
 	}
 
 	/**
-	 * 根據條件查詢 Setting
+	 * 根據條件查詢 Setting 資料
 	 * 
-	 * @param dataType
-	 * @param type
-	 * @param name
-	 * @param activeFlag
+	 * @param service    服務
+	 * @param dataType   資料種類
+	 * @param type       設定類別
+	 * @param name       名稱
+	 * @param activeFlag 是否生效
 	 * @return
 	 */
-	public List<SettingQueried> query(String dataType, String type, String name, String activeFlag) {
-		List<ConfigurableSetting> settingList = settingRepository.findAllWithSpecification(dataType, type, name,
-				activeFlag);
+	public List<SettingQueried> query(String service, String dataType, String type, String name, String activeFlag) {
+		List<ConfigurableSetting> settingList = settingRepository.findAllWithSpecification(service, dataType, type,
+				name, activeFlag);
 		return BaseDataTransformer.transformData(settingList, SettingQueried.class);
 	}
 

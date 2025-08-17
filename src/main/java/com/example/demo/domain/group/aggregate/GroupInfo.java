@@ -46,6 +46,8 @@ public class GroupInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String service;
 
 	private String type; // 群組種類
 
@@ -69,6 +71,7 @@ public class GroupInfo {
 	 * @param command
 	 */
 	public void create(CreateGroupCommand command) {
+		this.service = command.getService();
 		this.type = command.getType();
 		this.name = command.getName();
 		this.code = command.getCode();
@@ -82,6 +85,7 @@ public class GroupInfo {
 	 * @param command
 	 */
 	public void create(CreateOrUpdateGroupCommand command) {
+		this.service = command.getService();
 		this.type = command.getType();
 		this.name = command.getName();
 		this.code = command.getCode();
@@ -95,6 +99,7 @@ public class GroupInfo {
 	 * @param command
 	 */
 	public void update(CreateOrUpdateGroupCommand command) {
+		this.service = command.getService();
 		this.name = command.getName();
 		this.type = command.getType();
 		this.code = command.getCode();
@@ -131,16 +136,6 @@ public class GroupInfo {
 			}
 		});
 		this.roles = result;
-
-//		// 移除 functions 中不存在於 Role Functions 的項目
-//		this.roles.removeIf(
-//				existingFunction -> groupRoles.stream().noneMatch(newRole -> newRole.equals(existingFunction)));
-//		// 增加新的 Role Function
-//		groupRoles.stream().forEach(newRole -> {
-//			if (!this.roles.contains(newRole)) {
-//				this.roles.add(newRole);
-//			}
-//		});
 	}
 
 	/**

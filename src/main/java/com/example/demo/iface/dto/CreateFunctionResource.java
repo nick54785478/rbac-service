@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateFunctionResource {
+	
+	private String service;
 
 	private String type; // 種類
 	

@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS user_role (
 
 CREATE TABLE IF NOT EXISTS setting (
     `id` BIGINT(20) AUTO_INCREMENT,
+    `service` VARCHAR(20),
     `data_type` VARCHAR(20),
     `type` VARCHAR(100),
     `name` VARCHAR(100),

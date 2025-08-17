@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 public class CreateOrUpdateGroupCommand {
 
 	private Long id;
-	
+
+	private String service;
+
 	private String type;
 	
 	private String code;

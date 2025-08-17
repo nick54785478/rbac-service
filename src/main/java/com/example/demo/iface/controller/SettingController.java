@@ -56,18 +56,19 @@ public class SettingController {
 	/**
 	 * 查詢設定
 	 * 
-	 * @param dataType
-	 * @param type
-	 * @param name
-	 * @param activeFlag
+	 * @param service    服務
+	 * @param dataType   資料種類
+	 * @param type       設定類別
+	 * @param name       名稱
+	 * @param activeFlag 是否生效
 	 * @return ResponseEntity<List<SettingQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<SettingQueriedResource>> query(@RequestParam(required = false) String dataType,
-			@RequestParam(required = false) String type, @RequestParam(required = false) String name,
-			@RequestParam(required = false) String activeFlag) {
+	public ResponseEntity<List<SettingQueriedResource>> query(@RequestParam String service,
+			@RequestParam(required = false) String dataType, @RequestParam(required = false) String type,
+			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
 		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(settingQueryService.query(dataType, type, name, activeFlag),
+				BaseDataTransformer.transformData(settingQueryService.query(service, dataType, type, name, activeFlag),
 						SettingQueriedResource.class),
 				HttpStatus.OK);
 	}

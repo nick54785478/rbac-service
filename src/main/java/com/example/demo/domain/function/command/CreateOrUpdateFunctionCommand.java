@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 public class CreateOrUpdateFunctionCommand {
 
 	private Long id;
+	
+	private String service;
 
 	private String code;
 	

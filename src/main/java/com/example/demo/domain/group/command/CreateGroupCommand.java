@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateGroupCommand {
 	
+	private String service;
+	
 	private String type; // 群組種類
  	
 	private String code; // 群組代號

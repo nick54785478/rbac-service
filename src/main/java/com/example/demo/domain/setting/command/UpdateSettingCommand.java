@@ -11,6 +11,8 @@ public class UpdateSettingCommand {
 	
 	private Long id;
 	
+	private String service;
+
 	private String dataType; // 資料種類
 
 	private String type; // 種類

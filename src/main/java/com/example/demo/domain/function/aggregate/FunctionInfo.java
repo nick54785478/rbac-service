@@ -36,6 +36,8 @@ public class FunctionInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private String service;
 
 	private String type; // 種類
 
@@ -59,6 +61,7 @@ public class FunctionInfo {
 	 * @param command
 	 */
 	public void create(CreateFunctionCommand command) {
+		this.service = command.getService();
 		this.type = command.getType();
 		this.name = command.getName();
 		this.actionType = ActionType.fromLabel(command.getActionType());
@@ -73,6 +76,7 @@ public class FunctionInfo {
 	 * @param command
 	 */
 	public void create(CreateOrUpdateFunctionCommand command) {
+		this.service = command.getService();
 		this.code = command.getCode();
 		this.name = command.getName();
 		this.description = command.getDescription();
@@ -88,6 +92,7 @@ public class FunctionInfo {
 	 */
 	public void update(CreateOrUpdateFunctionCommand command) {
 		this.id = command.getId();
+		this.service = command.getService();
 		this.code = command.getCode();
 		this.name = command.getName();
 		this.type = command.getType();

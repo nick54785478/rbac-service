@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateGroupResource {
+	
+	private String service;
 
 	private String name; // 名稱
 	

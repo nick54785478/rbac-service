@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 public class RoleInfoQueriedResource {
 
 	private Long id;
+	
+	private String service;
 
 	private String code; // 角色 Code
 

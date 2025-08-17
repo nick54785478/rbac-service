@@ -117,9 +117,9 @@ public class RoleController {
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<RoleInfoQueriedResource>> query(@RequestParam(required = false) String type,
+	public ResponseEntity<List<RoleInfoQueriedResource>> query(@RequestParam String service, @RequestParam(required = false) String type,
 			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(roleQueryService.query(type, name, activeFlag),
+		return new ResponseEntity<>(BaseDataTransformer.transformData(roleQueryService.query(service, type, name, activeFlag),
 				RoleInfoQueriedResource.class), HttpStatus.OK);
 	}
 

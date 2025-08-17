@@ -32,8 +32,8 @@ public class OptionController {
 	 * @return ResponseEntity<List<OptionQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<OptionQueriedResource>> query(@RequestParam String type) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getSettingTypes(type),
+	public ResponseEntity<List<OptionQueriedResource>> query(@RequestParam String service, @RequestParam String type) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getSettingTypes(service, type),
 				OptionQueriedResource.class), HttpStatus.OK);
 	}
 
