@@ -15,7 +15,6 @@ import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
 import com.example.demo.domain.share.RoleFunctionQueried;
 import com.example.demo.domain.share.RoleInfoQueried;
-import com.example.demo.domain.share.RoleOptionQueried;
 import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.exception.ValidationException;
 import com.example.demo.infra.repository.FunctionInfoRepository;
