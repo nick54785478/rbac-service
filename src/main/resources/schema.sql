@@ -92,6 +92,8 @@ CREATE TABLE IF NOT EXISTS setting (
     `data_type` VARCHAR(20),
     `type` VARCHAR(100),
     `name` VARCHAR(100),
+    `code` VARCHAR(100),
+    `value` VARCHAR(100),
     `description` TEXT,
     `priority_no` INT,
     `active_flag` CHAR(1),
