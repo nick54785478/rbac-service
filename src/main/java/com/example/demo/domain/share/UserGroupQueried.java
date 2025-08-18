@@ -13,6 +13,8 @@ public class UserGroupQueried {
 
 	private Long id;
 	
+	private String service;
+	
 	private String type;
 
 	private String name; // 名稱

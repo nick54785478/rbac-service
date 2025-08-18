@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 public class GroupInfoQueried {
 
 	private Long id;
+	
+	private String service;
 
 	private String type; // 配置種類
 

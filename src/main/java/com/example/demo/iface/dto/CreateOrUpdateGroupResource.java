@@ -11,6 +11,8 @@ public class CreateOrUpdateGroupResource {
 
 	private Long id;
 	
+	private String service;
+	
 	private String type;
 	
 	private String code;

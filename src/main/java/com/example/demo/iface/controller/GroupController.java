@@ -68,16 +68,20 @@ public class GroupController {
 	/**
 	 * 查詢群組資料
 	 * 
-	 * @param type
-	 * @param name
-	 * @param actionFlag
+	 * @param service    服務
+	 * @param type       群組種類
+	 * @param name       群組名稱
+	 * @param activeFlag 是否生效
 	 * @return ResponseEntity<List<GroupInfoQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<GroupInfoQueriedResource>> query(@RequestParam(required = false) String type,
-			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(groupQueryService.query(type, name, activeFlag),
-				GroupInfoQueriedResource.class), HttpStatus.OK);
+	public ResponseEntity<List<GroupInfoQueriedResource>> query(@RequestParam String service,
+			@RequestParam(required = false) String type, @RequestParam(required = false) String name,
+			@RequestParam(required = false) String activeFlag) {
+		return new ResponseEntity<>(
+				BaseDataTransformer.transformData(groupQueryService.query(service, type, name, activeFlag),
+						GroupInfoQueriedResource.class),
+				HttpStatus.OK);
 	}
 
 	/**
