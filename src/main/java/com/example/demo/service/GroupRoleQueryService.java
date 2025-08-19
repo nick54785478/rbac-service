@@ -14,14 +14,15 @@ import lombok.AllArgsConstructor;
 public class GroupRoleQueryService {
 
 	private GroupRoleService groupRoleService;
-	
+
 	/**
-	 * 查詢其他(不屬於該角色)的功能
+	 * 查詢其他(不屬於該群組)的角色
 	 * 
-	 * @param id
+	 * @param id      群組ID
+	 * @param service 服務
 	 * @return
 	 */
-	public List<GroupRoleQueried> queryOthers(Long id) {
-		return groupRoleService.queryOthers(id);
+	public List<GroupRoleQueried> queryOthers(Long id, String service) {
+		return groupRoleService.queryOthers(id, service);
 	}
 }

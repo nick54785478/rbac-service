@@ -91,6 +91,7 @@ public class FunctionController {
 	/**
 	 * 查詢功能資料
 	 * 
+	 * @param service
 	 * @param actionType
 	 * @param type
 	 * @param name
@@ -98,12 +99,11 @@ public class FunctionController {
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<FunctionInfoQueriedResource>> query(@RequestParam(required = false) String actionType,
-			@RequestParam(required = false) String type, @RequestParam(required = false) String name,
-			@RequestParam(required = false) String activeFlag) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(functionQueryService.query(actionType, type, name, activeFlag),
-						FunctionInfoQueriedResource.class),
-				HttpStatus.OK);
+	public ResponseEntity<List<FunctionInfoQueriedResource>> query(@RequestParam String service,
+			@RequestParam(required = false) String actionType, @RequestParam(required = false) String type,
+			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(
+				functionQueryService.query(service, actionType, type, name, activeFlag),
+				FunctionInfoQueriedResource.class), HttpStatus.OK);
 	}
 }

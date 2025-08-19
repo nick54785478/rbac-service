@@ -31,7 +31,7 @@ public class OptionQueryService {
 	 * 查詢相關的設定
 	 * 
 	 * @param service 服務
-	 * @param type 設定種類
+	 * @param type    設定種類
 	 * @return List<OptionQueried>
 	 */
 	public List<OptionQueried> getSettingTypes(String service, String type) {
@@ -55,22 +55,24 @@ public class OptionQueryService {
 	/**
 	 * 查詢角色資料 (AutoComplete)
 	 * 
-	 * @param str 角色字串
+	 * @param service 服務
+	 * @param str     角色字串
 	 * @return List<RoleOptionQueried>
 	 */
-	public List<RoleOptionQueried> getRoleOptions(String str) {
-		return BaseDataTransformer.transformData(roleInfoRepository.findAllWithSpecification(str),
+	public List<RoleOptionQueried> getRoleOptions(String service, String str) {
+		return BaseDataTransformer.transformData(roleInfoRepository.findAllWithSpecification(service, str),
 				RoleOptionQueried.class);
 	}
 
 	/**
 	 * 查詢群組資料 (AutoComplete)
 	 * 
-	 * @param str 群組字串
+	 * @param service 服務
+	 * @param str     群組字串
 	 * @return List<GroupOptionQueried>
 	 */
-	public List<GroupOptionQueried> getGroupOptions(String str) {
-		return BaseDataTransformer.transformData(groupInfoRepository.findAllWithSpecification(str),
+	public List<GroupOptionQueried> getGroupOptions(String service, String str) {
+		return BaseDataTransformer.transformData(groupInfoRepository.findAllWithSpecification(service, str),
 				GroupOptionQueried.class);
 	}
 }

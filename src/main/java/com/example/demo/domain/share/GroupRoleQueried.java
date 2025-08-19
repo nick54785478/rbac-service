@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class GroupRoleQueried {
 
 	private Long id; // 角色 ID
+	
+	private String service;
 
 	private String code; // 角色代號
 

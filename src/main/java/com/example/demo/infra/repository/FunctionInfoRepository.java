@@ -28,11 +28,13 @@ public interface FunctionInfoRepository extends JpaRepository<FunctionInfo, Long
 	
 	List<FunctionInfo> findAll(Specification<FunctionInfo> specification);
 
-	default List<FunctionInfo> findAllWithSpecification(String actionType, String type, String name,
+	default List<FunctionInfo> findAllWithSpecification(String service, String actionType, String type, String name,
 			String activeFlag) {
 		Specification<FunctionInfo> specification = ((root, query, cb) -> {
 			List<Predicate> predicates = new ArrayList<>();
-
+			if (StringUtils.isNotBlank(service)) {
+				predicates.add(cb.equal(root.get("service"), service));
+			}
 			if (StringUtils.isNotBlank(type)) {
 				predicates.add(cb.equal(root.get("type"), type));
 			}

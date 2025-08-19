@@ -56,9 +56,12 @@ public interface GroupInfoRepository extends JpaRepository<GroupInfo, Long> {
 		return findAll(specification);
 	}
 
-	default List<GroupInfo> findAllWithSpecification(String str) {
+	default List<GroupInfo> findAllWithSpecification(String service, String str) {
 		Specification<GroupInfo> specification = ((root, query, cb) -> {
 			List<Predicate> predicates = new ArrayList<>();
+			if (StringUtils.isNotBlank(service)) {
+				predicates.add(cb.equal(root.get("service"), service));
+			}
 			if (StringUtils.isNotBlank(str)) {
 				Predicate predName = cb.like(root.get("name"), "%" + str + "%");
 				Predicate predCode = cb.like(root.get("code"), "%" + str + "%");

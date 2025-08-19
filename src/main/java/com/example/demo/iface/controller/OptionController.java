@@ -40,40 +40,38 @@ public class OptionController {
 	/**
 	 * 查詢使用者相關的設定 (AutoComplete)
 	 * 
-	 * @param str 使用者相關字串
-	 * return ResponseEntity<List<UserOptionQueriedResource>>
+	 * @param str 使用者相關字串 return ResponseEntity<List<UserOptionQueriedResource>>
 	 */
 	@GetMapping("/getUserOptions")
 	public ResponseEntity<List<UserOptionQueriedResource>> getUserOptions(@RequestParam("queryStr") String str) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(optionQueryService.getUserOptions(str), UserOptionQueriedResource.class),
-				HttpStatus.OK);
+		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getUserOptions(str),
+				UserOptionQueriedResource.class), HttpStatus.OK);
 	}
-	
+
 	/**
-	 * 查詢角色相關的設定 (AutoComplete)
+	 * 查詢角色相關的 AutoComplete 資料
 	 * 
-	 * @param str 角色相關字串
-	 * return ResponseEntity<List<RoleOptionQueriedResource>>
+	 * @param service 服務
+	 * @param str     角色相關字串 return ResponseEntity<List<RoleOptionQueriedResource>>
 	 */
 	@GetMapping("/roles")
-	public ResponseEntity<List<RoleOptionQueriedResource>> getRoleOptions(@RequestParam("queryStr") String str) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(optionQueryService.getRoleOptions(str), RoleOptionQueriedResource.class),
-				HttpStatus.OK);
+	public ResponseEntity<List<RoleOptionQueriedResource>> getRoleOptions(@RequestParam String service,
+			@RequestParam("queryStr") String str) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getRoleOptions(service, str),
+				RoleOptionQueriedResource.class), HttpStatus.OK);
 	}
-	
+
 	/**
-	 * 查詢角色相關的設定 (AutoComplete)
+	 * 查詢角色相關的 AutoComplete 資料
 	 * 
-	 * @param str 群組相關字串
-	 * return ResponseEntity<List<GroupOptionQueriedResource>>
+	 * @param service 服務
+	 * @param str     群組相關字串 return ResponseEntity<List<GroupOptionQueriedResource>>
 	 */
 	@GetMapping("/groups")
-	public ResponseEntity<List<GroupOptionQueriedResource>> getGroupOptions(@RequestParam("queryStr") String str) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(optionQueryService.getGroupOptions(str), GroupOptionQueriedResource.class),
-				HttpStatus.OK);
+	public ResponseEntity<List<GroupOptionQueriedResource>> getGroupOptions(@RequestParam String service,
+			@RequestParam("queryStr") String str) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(optionQueryService.getGroupOptions(service, str),
+				GroupOptionQueriedResource.class), HttpStatus.OK);
 	}
 
 }

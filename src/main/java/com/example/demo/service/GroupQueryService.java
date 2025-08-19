@@ -36,13 +36,14 @@ public class GroupQueryService {
 	}
 
 	/**
-	 * 透過 ID 查詢群組資料
+	 * 透過 ID 與服務查詢群組相關資料
 	 * 
 	 * @param id
+	 * @param service 服務
 	 * @return List<GroupInfoQueried>
 	 */
 	@Transactional
-	public GroupInfoQueried query(Long id) {
-		return groupService.query(id);
+	public GroupInfoQueried getGroupInfo(Long id, String service) {
+		return groupService.getGroupInfo(id, service);
 	}
 }

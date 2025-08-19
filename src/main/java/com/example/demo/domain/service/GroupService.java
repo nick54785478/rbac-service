@@ -48,7 +48,6 @@ public class GroupService {
 
 		Map<Long, GroupInfo> map = roles.stream().collect(Collectors.toMap(GroupInfo::getId, Function.identity()));
 
-						
 		List<GroupInfo> groupList = commands.stream().map(command -> {
 			// 修改
 			if (!Objects.isNull(command.getId()) && !Objects.isNull(map.get(command.getId()))) {
@@ -62,19 +61,18 @@ public class GroupService {
 				return group;
 			}
 		}).collect(Collectors.toList());
-		
+
 		groupInfoRepository.saveAll(groupList);
 	}
-	
-
 
 	/**
 	 * 查詢符合條件的群組資料
 	 * 
-	 * @param id
+	 * @param id      群組ID
+	 * @param service 服務
 	 * @return GroupInfoQueried
 	 */
-	public GroupInfoQueried query(Long id) {
+	public GroupInfoQueried getGroupInfo(Long id, String service) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			GroupInfo group = opt.get();
@@ -83,10 +81,9 @@ public class GroupService {
 			List<Long> roleIds = group.getRoles().stream().filter(e -> Objects.equals(e.getActiveFlag(), YesNo.Y))
 					.map(GroupRole::getRoleId).collect(Collectors.toList());
 
-			List<RoleInfo> roles = roleInfoRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y);
-			
-			List<GroupRoleQueried> groupRoles = BaseDataTransformer.transformData(roles,
-					GroupRoleQueried.class);
+			List<RoleInfo> roles = roleInfoRepository.findByIdInAndServiceAndActiveFlag(roleIds, service, YesNo.Y);
+
+			List<GroupRoleQueried> groupRoles = BaseDataTransformer.transformData(roles, GroupRoleQueried.class);
 			groupQueried.setRoles(groupRoles);
 			return groupQueried;
 
@@ -94,8 +91,6 @@ public class GroupService {
 			throw new ValidationException("VALIDATION_FAILED", "該群組 ID 有誤，查詢失敗");
 		}
 	}
-
-	
 
 	/**
 	 * 查詢群組角色
@@ -122,12 +117,12 @@ public class GroupService {
 			return result;
 		}
 	}
-	
+
 	/**
 	 * 刪除多筆角色資料
 	 * 
-	 * @param ids  要被刪除的 id 清單
-	 * */
+	 * @param ids 要被刪除的 id 清單
+	 */
 	public void delete(List<Long> ids) {
 		List<GroupInfo> groups = groupInfoRepository.findByIdInAndActiveFlag(ids, YesNo.Y);
 		groups.stream().forEach(group -> {

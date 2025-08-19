@@ -29,13 +29,14 @@ public class GroupRoleService {
 	private GroupInfoRepository groupInfoRepository;
 
 	/**
-	 * 查詢該群組內部不存在的其他角色
+	 * 查詢該群組內部不存在的其他角色(要透過 service 過濾，不然會有其他服務的角色)
 	 * 
-	 * @param id
+	 * @param id      群組ID
+	 * @param service 服務
 	 * @return List<GroupRoleQueried>
 	 */
 	@Transactional
-	public List<GroupRoleQueried> queryOthers(Long id) {
+	public List<GroupRoleQueried> queryOthers(Long id, String service) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			GroupInfo group = opt.get();
@@ -43,7 +44,8 @@ public class GroupRoleService {
 			// 篩選出該角色有的 Role ID 清單
 			List<Long> existingIds = group.getRoles().stream().map(GroupRole::getRoleId).collect(Collectors.toList());
 
-			List<RoleInfo> roles = roleInfoRepository.findByActiveFlag(YesNo.Y);
+			// 取得與該 Service 相關的角色資料
+			List<RoleInfo> roles = roleInfoRepository.findByServiceAndActiveFlag(service, YesNo.Y);
 
 			// 過濾出該群組所沒有的角色資料
 			List<RoleInfo> filtered = roles.stream().filter(e -> !existingIds.contains(e.getId()))

@@ -92,9 +92,9 @@ public class GroupController {
 	 * @return ResponseEntity<GroupInfoQueriedResource>
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<GroupInfoQueriedResource> query(@PathVariable Long id) {
+	public ResponseEntity<GroupInfoQueriedResource> getGroupInfo(@PathVariable Long id, @RequestParam String service) {
 		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(groupQueryService.query(id), GroupInfoQueriedResource.class),
+				BaseDataTransformer.transformData(groupQueryService.getGroupInfo(id, service), GroupInfoQueriedResource.class),
 				HttpStatus.OK);
 	}
 
