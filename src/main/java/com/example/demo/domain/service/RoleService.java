@@ -30,7 +30,6 @@ public class RoleService {
 	private FunctionInfoRepository functionInfoRepository;
 	private RoleInfoRepository roleInfoRepository;
 
-
 	/**
 	 * 建立多筆角色資訊(僅限於前端使用 Inline-Edit)
 	 * 
@@ -65,21 +64,22 @@ public class RoleService {
 		roleInfoRepository.saveAll(roleList);
 	}
 
-
 	/**
 	 * 查詢符合條件的角色資料
 	 * 
-	 * @param id
+	 * @param id      角色ID
+	 * @param service 服務
 	 * @return RoleInfoQueried
 	 */
-	public RoleInfoQueried query(Long id) {
+	public RoleInfoQueried getRoleInfo(Long id, String service) {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
 			RoleInfoQueried roleQueried = BaseDataTransformer.transformData(role, RoleInfoQueried.class);
 			List<Long> funcIds = role.getFunctions().stream().filter(e -> Objects.equals(e.getActiveFlag(), YesNo.Y))
 					.map(RoleFunction::getFunctionId).collect(Collectors.toList());
-			List<FunctionInfo> functions = functionInfoRepository.findByIdInAndActiveFlag(funcIds, YesNo.Y);
+			List<FunctionInfo> functions = functionInfoRepository.findByIdInAndServiceAndActiveFlag(funcIds, service,
+					YesNo.Y);
 			List<RoleFunctionQueried> functionRoles = BaseDataTransformer.transformData(functions,
 					RoleFunctionQueried.class);
 			roleQueried.setFunctions(functionRoles);
@@ -88,8 +88,5 @@ public class RoleService {
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");
 		}
 	}
-
-
-
 
 }

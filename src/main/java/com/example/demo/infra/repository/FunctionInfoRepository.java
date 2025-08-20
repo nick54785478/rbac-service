@@ -17,15 +17,19 @@ import jakarta.persistence.criteria.Predicate;
 public interface FunctionInfoRepository extends JpaRepository<FunctionInfo, Long> {
 
 	List<FunctionInfo> findByIdIn(List<Long> ids);
-	
+
 	List<FunctionInfo> findByActiveFlag(YesNo activeFlag);
 
-	List<FunctionInfo> findByTypeAndActiveFlag(String type, YesNo activeFlag);
+	List<FunctionInfo> findByServiceAndActiveFlag(String service, YesNo activeFlag);
 
+	List<FunctionInfo> findByTypeAndActiveFlag(String type, YesNo activeFlag);
+	
 	List<FunctionInfo> findByIdInAndActiveFlag(List<Long> ids, YesNo activeFlag);
-	
+
+	List<FunctionInfo> findByIdInAndServiceAndActiveFlag(List<Long> ids, String service, YesNo activeFlag);
+
 	List<FunctionInfo> findByIdInAndTypeAndActiveFlag(List<Long> ids, String type, YesNo activeFlag);
-	
+
 	List<FunctionInfo> findAll(Specification<FunctionInfo> specification);
 
 	default List<FunctionInfo> findAllWithSpecification(String service, String actionType, String type, String name,

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.role.command.UpdateRoleFunctionsCommand;
@@ -47,13 +48,14 @@ public class RoleFunctionController {
 	/**
 	 * 查詢不屬於該角色的功能資料
 	 * 
-	 * @param type
-	 * @param name
+	 * @param id      角色ID
+	 * @param service 服務
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/{id}/others")
-	public ResponseEntity<List<RoleFunctionQueriedResource>> query(@PathVariable Long id) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(roleFunctionQueryService.queryOthers(id),
+	public ResponseEntity<List<RoleFunctionQueriedResource>> query(@PathVariable Long id,
+			@RequestParam String service) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(roleFunctionQueryService.queryOthers(id, service),
 				RoleFunctionQueriedResource.class), HttpStatus.OK);
 	}
 

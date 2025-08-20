@@ -31,11 +31,12 @@ public class RoleFunctionService {
 	/**
 	 * 查詢該角色不具備的其他功能
 	 * 
-	 * @param id
+	 * @param id      角色ID
+	 * @param service 服務
 	 * @return List<RoleFunctionQueried>
 	 */
 	@Transactional
-	public List<RoleFunctionQueried> queryOthers(Long id) {
+	public List<RoleFunctionQueried> queryOthers(Long id, String service) {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
@@ -45,7 +46,7 @@ public class RoleFunctionService {
 					.collect(Collectors.toList());
 
 			// 查出該角色功能資料清單
-			List<FunctionInfo> functions = functionInfoRepository.findByActiveFlag(YesNo.Y);
+			List<FunctionInfo> functions = functionInfoRepository.findByServiceAndActiveFlag(service, YesNo.Y);
 
 			// 過濾出該角色所沒有的功能資料
 			List<FunctionInfo> filtered = functions.stream().filter(e -> !existingIds.contains(e.getId()))

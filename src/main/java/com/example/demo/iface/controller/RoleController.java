@@ -98,14 +98,14 @@ public class RoleController {
 	/**
 	 * 透過 ID 查詢角色資料
 	 * 
-	 * @param type
-	 * @param name
+	 * @param id      角色ID
+	 * @param service 服務
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<RoleInfoQueriedResource> query(@PathVariable Long id) {
+	public ResponseEntity<RoleInfoQueriedResource> getRoleInfo(@PathVariable Long id, @RequestParam String service) {
 		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(roleQueryService.query(id), RoleInfoQueriedResource.class),
+				BaseDataTransformer.transformData(roleQueryService.getRoleInfo(id, service), RoleInfoQueriedResource.class),
 				HttpStatus.OK);
 	}
 

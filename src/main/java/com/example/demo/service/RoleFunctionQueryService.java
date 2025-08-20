@@ -18,10 +18,11 @@ public class RoleFunctionQueryService {
 	/**
 	 * 查詢其他(不屬於該角色)的功能
 	 * 
-	 * @param id
+	 * @param id      角色ID
+	 * @param service 服務
 	 * @return List<RoleFunctionQueried> 角色功能清單
 	 */
-	public List<RoleFunctionQueried> queryOthers(Long id) {
-		return roleFunctionService.queryOthers(id);
+	public List<RoleFunctionQueried> queryOthers(Long id, String service) {
+		return roleFunctionService.queryOthers(id, service);
 	}
 }

@@ -38,11 +38,12 @@ public class RoleQueryService {
 	/**
 	 * 透過 ID 查詢角色資料
 	 * 
-	 * @param id
+	 * @param id      角色ID
+	 * @param service 服務
 	 * @return RoleInfoQueried
 	 */
 	@Transactional
-	public RoleInfoQueried query(Long id) {
-		return roleService.query(id);
+	public RoleInfoQueried getRoleInfo(Long id, String service) {
+		return roleService.getRoleInfo(id, service);
 	}
 }
