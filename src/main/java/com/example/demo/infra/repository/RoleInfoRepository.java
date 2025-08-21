@@ -23,8 +23,12 @@ public interface RoleInfoRepository extends JpaRepository<RoleInfo, Long> {
 	List<RoleInfo> findByServiceAndActiveFlag(String service, YesNo activeFlag);
 
 	List<RoleInfo> findByIdInAndServiceAndActiveFlag(List<Long> ids, String service, YesNo activeFlag);
+	
+	List<RoleInfo> findByIdInAndServiceNot(List<Long> ids, String service);
 
 	List<RoleInfo> findByIdInAndActiveFlag(List<Long> ids, YesNo activeFlag);
+
+	List<RoleInfo> findByServiceNotAndActiveFlag(String service, YesNo activeFlag);
 
 	List<RoleInfo> findAll(Specification<RoleInfo> specification);
 

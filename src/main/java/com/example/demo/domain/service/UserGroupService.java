@@ -1,5 +1,6 @@
 package com.example.demo.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -31,11 +32,12 @@ public class UserGroupService {
 	/**
 	 * 查詢不屬於該使用者的群組
 	 * 
-	 * @param id
+	 * @param username 使用者帳號
+	 * @param service  服務
 	 * @return List<UserGroupQueried>
 	 */
 	@Transactional
-	public List<UserGroupQueried> queryOthers(String username) {
+	public List<UserGroupQueried> queryOthers(String username, String service) {
 		UserInfo userInfo = userInfoRepository.findByUsername(username);
 
 		if (!Objects.isNull(userInfo)) {
@@ -44,7 +46,7 @@ public class UserGroupService {
 			List<Long> existingIds = userInfo.getGroups().stream().map(UserGroup::getGroupId)
 					.collect(Collectors.toList());
 
-			List<GroupInfo> groups = groupInfoRepository.findByActiveFlag(YesNo.Y);
+			List<GroupInfo> groups = groupInfoRepository.findByServiceAndActiveFlag(service, YesNo.Y);
 
 			// 過濾出該使用者沒有的群組資料
 			List<GroupInfo> filtered = groups.stream().filter(e -> !existingIds.contains(e.getId()))
@@ -75,17 +77,66 @@ public class UserGroupService {
 	 */
 	public void update(UpdateUserGroupsCommand command) {
 		UserInfo userInfo = userInfoRepository.findByUsername(command.getUsername());
+		
 		List<GroupInfo> groups = groupInfoRepository.findByIdInAndActiveFlag(command.getGroupIds(), YesNo.Y);
 
-		// 將群組資料轉為 UserGroup
-		List<UserGroup> userGroups = groups.stream().map(group -> {
-			UserGroup userGroup = new UserGroup();
-			userGroup.create(group.getId(), userInfo.getId());
-			return userGroup;
-		}).collect(Collectors.toList());
+		// 處理要被更新的 Group 資料
+		List<UserGroup> userGroups = this.processUpdatedGroupData(command.getService(), userInfo, groups);
 
 		// 更新群組資料
 		userInfo.updateGroups(userGroups);
 		userInfoRepository.save(userInfo);
+	}
+
+	/**
+	 * 處理要被更新的 Group 資料
+	 * 
+	 * @param service  服務
+	 * @param userInfo 使用者資料
+	 * @param roles    要被更新的群組清單
+	 */
+	private List<UserGroup> processUpdatedGroupData(String service, UserInfo userInfo, List<GroupInfo> groups) {
+		List<GroupInfo> groupList = new ArrayList<>();
+
+		// 取出使用者目前的群組
+		List<Long> currentGroupIds = userInfo.getGroups().stream()
+				.filter(group -> Objects.equals(group.getActiveFlag(), YesNo.Y)).map(UserGroup::getGroupId).distinct()
+				.collect(Collectors.toList());
+
+		// 查出原先屬於我的群組
+		List<GroupInfo> otherGroups = groupInfoRepository.findByIdInAndActiveFlag(currentGroupIds, YesNo.Y);
+
+		// 過濾出不屬於該服務的群組清單
+		List<GroupInfo> filtered = otherGroups.stream()
+				.filter(group -> !StringUtils.equals(group.getService(), service)).collect(Collectors.toList());
+
+		groupList.addAll(groups);
+		groupList.addAll(filtered);
+
+		// 將角色資料轉為 UserGroup
+		return groupList.stream().map(group -> {
+			UserGroup userGroup = new UserGroup();
+			userGroup.create(group.getId(), userInfo.getId());
+			return userGroup;
+		}).collect(Collectors.toList());
+	}
+
+	/**
+	 * 取得特定使用者所在的群組資料
+	 * 
+	 * @param username 使用者帳號
+	 * @return List<UserGroupQueried>
+	 */
+	@Transactional
+	public List<UserGroupQueried> queryGroups(String username, String service) {
+		UserInfo userInfo = userInfoRepository.findByUsername(username);
+		// 取得 User Group 的 GroupId
+		List<Long> groupIds = userInfo.getGroups().stream()
+				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
+				.map(UserGroup::getGroupId).collect(Collectors.toList());
+		// 透過 ID 取得 Group 資料
+		return groupInfoRepository.findByIdInAndServiceAndActiveFlag(groupIds, service, YesNo.Y).stream()
+				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueried.class))
+				.collect(Collectors.toList());
 	}
 }

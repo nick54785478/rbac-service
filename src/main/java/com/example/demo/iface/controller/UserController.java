@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.share.UserGroupQueried;
@@ -69,14 +70,15 @@ public class UserController {
 
 	/**
 	 * 查詢該使用者相關群組資訊
+	 * 
 	 * @param username
 	 * @return ResponseEntity<List<UserGroupQueriedResource>>
 	 */
 	@GetMapping("/{username}/groups")
 	public ResponseEntity<List<UserGroupDetailsQueriedResource>> queryGroups(@PathVariable String username) {
 		List<UserGroupQueried> userGroups = userQueryService.queryGroups(username);
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userGroups, UserGroupDetailsQueriedResource.class),
-				HttpStatus.OK);
+		return new ResponseEntity<>(
+				BaseDataTransformer.transformData(userGroups, UserGroupDetailsQueriedResource.class), HttpStatus.OK);
 	}
 
 	/**
@@ -95,13 +97,17 @@ public class UserController {
 	/**
 	 * 查詢該使用者相關資訊(含權限、角色)
 	 * 
-	 * @param username
+	 * @param username 使用者名稱
+	 * @param service  服務
 	 * @return ResponseEntity<UserInfoDetailQueriedResource>
 	 */
 	@GetMapping("/{username}/details")
-	public ResponseEntity<UserInfoDetailsQueriedResource> queryUserDetails(@PathVariable String username) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(userQueryService.getUserDetails(username),
-				UserInfoDetailsQueriedResource.class), HttpStatus.OK);
+	public ResponseEntity<UserInfoDetailsQueriedResource> queryUserDetails(@PathVariable String username,
+			@RequestParam String service) {
+		return new ResponseEntity<>(
+				BaseDataTransformer.transformData(userQueryService.getUserDetails(username, service),
+						UserInfoDetailsQueriedResource.class),
+				HttpStatus.OK);
 	}
 
 	/**

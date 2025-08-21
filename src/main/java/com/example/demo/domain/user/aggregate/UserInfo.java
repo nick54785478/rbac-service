@@ -138,10 +138,10 @@ public class UserInfo {
 				.collect(Collectors.toMap(UserRole::getRoleId, Function.identity()));
 
 		// 新資料沒有但舊資料有 => 刪除
-		List<UserRole> result = this.roles.stream().filter(existingRole -> userRoles.stream()
-				.noneMatch(newRole -> newRole.getRoleId().equals(existingRole.getRoleId()))).peek(role -> {
-					role.delete();
-				}) // peek 在收集到清單之前執行
+		List<UserRole> result = this.roles.stream()
+				.filter(existingRole -> userRoles.stream()
+						.noneMatch(newRole -> newRole.getRoleId().equals(existingRole.getRoleId())))
+				.peek(UserRole::delete) // peek 在收集到清單之前執行
 				.collect(Collectors.toList());
 		// 遍歷使用者的角色資料蒐集
 		userRoles.stream().forEach(e -> {
@@ -157,14 +157,6 @@ public class UserInfo {
 		});
 		this.roles = result;
 
-//		// 移除 functions 中不存在於 Role Functions 的項目
-//		this.roles.removeIf(existingRole -> userRoles.stream().noneMatch(newRole -> newRole.equals(existingRole)));
-//		// 增加新的 Role Function
-//		userRoles.stream().forEach(newRole -> {
-//			if (!roles.contains(newRole)) {
-//				this.roles.add(newRole);
-//			}
-//		});
 	}
 
 	/**
@@ -180,9 +172,7 @@ public class UserInfo {
 		List<UserGroup> result = this.groups.stream()
 				.filter(existingGroup -> userGroups.stream()
 						.noneMatch(newGroup -> newGroup.getGroupId().equals(existingGroup.getGroupId())))
-				.peek(group -> {
-					group.delete();
-				}) // peek 在收集到清單之前執行
+				.peek(UserGroup::delete) // peek 在收集到清單之前執行
 				.collect(Collectors.toList());
 
 		// 遍歷使用者的群組資料蒐集
@@ -198,16 +188,6 @@ public class UserInfo {
 			}
 		});
 		this.groups = result;
-
-		// 移除 functions 中不存在於 Role Functions 的項目
-//		this.groups
-//				.removeIf(existingGroup -> userGroups.stream().noneMatch(newGroup -> newGroup.equals(existingGroup)));
-//		// 增加新的使用者群組
-//		userGroups.stream().forEach(newGroup -> {
-//			if (!this.groups.contains(newGroup)) {
-//				this.groups.add(newGroup);
-//			}
-//		});
 	}
 
 	/**

@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class UpdateUserRolesResource {
 
 	private String username;
+	
+	private String service;
 
 	private List<Long> roleIds;
 }

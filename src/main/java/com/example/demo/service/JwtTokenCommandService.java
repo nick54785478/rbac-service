@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.config.context.ContextHolder;
 import com.example.demo.config.security.JwtConstants;
 import com.example.demo.domain.service.UserService;
 import com.example.demo.domain.share.JwtTokenGenerated;
@@ -62,23 +63,27 @@ public class JwtTokenCommandService {
 
 		// 查詢該使用者所在的群組
 		List<UserGroupQueried> queryGroups = userService.queryGroups(command.getUsername());
-		List<String> groups = queryGroups.stream().map(UserGroupQueried::getCode).collect(Collectors.toList());
+		List<String> groups = queryGroups.stream()
+				.filter(group -> StringUtils.equals(group.getService(), ContextHolder.getService()))
+				.map(UserGroupQueried::getCode).collect(Collectors.toList());
 
 		// 查詢該使用者個人角色
 		List<UserRoleQueried> queryRoles = userService.queryRoles(command.getUsername());
-		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
-		JwtTokenGenerated tokenGenerated = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(), roles,
-				groups);
+		List<String> roles = queryRoles.stream()
+				.filter(role -> StringUtils.equals(role.getService(), ContextHolder.getService()))
+				.map(UserRoleQueried::getCode).collect(Collectors.toList());
+		JwtTokenGenerated tokenGenerated = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(),
+				roles, groups);
+		
 		// 更新 Refresh Token
 		userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
 		userInfoRepository.save(userInfo);
-
 
 		// 若不存在 RefreshToken，設置進去
 		if (StringUtils.isBlank(userInfo.getRefreshToken())) {
 			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
 		}
-		
+
 		// 如果 RefreshToken 過期
 		if (isExpiration(userInfo.getRefreshToken())) {
 			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
@@ -102,23 +107,21 @@ public class JwtTokenCommandService {
 			List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
 			JwtTokenGenerated tokenGenerated = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(),
 					roles, groups);
-			
+
 			// 若不存在 RefreshToken，設置進去
 			if (StringUtils.isBlank(userInfo.getRefreshToken())) {
 				userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
 			} else {
-				
+
 				// 若 Refresh Token 過期，更新該 Refresh Token
 				if (isExpiration(userInfo.getRefreshToken())) {
 					userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
-				// Refresh Token 未過期，沿用舊 Token
+					// Refresh Token 未過期，沿用舊 Token
 				} else {
 					tokenGenerated.setRefreshToken(userInfo.getRefreshToken());
 				}
 			}
-			
-			
-		
+
 			userInfoRepository.save(userInfo);
 			return tokenGenerated;
 

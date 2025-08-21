@@ -20,7 +20,11 @@ public interface GroupInfoRepository extends JpaRepository<GroupInfo, Long> {
 
 	List<GroupInfo> findByIdInAndActiveFlag(List<Long> ids, YesNo activeFlag);
 
+	List<GroupInfo> findByIdInAndServiceAndActiveFlag(List<Long> ids, String service, YesNo activeFlag);
+
 	List<GroupInfo> findByActiveFlag(YesNo activeFlag);
+	
+	List<GroupInfo> findByServiceAndActiveFlag(String service, YesNo activeFlag);
 
 	List<GroupInfo> findAll(Specification<GroupInfo> specification);
 

@@ -35,8 +35,7 @@ public class UserQueryService {
 		List<UserGroupQueried> groups = userService.queryGroups(username);
 		return groups;
 	}
-	
-	
+
 	/**
 	 * 取得特定使用者所在的 Role 資料
 	 * 
@@ -60,15 +59,16 @@ public class UserQueryService {
 		UserInfo userInfo = userRepository.findByUsername(username);
 		return BaseDataTransformer.transformData(userInfo, UserInfoQueried.class);
 	}
-	
+
 	/**
 	 * 取得使用者詳細資訊
 	 * 
-	 * @param username
+	 * @param username 使用者名稱
+	 * @param service  服務
 	 * @return UserInfoQueried
 	 */
-	public UserInfoDetailsQueried getUserDetails(String username) {
-		return userService.getUserDetails(username);
+	public UserInfoDetailsQueried getUserDetails(String username, String service) {
+		return userService.getUserDetails(username, service);
 	}
 
 }
