@@ -100,3 +100,14 @@ CREATE TABLE IF NOT EXISTS setting (
     `active_flag` CHAR(1),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE customisation (
+    `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
+    `username` VARCHAR(100),
+    `component` VARCHAR(100),
+    `type` VARCHAR(100),       
+    `name` VARCHAR(100),
+    `value` VARCHAR(150),   
+    `description` TEXT,
+    `active_flag` CHAR(2)
+);

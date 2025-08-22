@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.config.context.ContextHolder;
 import com.example.demo.config.security.JwtConstants;
+import com.example.demo.domain.service.UserGroupService;
+import com.example.demo.domain.service.UserRoleService;
 import com.example.demo.domain.service.UserService;
 import com.example.demo.domain.share.JwtTokenGenerated;
 import com.example.demo.domain.share.UserGroupQueried;
@@ -37,6 +39,8 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtTokenCommandService {
 
 	private final UserService userService;
+	private final UserRoleService userRoleService;
+	private final UserGroupService userGroupService;
 	private final UserInfoRepository userInfoRepository;
 
 	/**
@@ -62,19 +66,20 @@ public class JwtTokenCommandService {
 		}
 
 		// 查詢該使用者所在的群組
-		List<UserGroupQueried> queryGroups = userService.queryGroups(command.getUsername());
+		List<UserGroupQueried> queryGroups = userGroupService.queryGroups(command.getUsername(),
+				ContextHolder.getService());
 		List<String> groups = queryGroups.stream()
-				.filter(group -> StringUtils.equals(group.getService(), ContextHolder.getService()))
 				.map(UserGroupQueried::getCode).collect(Collectors.toList());
 
 		// 查詢該使用者個人角色
-		List<UserRoleQueried> queryRoles = userService.queryRoles(command.getUsername());
+		List<UserRoleQueried> queryRoles = userRoleService.queryRoles(command.getUsername(),
+				ContextHolder.getService());
 		List<String> roles = queryRoles.stream()
-				.filter(role -> StringUtils.equals(role.getService(), ContextHolder.getService()))
 				.map(UserRoleQueried::getCode).collect(Collectors.toList());
+
 		JwtTokenGenerated tokenGenerated = JwtTokenUtil.generateToken(userInfo.getUsername(), userInfo.getEmail(),
 				roles, groups);
-		
+
 		// 更新 Refresh Token
 		userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
 		userInfoRepository.save(userInfo);

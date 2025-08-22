@@ -103,7 +103,7 @@ public class UserController {
 	 */
 	@GetMapping("/{username}/details")
 	public ResponseEntity<UserInfoDetailsQueriedResource> queryUserDetails(@PathVariable String username,
-			@RequestParam String service) {
+			@RequestParam(defaultValue = "AUTH_SERVICE") String service) {
 		return new ResponseEntity<>(
 				BaseDataTransformer.transformData(userQueryService.getUserDetails(username, service),
 						UserInfoDetailsQueriedResource.class),
