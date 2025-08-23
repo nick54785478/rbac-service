@@ -2,7 +2,9 @@ package com.example.demo.domain.customisation.aggregate;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.example.demo.domain.customisation.command.UpdateCustomisationCommand;
 import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.util.JsonParseUtil;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,12 +46,23 @@ public class Customisation {
 	private String name;
 
 	@Column(name = "value")
-	private String value; // 以 "," 分隔的配置
-
-	@Column(name = "description")
-	private String description; // 敘述
+	private String value; 
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "active_flag")
 	private YesNo activeFlag; // 是否生效
+
+	/**
+	 * 更新個人化設定
+	 * 
+	 * @param command
+	 */
+	public void update(UpdateCustomisationCommand command) {
+		this.username = command.getUsername();
+		this.component = command.getComponent();
+		this.type = command.getType();
+		this.value = JsonParseUtil.serialize(command.getValueList());
+		this.activeFlag = YesNo.Y;
+
+	}
 }
