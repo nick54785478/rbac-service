@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS user_info (
 -- 角色資料表 (ROLE)：存儲角色信息
 CREATE TABLE IF NOT EXISTS role_info (
     `id` BIGINT(20) AUTO_INCREMENT,
+    `service` VARCHAR(100),
     `code` VARCHAR(100),
     `name` VARCHAR(100),
     `type` VARCHAR(100),
@@ -27,6 +28,7 @@ CREATE TABLE IF NOT EXISTS role_info (
 -- 群組表 (GROUP_INFO)：存儲群組信息
 CREATE TABLE IF NOT EXISTS group_info (
     `id` BIGINT(20) AUTO_INCREMENT,
+    `service` VARCHAR(100),
     `type` VARCHAR(100),
     `name` VARCHAR(100),
     `code` VARCHAR(100),
@@ -38,6 +40,7 @@ CREATE TABLE IF NOT EXISTS group_info (
 -- 功能表 (FUNCTION_INFO)：存儲功能代碼和行為類型
 CREATE TABLE IF NOT EXISTS function_info (
     `id` BIGINT(20) AUTO_INCREMENT,
+    `service` VARCHAR(100),
     `type` VARCHAR(30),
     `action_type` VARCHAR(100),
     `name` VARCHAR(100),
