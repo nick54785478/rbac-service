@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.domain.customisation.command.UpdateCustomisationCommand;
 import com.example.demo.iface.dto.CustomisationUpdatedResource;
 import com.example.demo.iface.dto.FieldViewCustomisationQueriedResource;
-import com.example.demo.iface.dto.GroupCreatedResource;
 import com.example.demo.iface.dto.UpdateCustomisationResource;
 import com.example.demo.service.CustomisationCommandService;
 import com.example.demo.service.CustomisationQueryService;

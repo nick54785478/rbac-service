@@ -8,21 +8,21 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
+import com.example.demo.domain.setting.aggregate.Setting;
 
 import jakarta.persistence.criteria.Predicate;
 import com.example.demo.domain.share.enums.YesNo;
 
 @Repository
-public interface SettingRepository extends JpaRepository<ConfigurableSetting, Long> {
+public interface SettingRepository extends JpaRepository<Setting, Long> {
 
-	List<ConfigurableSetting> findByServiceAndDataTypeAndActiveFlag(String service, String dataType, YesNo activeFlag);
+	List<Setting> findByServiceAndDataTypeAndActiveFlag(String service, String dataType, YesNo activeFlag);
 
-	List<ConfigurableSetting> findAll(Specification<ConfigurableSetting> specification);
+	List<Setting> findAll(Specification<Setting> specification);
 
-	default List<ConfigurableSetting> findAllWithSpecification(String service, String dataType, String type,
+	default List<Setting> findAllWithSpecification(String service, String dataType, String type,
 			String name, String activeFlag) {
-		Specification<ConfigurableSetting> specification = ((root, query, cb) -> {
+		Specification<Setting> specification = ((root, query, cb) -> {
 			List<Predicate> predicates = new ArrayList<>();
 
 			if (StringUtils.isNotBlank(service)) {

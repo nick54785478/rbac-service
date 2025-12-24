@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.setting.aggregate.ConfigurableSetting;
+import com.example.demo.domain.setting.aggregate.Setting;
 import com.example.demo.domain.setting.command.CreateSettingCommand;
 import com.example.demo.domain.setting.command.UpdateSettingCommand;
 import com.example.demo.domain.share.SettingQueried;
@@ -29,7 +29,7 @@ public class SettingService {
 	 * @param command
 	 */
 	public void create(CreateSettingCommand command) {
-		ConfigurableSetting setting = new ConfigurableSetting();
+		Setting setting = new Setting();
 		setting.create(command);
 		settingRepository.save(setting);
 	}
@@ -59,7 +59,7 @@ public class SettingService {
 	 * @return
 	 */
 	public List<SettingQueried> query(String service, String dataType, String type, String name, String activeFlag) {
-		List<ConfigurableSetting> settingList = settingRepository.findAllWithSpecification(service, dataType, type,
+		List<Setting> settingList = settingRepository.findAllWithSpecification(service, dataType, type,
 				name, activeFlag);
 		return BaseDataTransformer.transformData(settingList, SettingQueried.class);
 	}

@@ -27,7 +27,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Table(name = "setting")
 @EntityListeners(AuditingEntityListener.class)
-public class ConfigurableSetting {
+public class Setting {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

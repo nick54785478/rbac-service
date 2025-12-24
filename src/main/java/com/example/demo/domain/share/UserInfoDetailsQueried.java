@@ -24,6 +24,8 @@ public class UserInfoDetailsQueried {
 	private String birthday;
 	
 	private String nationalIdNo;
+	
+	private String activeFlag;
 
 	private List<UserGroupDetailsQueried> groups;
 
