@@ -1,4 +1,4 @@
-package com.example.demo.iface.aop;
+package com.example.demo.iface.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,19 +15,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 
- * */
+ * 攔截所有 Controller 的切面
+ */
 @Aspect
 @Component
 @Slf4j
-public class LoginAop {
+public class ServiceHeaderAspect {
 
 	/**
-	 * 定義切入點，針對 LoginController 進行切入。
+	 * 定義切入點，針對帶有 @RestController 注解的類進行切入。
 	 */
-	@Pointcut("execution(* com.example.demo.iface.controller.LoginController.*(..))")
+	@Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
 	public void pointCut() {
-
 	}
 
 	@Around("pointCut()")
