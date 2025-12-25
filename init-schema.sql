@@ -1,4 +1,5 @@
 -- 用戶資料表 (USER)：存儲用戶的基本信息
+DROP TABLE IF EXISTS user_info;
 CREATE TABLE IF NOT EXISTS user_info (
     `id` BIGINT(20) AUTO_INCREMENT,
     `name` VARCHAR(100),
@@ -14,6 +15,7 @@ CREATE TABLE IF NOT EXISTS user_info (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 角色資料表 (ROLE)：存儲角色信息
+DROP TABLE IF EXISTS role_info;
 CREATE TABLE IF NOT EXISTS role_info (
     `id` BIGINT(20) AUTO_INCREMENT,
     `service` VARCHAR(100),
@@ -26,6 +28,7 @@ CREATE TABLE IF NOT EXISTS role_info (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 群組表 (GROUP_INFO)：存儲群組信息
+DROP TABLE IF EXISTS group_info;
 CREATE TABLE IF NOT EXISTS group_info (
     `id` BIGINT(20) AUTO_INCREMENT,
     `service` VARCHAR(100),
@@ -38,7 +41,8 @@ CREATE TABLE IF NOT EXISTS group_info (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 功能表 (FUNCTION_INFO)：存儲功能代碼和行為類型
-CREATE TABLE IF NOT EXISTS function_info (
+DROP TABLE IF EXISTS function_info;
+CREATE TABLE function_info (
     `id` BIGINT(20) AUTO_INCREMENT,
     `service` VARCHAR(100),
     `type` VARCHAR(30),
@@ -51,6 +55,7 @@ CREATE TABLE IF NOT EXISTS function_info (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 群組使用者關聯表 (USER_GROUP)：定義群組與用戶的關聯
+DROP TABLE IF EXISTS user_group;
 CREATE TABLE IF NOT EXISTS user_group (
     `id` BIGINT(20) AUTO_INCREMENT,
     `user_id` BIGINT(20),
@@ -61,6 +66,7 @@ CREATE TABLE IF NOT EXISTS user_group (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 群組角色關聯表 (ROLE_GROUP)：定義群組與角色的關聯
+DROP TABLE IF EXISTS group_role;
 CREATE TABLE IF NOT EXISTS group_role (
     `id` BIGINT(20) AUTO_INCREMENT,
     `role_id` BIGINT(20),
@@ -71,6 +77,7 @@ CREATE TABLE IF NOT EXISTS group_role (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 角色功能關聯表 (ROLE_FUNCTION)：定義角色與功能的關聯
+DROP TABLE IF EXISTS role_function;
 CREATE TABLE IF NOT EXISTS role_function (
     `id` BIGINT(20) AUTO_INCREMENT,
     `role_id` BIGINT(20),
@@ -81,6 +88,7 @@ CREATE TABLE IF NOT EXISTS role_function (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- 使用者角色關聯表 (USER_ROLE)：定義用戶與角色的關聯
+DROP TABLE IF EXISTS user_role;
 CREATE TABLE IF NOT EXISTS user_role (
     `id` BIGINT(20) AUTO_INCREMENT,
     `user_id` BIGINT(20),
@@ -90,6 +98,7 @@ CREATE TABLE IF NOT EXISTS user_role (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS setting;
 CREATE TABLE IF NOT EXISTS setting (
     `id` BIGINT(20) AUTO_INCREMENT,
     `service` VARCHAR(20),
@@ -97,13 +106,14 @@ CREATE TABLE IF NOT EXISTS setting (
     `type` VARCHAR(100),
     `name` VARCHAR(100),
     `code` VARCHAR(100),
-    `value` VARCHAR(100),
+    `value` VARCHAR(255),
     `description` TEXT,
     `priority_no` INT,
     `active_flag` CHAR(1),
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS customisation;
 CREATE TABLE customisation (
     `id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `username` VARCHAR(100),
