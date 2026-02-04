@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.GroupRoleQueried;
 import com.example.demo.domain.service.GroupRoleService;
-import com.example.demo.domain.share.GroupRoleQueried;
 
 import lombok.AllArgsConstructor;
 

@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.GroupInfoQueried;
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.service.GroupService;
-import com.example.demo.domain.share.GroupInfoQueried;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
 

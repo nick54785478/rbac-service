@@ -5,10 +5,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.SettingQueried;
 import com.example.demo.domain.setting.aggregate.Setting;
 import com.example.demo.domain.setting.command.CreateSettingCommand;
 import com.example.demo.domain.setting.command.UpdateSettingCommand;
-import com.example.demo.domain.share.SettingQueried;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.SettingRepository;
 import com.example.demo.util.BaseDataTransformer;

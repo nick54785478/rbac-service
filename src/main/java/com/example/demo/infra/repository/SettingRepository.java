@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.example.demo.domain.setting.aggregate.Setting;
+import com.example.demo.shared.enums.YesNo;
 
 import jakarta.persistence.criteria.Predicate;
-import com.example.demo.domain.share.enums.YesNo;
 
 @Repository
 public interface SettingRepository extends JpaRepository<Setting, Long> {

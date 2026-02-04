@@ -10,16 +10,16 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.GroupInfoQueried;
+import com.example.demo.domain.dto.GroupRoleQueried;
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
 import com.example.demo.domain.role.aggregate.RoleInfo;
-import com.example.demo.domain.share.GroupInfoQueried;
-import com.example.demo.domain.share.GroupRoleQueried;
-import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
+import com.example.demo.shared.enums.YesNo;
 import com.example.demo.util.BaseDataTransformer;
 
 import jakarta.transaction.Transactional;

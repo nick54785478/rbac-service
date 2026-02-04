@@ -5,7 +5,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.example.demo.domain.function.aggregate.vo.ActionType;
 import com.example.demo.domain.function.command.CreateFunctionCommand;
 import com.example.demo.domain.function.command.CreateOrUpdateFunctionCommand;
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.shared.enums.YesNo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

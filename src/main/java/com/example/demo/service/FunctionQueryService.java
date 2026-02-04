@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.FunctionInfoQueried;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
-import com.example.demo.domain.share.FunctionInfoQueried;
 import com.example.demo.infra.repository.FunctionInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
 

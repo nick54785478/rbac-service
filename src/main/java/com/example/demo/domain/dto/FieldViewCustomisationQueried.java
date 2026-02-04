@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class JwtTokenGenerated {
+public class FieldViewCustomisationQueried {
 
-	private String token;
+	private String field;
 	
-	private String refreshToken;
-
+	private String label;
 }

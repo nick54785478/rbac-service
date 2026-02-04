@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.JwtTokenGenerated;
+import com.example.demo.domain.dto.UserGroupQueried;
+import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.service.UserGroupService;
 import com.example.demo.domain.service.UserRoleService;
 import com.example.demo.domain.service.UserService;
-import com.example.demo.domain.share.JwtTokenGenerated;
-import com.example.demo.domain.share.UserGroupQueried;
-import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.command.GenerateJwtokenCommand;
 import com.example.demo.domain.user.command.RefreshTokenCommand;

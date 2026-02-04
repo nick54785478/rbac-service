@@ -9,15 +9,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.dto.UserGroupQueried;
 import com.example.demo.domain.group.aggregate.GroupInfo;
-import com.example.demo.domain.share.UserGroupQueried;
-import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.command.UpdateUserGroupsCommand;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.UserInfoRepository;
+import com.example.demo.shared.enums.YesNo;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;

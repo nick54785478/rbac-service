@@ -3,7 +3,7 @@ package com.example.demo.domain.customisation.aggregate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.example.demo.domain.customisation.command.UpdateCustomisationCommand;
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.shared.enums.YesNo;
 import com.example.demo.util.JsonParseUtil;
 
 import jakarta.persistence.Column;

@@ -1,9 +1,9 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.dto;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.shared.enums.YesNo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.share.UserRoleQueried;
+import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
 import com.example.demo.iface.dto.in.UpdateUserRolesResource;
 import com.example.demo.iface.dto.out.UserRoleQueriedResource;

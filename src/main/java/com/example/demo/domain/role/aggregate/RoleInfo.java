@@ -13,7 +13,7 @@ import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
 import com.example.demo.domain.role.command.CreateRoleCommand;
 import com.example.demo.domain.role.command.UpdateRoleCommand;
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.shared.enums.YesNo;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

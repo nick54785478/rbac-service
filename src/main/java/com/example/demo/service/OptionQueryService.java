@@ -5,15 +5,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.share.GroupOptionQueried;
-import com.example.demo.domain.share.OptionQueried;
-import com.example.demo.domain.share.RoleOptionQueried;
-import com.example.demo.domain.share.UserOptionQueried;
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.domain.dto.GroupOptionQueried;
+import com.example.demo.domain.dto.OptionQueried;
+import com.example.demo.domain.dto.RoleOptionQueried;
+import com.example.demo.domain.dto.UserOptionQueried;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.infra.repository.SettingRepository;
 import com.example.demo.infra.repository.UserInfoRepository;
+import com.example.demo.shared.enums.YesNo;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;

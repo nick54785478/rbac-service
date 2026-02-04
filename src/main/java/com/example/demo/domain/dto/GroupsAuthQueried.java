@@ -1,4 +1,4 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.dto;
 
 import java.util.List;
 

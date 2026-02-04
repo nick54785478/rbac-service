@@ -11,11 +11,11 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserCommand;
+import com.example.demo.shared.enums.YesNo;
 import com.example.demo.util.PasswordUtil;
 
 import jakarta.persistence.CascadeType;

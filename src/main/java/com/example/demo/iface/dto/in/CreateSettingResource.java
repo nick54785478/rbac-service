@@ -1,6 +1,6 @@
 package com.example.demo.iface.dto.in;
 
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.shared.enums.YesNo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

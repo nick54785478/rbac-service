@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.group.command.CreateGroupCommand;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
-import com.example.demo.domain.share.enums.YesNo;
+import com.example.demo.shared.enums.YesNo;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

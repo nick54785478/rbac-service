@@ -1,6 +1,6 @@
-package com.example.demo.domain.share;
+package com.example.demo.domain.dto;
 
-import java.util.List;
+import com.example.demo.shared.enums.YesNo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,17 +9,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupRoleQueried {
+public class UserGroupDetailsQueried {
 
-	private Long id; // 角色 ID
+	private Long id;
 	
 	private String service;
 
-	private String code; // 角色代號
+	private String type;
 
 	private String name; // 名稱
 
-	private List<RoleInfoQueried> roles;
+	private String code; // 群組代號
 
 	private String description; // 敘述
+
+	private YesNo activeFlag;
 }

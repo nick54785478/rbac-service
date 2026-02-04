@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.dto.RoleInfoQueried;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.service.RoleService;
-import com.example.demo.domain.share.RoleInfoQueried;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
 

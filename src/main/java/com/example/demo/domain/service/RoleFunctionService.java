@@ -8,15 +8,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.domain.dto.RoleFunctionQueried;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.UpdateRoleFunctionsCommand;
-import com.example.demo.domain.share.RoleFunctionQueried;
-import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.FunctionInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
+import com.example.demo.shared.enums.YesNo;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;

@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.domain.share.UserGroupQueried;
-import com.example.demo.domain.share.UserRoleQueried;
+import com.example.demo.domain.dto.UserGroupQueried;
+import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.iface.dto.in.CreateUserResource;

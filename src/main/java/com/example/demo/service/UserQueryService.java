@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.UserGroupQueried;
+import com.example.demo.domain.dto.UserInfoDetailsQueried;
+import com.example.demo.domain.dto.UserInfoQueried;
+import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.service.UserService;
-import com.example.demo.domain.share.UserGroupQueried;
-import com.example.demo.domain.share.UserInfoDetailsQueried;
-import com.example.demo.domain.share.UserInfoQueried;
-import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.infra.repository.UserInfoRepository;
 import com.example.demo.util.BaseDataTransformer;

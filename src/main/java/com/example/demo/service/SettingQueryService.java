@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.SettingQueried;
 import com.example.demo.domain.service.SettingService;
-import com.example.demo.domain.share.SettingQueried;
 
 import lombok.AllArgsConstructor;
 

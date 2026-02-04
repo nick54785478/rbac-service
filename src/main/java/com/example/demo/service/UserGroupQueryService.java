@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.domain.dto.UserGroupQueried;
 import com.example.demo.domain.service.UserGroupService;
-import com.example.demo.domain.share.UserGroupQueried;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
