@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.setting.command.CreateSettingCommand;
 import com.example.demo.domain.setting.command.UpdateSettingCommand;
-import com.example.demo.iface.dto.CreateSettingResource;
-import com.example.demo.iface.dto.SettingCreatedResource;
-import com.example.demo.iface.dto.SettingDeletedResource;
-import com.example.demo.iface.dto.SettingQueriedResource;
-import com.example.demo.iface.dto.SettingUpdatedResource;
-import com.example.demo.iface.dto.UpdateSettingResource;
+import com.example.demo.iface.dto.in.CreateSettingResource;
+import com.example.demo.iface.dto.in.UpdateSettingResource;
+import com.example.demo.iface.dto.out.SettingCreatedResource;
+import com.example.demo.iface.dto.out.SettingDeletedResource;
+import com.example.demo.iface.dto.out.SettingQueriedResource;
+import com.example.demo.iface.dto.out.SettingUpdatedResource;
 import com.example.demo.service.SettingCommandService;
 import com.example.demo.service.SettingQueryService;
 import com.example.demo.util.BaseDataTransformer;

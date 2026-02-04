@@ -13,7 +13,7 @@ import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
 import com.example.demo.domain.role.command.CreateRoleCommand;
 import com.example.demo.domain.role.command.UpdateRoleCommand;
 import com.example.demo.domain.service.RoleService;
-import com.example.demo.exception.ValidationException;
+import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.RoleInfoRepository;
 
 import lombok.AllArgsConstructor;

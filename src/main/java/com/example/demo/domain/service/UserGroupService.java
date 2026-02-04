@@ -15,7 +15,7 @@ import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.command.UpdateUserGroupsCommand;
-import com.example.demo.exception.ValidationException;
+import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.UserInfoRepository;
 import com.example.demo.util.BaseDataTransformer;

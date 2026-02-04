@@ -12,7 +12,7 @@ import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
-import com.example.demo.exception.ValidationException;
+import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.UserInfoRepository;
 
 import lombok.AllArgsConstructor;

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.function.command.CreateFunctionCommand;
 import com.example.demo.domain.function.command.CreateOrUpdateFunctionCommand;
-import com.example.demo.iface.dto.CreateFunctionResource;
-import com.example.demo.iface.dto.CreateOrUpdateFunctionResource;
-import com.example.demo.iface.dto.FunctionCreatedOrUpdatedResource;
-import com.example.demo.iface.dto.FunctionCreatedResource;
-import com.example.demo.iface.dto.FunctionDeletedResource;
-import com.example.demo.iface.dto.FunctionInfoQueriedResource;
+import com.example.demo.iface.dto.in.CreateFunctionResource;
+import com.example.demo.iface.dto.in.CreateOrUpdateFunctionResource;
+import com.example.demo.iface.dto.out.FunctionCreatedOrUpdatedResource;
+import com.example.demo.iface.dto.out.FunctionCreatedResource;
+import com.example.demo.iface.dto.out.FunctionDeletedResource;
+import com.example.demo.iface.dto.out.FunctionInfoQueriedResource;
 import com.example.demo.service.FunctionCommandService;
 import com.example.demo.service.FunctionQueryService;
 import com.example.demo.util.BaseDataTransformer;

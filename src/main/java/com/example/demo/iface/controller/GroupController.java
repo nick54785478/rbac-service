@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.group.command.CreateGroupCommand;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
-import com.example.demo.iface.dto.CreateGroupResource;
-import com.example.demo.iface.dto.CreateOrUpdateGroupResource;
-import com.example.demo.iface.dto.GroupCreatedOrUpdatedResource;
-import com.example.demo.iface.dto.GroupCreatedResource;
-import com.example.demo.iface.dto.GroupDeletedResource;
-import com.example.demo.iface.dto.GroupInfoQueriedResource;
+import com.example.demo.iface.dto.in.CreateGroupResource;
+import com.example.demo.iface.dto.in.CreateOrUpdateGroupResource;
+import com.example.demo.iface.dto.out.GroupCreatedOrUpdatedResource;
+import com.example.demo.iface.dto.out.GroupCreatedResource;
+import com.example.demo.iface.dto.out.GroupDeletedResource;
+import com.example.demo.iface.dto.out.GroupInfoQueriedResource;
 import com.example.demo.service.GroupCommandService;
 import com.example.demo.service.GroupQueryService;
 import com.example.demo.util.BaseDataTransformer;

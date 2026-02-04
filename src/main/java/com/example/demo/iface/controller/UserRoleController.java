@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.share.UserRoleQueried;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
-import com.example.demo.iface.dto.UpdateUserRolesResource;
-import com.example.demo.iface.dto.UserRoleQueriedResource;
-import com.example.demo.iface.dto.UserRolesUpdatedResource;
+import com.example.demo.iface.dto.in.UpdateUserRolesResource;
+import com.example.demo.iface.dto.out.UserRoleQueriedResource;
+import com.example.demo.iface.dto.out.UserRolesUpdatedResource;
 import com.example.demo.service.UserRoleCommandService;
 import com.example.demo.service.UserRoleQueryService;
 import com.example.demo.util.BaseDataTransformer;

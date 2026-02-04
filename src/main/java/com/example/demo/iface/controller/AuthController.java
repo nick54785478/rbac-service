@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.iface.dto.MaintainPermissionQueriedResource;
+import com.example.demo.iface.dto.in.MaintainPermissionQueriedResource;
 import com.example.demo.service.AuthQueryService;
 
 import lombok.AllArgsConstructor;

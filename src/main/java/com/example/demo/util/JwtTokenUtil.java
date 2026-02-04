@@ -11,8 +11,8 @@ import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.config.security.JwtConstants;
 import com.example.demo.domain.share.JwtTokenGenerated;
+import com.example.demo.infra.jwt.JwtConstants;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

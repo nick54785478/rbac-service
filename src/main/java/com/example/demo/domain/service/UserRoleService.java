@@ -15,7 +15,7 @@ import com.example.demo.domain.share.enums.YesNo;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
-import com.example.demo.exception.ValidationException;
+import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.infra.repository.UserInfoRepository;
 import com.example.demo.util.BaseDataTransformer;

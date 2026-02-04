@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.domain.share.UserGroupQueried;
 import com.example.demo.domain.user.command.UpdateUserGroupsCommand;
-import com.example.demo.iface.dto.UpdateUserGroupsResource;
-import com.example.demo.iface.dto.UserGroupDetailsQueriedResource;
-import com.example.demo.iface.dto.UserGroupQueriedResource;
-import com.example.demo.iface.dto.UserGroupUpdatedResource;
+import com.example.demo.iface.dto.in.UpdateUserGroupsResource;
+import com.example.demo.iface.dto.out.UserGroupDetailsQueriedResource;
+import com.example.demo.iface.dto.out.UserGroupQueriedResource;
+import com.example.demo.iface.dto.out.UserGroupUpdatedResource;
 import com.example.demo.service.UserGroupCommandService;
 import com.example.demo.service.UserGroupQueryService;
 import com.example.demo.util.BaseDataTransformer;

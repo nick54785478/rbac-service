@@ -17,7 +17,7 @@ import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.share.GroupInfoQueried;
 import com.example.demo.domain.share.GroupRoleQueried;
 import com.example.demo.domain.share.enums.YesNo;
-import com.example.demo.exception.ValidationException;
+import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
