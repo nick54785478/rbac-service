@@ -37,10 +37,14 @@ public class ContextHolder {
 	 */
 	private static final ThreadLocal<Claims> JWT_CLAIMS = new ThreadLocal<>();
 
-	/** 儲存目前使用者傳入的 JWT Token */
+	/**
+	 * 儲存目前使用者傳入的 JWT Token
+	 */
 	private static final ThreadLocal<String> JWT_TOKEN = new ThreadLocal<>();
 
-	/** 儲存目前使用者傳入的 Service Header */
+	/**
+	 * 儲存目前使用者傳入的 Service Header
+	 */
 	private static final ThreadLocal<String> SERVICE_HEADER = new ThreadLocal<>();
 
 	/**
@@ -117,6 +121,15 @@ public class ContextHolder {
 	 */
 	public static String getJwtoken() {
 		return JWT_TOKEN.get() != null ? JWT_TOKEN.get() : null;
+	}
+
+	/**
+	 * 清除上下文資料
+	 */
+	public static void clear() {
+		JWT_CLAIMS.remove();
+		JWT_TOKEN.remove();
+		SERVICE_HEADER.remove();
 	}
 
 }
