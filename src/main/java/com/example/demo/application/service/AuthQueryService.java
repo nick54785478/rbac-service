@@ -29,4 +29,5 @@ public class AuthQueryService {
 		}
 		return authService.getMaintainPermissions(username);
 	}
+
 }

@@ -1,7 +1,9 @@
 package com.example.demo.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.domain.dto.RoleFunctionQueried;
+import com.example.demo.domain.dto.RolesFunctionsQueried;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
@@ -27,6 +30,24 @@ public class RoleFunctionService {
 
 	private RoleInfoRepository roleInfoRepository;
 	private FunctionInfoRepository functionInfoRepository;
+
+	/**
+	 * 查詢該角色清單所具備的相關功能權限
+	 * 
+	 * @param service  服務
+	 * @param roleList 角色清單
+	 * @return RolesFunctionsQueried
+	 */
+	public RolesFunctionsQueried getFunctionsByRoleIds(String service, List<String> rolesList) {
+		List<RoleInfo> roles = roleInfoRepository.findByServiceAndCodeInAndActiveFlag(service, rolesList, YesNo.Y);
+		// 取得所有角色清單所帶有的功能 ID
+		Set<Long> allFuncIds = roles.stream().flatMap(role -> role.getFunctions().stream())
+				.map(RoleFunction::getFunctionId).collect(Collectors.toSet());
+		// 取得 Function 清單
+		List<FunctionInfo> functions = functionInfoRepository
+				.findByIdInAndServiceAndActiveFlag(new ArrayList<>(allFuncIds), service, YesNo.Y);
+		return new RolesFunctionsQueried(service, rolesList, functions);
+	}
 
 	/**
 	 * 查詢該角色不具備的其他功能
@@ -74,7 +95,7 @@ public class RoleFunctionService {
 	/**
 	 * 賦予角色相關功能權限
 	 * 
-	 * @param command
+	 * @param command {@link UpdateRoleFunctionsCommand}
 	 */
 	public void update(UpdateRoleFunctionsCommand command) {
 		// 透過功能 ID 清單取得功能

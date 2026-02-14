@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.shared.summary;
 
 import java.util.List;
 
@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupsAuthQueried {
-
-	private String username;
+public class PersonalAuthQueriedSummary {
 	
-	private String email;
+	private String username;
 
+	private String email;
+	
 	private List<String> roles;
 
 	private List<String> functions;

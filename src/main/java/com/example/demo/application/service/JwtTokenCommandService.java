@@ -1,16 +1,20 @@
 package com.example.demo.application.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.application.port.JwTokenManagerPort;
-import com.example.demo.domain.dto.JwtTokenGenerated;
+import com.example.demo.application.shared.dto.JwtTokenGenerated;
 import com.example.demo.domain.dto.UserGroupQueried;
 import com.example.demo.domain.dto.UserRoleQueried;
+import com.example.demo.domain.function.aggregate.FunctionInfo;
+import com.example.demo.domain.service.RoleFunctionService;
 import com.example.demo.domain.service.UserGroupService;
 import com.example.demo.domain.service.UserRoleService;
 import com.example.demo.domain.service.UserService;
@@ -39,6 +43,7 @@ public class JwtTokenCommandService {
 	private final JwTokenManagerPort jwTokenManager;
 	private final UserGroupService userGroupService;
 	private final UserInfoRepository userInfoRepository;
+	private final RoleFunctionService roleFunctionService;
 
 	/**
 	 * 建立 JWToken
@@ -48,6 +53,9 @@ public class JwtTokenCommandService {
 	 */
 	@Transactional
 	public JwtTokenGenerated generateToken(GenerateJwtokenCommand command) {
+		// 透過 ContextHolder 取得 Service
+		String service = ContextHolder.getService();
+
 		UserInfo userInfo = userInfoRepository.findByUsername(command.getUsername());
 
 		if (Objects.isNull(userInfo)) {
@@ -72,22 +80,25 @@ public class JwtTokenCommandService {
 				ContextHolder.getService());
 		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
 
+		// 取得該角色清單所具備的相關功能權限
+		Set<String> functionCodes = roleFunctionService.getFunctionsByRoleIds(service, roles).getFuncList().stream()
+				.map(FunctionInfo::getCode).collect(Collectors.toSet());
 		JwtTokenGenerated tokenGenerated = jwTokenManager.generateToken(userInfo.getUsername(), userInfo.getEmail(),
-				roles, groups);
+				roles, groups, new ArrayList<>(functionCodes));
 
-//		// 更新 Refresh Token
-//		userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
-//		userInfoRepository.save(userInfo);
-//
-//		// 若不存在 RefreshToken，設置進去
-//		if (StringUtils.isBlank(userInfo.getRefreshToken())) {
-//			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
-//		}
-//
-//		// 如果 RefreshToken 過期
-//		if (isExpiration(userInfo.getRefreshToken())) {
-//			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
-//		}
+		// 更新 Refresh Token
+		userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+		userInfoRepository.save(userInfo);
+
+		// 若不存在 RefreshToken，設置進去
+		if (StringUtils.isBlank(userInfo.getRefreshToken())) {
+			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+		}
+
+		// 如果 RefreshToken 過期
+		if (jwTokenManager.isExpiration(userInfo.getRefreshToken())) {
+			userInfo.updateRefreshToken(tokenGenerated.getRefreshToken());
+		}
 		return tokenGenerated;
 	}
 
@@ -105,8 +116,13 @@ public class JwtTokenCommandService {
 			List<String> groups = queryGroups.stream().map(UserGroupQueried::getCode).collect(Collectors.toList());
 			List<UserRoleQueried> queryRoles = userService.queryRoles(userInfo.getUsername());
 			List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
+
+			String service = ContextHolder.getService();
+			// 取得該角色清單所具備的相關功能權限
+			Set<String> functions = roleFunctionService.getFunctionsByRoleIds(service, roles).getFuncList().stream()
+					.map(FunctionInfo::getCode).collect(Collectors.toSet());
 			JwtTokenGenerated tokenGenerated = jwTokenManager.generateToken(userInfo.getUsername(), userInfo.getEmail(),
-					roles, groups);
+					roles, groups, new ArrayList<>(functions));
 
 			// 若不存在 RefreshToken，設置進去
 			if (StringUtils.isBlank(userInfo.getRefreshToken())) {

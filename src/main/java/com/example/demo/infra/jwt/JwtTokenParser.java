@@ -57,6 +57,28 @@ public class JwtTokenParser {
 	}
 
 	/**
+	 * 取得使用者群組
+	 * 
+	 * @param token
+	 * @return 使用者群組
+	 */
+	@SuppressWarnings(value = "unchecked")
+	public List<String> getGroupList(String token) {
+		return (List<String>) getTokenBody(token).get(JwtConstants.JWT_CLAIMS_KEY_GROUP.getValue());
+	}
+
+	/**
+	 * 取得使用者群組
+	 * 
+	 * @param token
+	 * @return 使用者群組
+	 */
+	@SuppressWarnings(value = "unchecked")
+	public List<String> getFuncList(String token) {
+		return (List<String>) getTokenBody(token).get(JwtConstants.JWT_CLAIMS_KEY_FUNCTION.getValue());
+	}
+
+	/**
 	 * 從 token 中取得使用者信箱
 	 * 
 	 * @param token
@@ -119,7 +141,7 @@ public class JwtTokenParser {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
 		return Keys.hmacShaKeyFor(keyBytes);
 	}
-	
+
 	/**
 	 * 解析 Token
 	 * 

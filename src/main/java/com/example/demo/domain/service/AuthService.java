@@ -6,13 +6,13 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.dto.GroupsAuthQueried;
-import com.example.demo.domain.dto.PersonalAuthQueried;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
+import com.example.demo.domain.shared.summary.GroupsAuthQueriedSummary;
+import com.example.demo.domain.shared.summary.PersonalAuthQueriedSummary;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
@@ -40,7 +40,7 @@ public class AuthService {
 	 * @param userInfo 使用者資料
 	 * @return GroupsAuthQueried
 	 */
-	public GroupsAuthQueried queryGroupsAuth(UserInfo userInfo) {
+	public GroupsAuthQueriedSummary queryGroupsAuth(UserInfo userInfo) {
 		// 取得該使用者所在群組 ID 清單
 		List<Long> userGroupIds = userInfo.getGroups().stream().map(UserGroup::getGroupId).collect(Collectors.toList());
 		// 透過群組 ID 清單查詢群組
@@ -61,7 +61,7 @@ public class AuthService {
 		// 透過功能 ID 清單搜尋該權限擁有的功能
 		List<String> functions = functionRepository.findByIdInAndActiveFlag(functionIds, YesNo.Y).stream()
 				.map(FunctionInfo::getCode).collect(Collectors.toList());
-		return GroupsAuthQueried.builder().username(userInfo.getUsername()).email(userInfo.getEmail()).roles(roles)
+		return GroupsAuthQueriedSummary.builder().username(userInfo.getUsername()).email(userInfo.getEmail()).roles(roles)
 				.functions(functions).build();
 	}
 
@@ -71,7 +71,7 @@ public class AuthService {
 	 * @param userInfo 使用者資料
 	 * @return PersonalAuthQueried
 	 */
-	public PersonalAuthQueried queryPersonalAuth(UserInfo userInfo) {
+	public PersonalAuthQueriedSummary queryPersonalAuth(UserInfo userInfo) {
 		// 取出該使用者所具備的角色 ID 清單
 		List<Long> roleIds = userInfo.getRoles().stream().map(UserRole::getRoleId).collect(Collectors.toList());
 		// 透過角色 ID 清單找出所屬角色
@@ -85,7 +85,7 @@ public class AuthService {
 
 		List<String> functions = functionRepository.findByIdInAndActiveFlag(functionIds, YesNo.Y).stream()
 				.map(FunctionInfo::getCode).collect(Collectors.toList());
-		return PersonalAuthQueried.builder().username(userInfo.getUsername()).email(userInfo.getEmail()).roles(roles)
+		return PersonalAuthQueriedSummary.builder().username(userInfo.getUsername()).email(userInfo.getEmail()).roles(roles)
 				.functions(functions).build();
 	}
 
