@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.application.shared.dto.RoleFunctionQueried;
+import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.service.RoleFunctionService;
-import com.example.demo.domain.shared.detail.RoleFunctionQueriedDetail;
+import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
 
@@ -22,7 +24,8 @@ public class RoleFunctionQueryService {
 	 * @param service 服務
 	 * @return List<RoleFunctionQueried> 角色功能清單
 	 */
-	public List<RoleFunctionQueriedDetail> queryOthers(Long id, String service) {
-		return roleFunctionService.queryOthers(id, service);
+	public List<RoleFunctionQueried> queryOthers(Long id, String service) {
+		List<FunctionInfo> others = roleFunctionService.queryOthers(id, service);
+		return BaseDataTransformer.transformData(others, RoleFunctionQueried.class);
 	}
 }

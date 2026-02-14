@@ -57,7 +57,7 @@ public class RoleFunctionService {
 	 * @return List<RoleFunctionQueried>
 	 */
 	@Transactional
-	public List<RoleFunctionQueriedDetail> queryOthers(Long id, String service) {
+	public List<FunctionInfo> queryOthers(Long id, String service) {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
@@ -84,7 +84,7 @@ public class RoleFunctionService {
 
 			// 合併兩者
 			filtered.addAll(inactiveRelated);
-			return BaseDataTransformer.transformData(filtered, RoleFunctionQueriedDetail.class);
+			return filtered;
 
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");
