@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/v1")
 public class LoginController {
 
-	private JwtTokenCommandService jwtokenService;
+	private JwtTokenCommandService commandService;
 
 	/**
 	 * 登入並取得 Jwt Token
@@ -33,7 +33,7 @@ public class LoginController {
 	@PostMapping("/login")
 	public ResponseEntity<JwtTokenGeneratedResource> login(@RequestBody GenerateJwtokenResource resource) {
 		GenerateJwtokenCommand command = BaseDataTransformer.transformData(resource, GenerateJwtokenCommand.class);
-		return new ResponseEntity<>(BaseDataTransformer.transformData(jwtokenService.generateToken(command),
+		return new ResponseEntity<>(BaseDataTransformer.transformData(commandService.generateToken(command),
 				JwtTokenGeneratedResource.class), HttpStatus.OK);
 	}
 
@@ -48,7 +48,7 @@ public class LoginController {
 
 		RefreshTokenCommand command = BaseDataTransformer.transformData(resource, RefreshTokenCommand.class);
 		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(jwtokenService.refresh(command), JwtTokenGeneratedResource.class),
+				BaseDataTransformer.transformData(commandService.refresh(command), JwtTokenGeneratedResource.class),
 				HttpStatus.OK);
 	}
 }

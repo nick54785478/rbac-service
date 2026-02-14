@@ -1,4 +1,4 @@
-package com.example.demo.infra.jwt;
+package com.example.demo.shared.enums;
 
 public enum JwtConstants {
 

@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.domain.dto.JwtTokenGenerated;
-import com.example.demo.infra.jwt.JwtConstants;
+import com.example.demo.shared.enums.JwtConstants;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

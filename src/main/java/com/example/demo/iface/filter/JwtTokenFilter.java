@@ -2,15 +2,14 @@ package com.example.demo.iface.filter;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.example.demo.infra.context.ContextHolder;
-import com.example.demo.infra.jwt.JwtConstants;
-import com.example.demo.service.JwtTokenCommandService;
+import com.example.demo.infra.jwt.JwtTokenParser;
+import com.example.demo.shared.enums.JwtConstants;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -27,8 +26,11 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter {
 
-	@Autowired
-	private JwtTokenCommandService jwtTokenService;
+	private final JwtTokenParser jwtTokenParser;
+
+	public JwtTokenFilter(JwtTokenParser jwtTokenParser) {
+		this.jwtTokenParser = jwtTokenParser;
+	}
 
 	@Value("${jwt.auth.enabled}")
 	private boolean jwtAuthEnabled;
@@ -42,8 +44,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	 * 公開的路徑列表，不需要進行 JWT 驗證的路徑。
 	 */
 	private static final String[] PUBLIC_PATHS = { "/health", "/favicon.ico", "**/api-docs/**", "**/swagger-ui**",
-			"/api/v1/auth/permissions", "/swagger*", "/swagger-ui/*", "/api/v1/users/register", "/actuator/**", "/v3/api-docs/**",
-			"/api/v1/login", "/api/v1/refresh" };
+			"/api/v1/auth/permissions", "/swagger*", "/swagger-ui/*", "/api/v1/users/register", "/actuator/**",
+			"/v3/api-docs/**", "/api/v1/login", "/api/v1/refresh" };
 
 	/**
 	 * 過濾器的核心方法，用於處理 Request 中的授權資訊。
@@ -70,7 +72,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		if (!jwtAuthEnabled) {
 			// 測試用: 10 年的 Token
 			String token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJEQVRBX09XTkVSIl0sImlzcyI6IlNZU1RFTSIsInN1YiI6Im5pY2sxMjNAZXhhbXBsZS5jb20iLCJpYXQiOjE3MjYxMzcyNDQsImV4cCI6MjA0MTQ5NzI0NH0.kxzrgtEifDx7u-IFAl9lHQshyjUYOaHkRfCi7ZWFooY";
-			Claims tokenBody = jwtTokenService.getTokenBody(token);
+			Claims tokenBody = jwtTokenParser.getTokenBody(token);
 			ContextHolder.setJwtClaims(tokenBody);
 			ContextHolder.setJwtToken(token);
 			chain.doFilter(request, response);
@@ -107,7 +109,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 		// 檢查 Request 的 URL 是否在公開路徑列表中，如果是則不需要進行 JWT 驗證
 		for (String publicPath : PUBLIC_PATHS) {
 			log.info("publicPath:{}, requestPath:{}", publicPath, requestPath);
-			
+
 			if (pathMatcher.match(publicPath, requestPath)) {
 				return false;
 			}
@@ -125,14 +127,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	 * @throws IOException 如果發生 I/O 相關異常
 	 */
 	private boolean validateJwtToken(String token, HttpServletResponse response) throws IOException {
+
 		// 解析 JWT Token
-		Claims claims = jwtTokenService.getTokenBody(token);
+		Claims claims = jwtTokenParser.getTokenBody(token);
 
 		log.info("JWT claims: {}", claims);
 
 		if (jwtAuthEnabled) {
 			// 驗證 JWT Token
-			jwtTokenService.parseToken(token);
+			jwtTokenParser.parseToken(token);
 		}
 
 		// 驗證通過將 JWT Token 存儲到 ContextHolder 中

@@ -3,7 +3,7 @@ package com.example.demo.infra.context;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.infra.jwt.JwtConstants;
+import com.example.demo.shared.enums.JwtConstants;
 
 import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
