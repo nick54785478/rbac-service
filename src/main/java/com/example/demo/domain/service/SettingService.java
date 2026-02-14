@@ -25,14 +25,8 @@ public class SettingService {
 	 * @param command
 	 */
 	public void create(CreateSettingCommand command) {
-		// 檢查資料
-		if (StringUtils.equals(command.getDataType(), "CONFIGURE") && command.getPriorityNo() != 0L) {
-			throw new ValidationException("VALIDATION_FAILED", "資料配置有誤，Configure 的排序號需為 0");
-		}
-
-		if (StringUtils.equals(command.getDataType(), "DATA") && command.getPriorityNo() == 0L) {
-			throw new ValidationException("VALIDATION_FAILED", "資料配置有誤，Data 的排序號需大於 0");
-		}
+		// 領域檢核:
+		this.checkSetting(command.getType(), command.getPriorityNo());
 
 		// 進行新增動作
 		Setting setting = new Setting();
@@ -46,14 +40,8 @@ public class SettingService {
 	 * @param command
 	 */
 	public void update(UpdateSettingCommand command) {
-
-		if (StringUtils.equals(command.getDataType(), "CONFIGURE") && command.getPriorityNo() != 0L) {
-			throw new ValidationException("VALIDATION_FAILED", "資料配置有誤，Configure 的排序號需為 0");
-		}
-
-		if (StringUtils.equals(command.getDataType(), "DATA") && command.getPriorityNo() == 0L) {
-			throw new ValidationException("VALIDATION_FAILED", "資料配置有誤，Data 的排序號需大於 0");
-		}
+		// 領域檢核:
+		this.checkSetting(command.getType(), command.getPriorityNo());
 
 		// 檢查資料
 		settingRepository.findById(command.getId()).ifPresentOrElse(setting -> {
@@ -80,16 +68,16 @@ public class SettingService {
 	}
 
 	/**
-	 * 檢查資料
+	 * 進行領域檢核
 	 * 
 	 * @param command
 	 */
-	private void checkSetting(CreateSettingCommand command) {
-		if (StringUtils.equals(command.getDataType(), "CONFIGURE") && command.getPriorityNo() != 0L) {
+	private void checkSetting(String type, Integer priorityNo) {
+		if (StringUtils.equals(type, "CONFIGURE") && priorityNo != 0L) {
 			throw new ValidationException("VALIDATION_FAILED", "資料配置有誤，Configure 的排序號需為 0");
 		}
 
-		if (StringUtils.equals(command.getDataType(), "DATA") && command.getPriorityNo() == 0L) {
+		if (StringUtils.equals(type, "DATA") && priorityNo == 0L) {
 			throw new ValidationException("VALIDATION_FAILED", "資料配置有誤，Data 的排序號需大於 0");
 		}
 
