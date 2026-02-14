@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.GroupCommandService;
+import com.example.demo.application.service.GroupQueryService;
 import com.example.demo.domain.group.command.CreateGroupCommand;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
 import com.example.demo.iface.dto.in.CreateGroupResource;
@@ -21,8 +23,6 @@ import com.example.demo.iface.dto.out.GroupCreatedOrUpdatedResource;
 import com.example.demo.iface.dto.out.GroupCreatedResource;
 import com.example.demo.iface.dto.out.GroupDeletedResource;
 import com.example.demo.iface.dto.out.GroupInfoQueriedResource;
-import com.example.demo.service.GroupCommandService;
-import com.example.demo.service.GroupQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;

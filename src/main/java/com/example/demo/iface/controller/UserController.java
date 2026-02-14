@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.UserCommandService;
+import com.example.demo.application.service.UserQueryService;
 import com.example.demo.domain.dto.UserGroupQueried;
 import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.user.command.CreateUserCommand;
@@ -25,8 +27,6 @@ import com.example.demo.iface.dto.out.UserInfoDetailsQueriedResource;
 import com.example.demo.iface.dto.out.UserInfoQueriedResource;
 import com.example.demo.iface.dto.out.UserRoleQueriedResource;
 import com.example.demo.iface.dto.out.UserUpdatedResource;
-import com.example.demo.service.UserCommandService;
-import com.example.demo.service.UserQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;

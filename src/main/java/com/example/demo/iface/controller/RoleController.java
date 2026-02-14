@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.RoleCommandService;
+import com.example.demo.application.service.RoleQueryService;
 import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
 import com.example.demo.domain.role.command.CreateRoleCommand;
 import com.example.demo.domain.role.command.UpdateRoleCommand;
@@ -25,8 +27,6 @@ import com.example.demo.iface.dto.out.RoleCreatedResource;
 import com.example.demo.iface.dto.out.RoleDeletedResource;
 import com.example.demo.iface.dto.out.RoleInfoQueriedResource;
 import com.example.demo.iface.dto.out.RoleUpdatedResource;
-import com.example.demo.service.RoleCommandService;
-import com.example.demo.service.RoleQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;

@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.OptionQueryService;
 import com.example.demo.iface.dto.out.GroupOptionQueriedResource;
 import com.example.demo.iface.dto.out.OptionQueriedResource;
 import com.example.demo.iface.dto.out.RoleOptionQueriedResource;
 import com.example.demo.iface.dto.out.UserOptionQueriedResource;
-import com.example.demo.service.OptionQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;

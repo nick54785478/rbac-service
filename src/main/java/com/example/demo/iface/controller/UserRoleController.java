@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.UserRoleCommandService;
+import com.example.demo.application.service.UserRoleQueryService;
 import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
 import com.example.demo.iface.dto.in.UpdateUserRolesResource;
 import com.example.demo.iface.dto.out.UserRoleQueriedResource;
 import com.example.demo.iface.dto.out.UserRolesUpdatedResource;
-import com.example.demo.service.UserRoleCommandService;
-import com.example.demo.service.UserRoleQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;

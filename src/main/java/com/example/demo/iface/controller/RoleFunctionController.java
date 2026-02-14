@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.application.service.RoleFunctionCommandService;
+import com.example.demo.application.service.RoleFunctionQueryService;
 import com.example.demo.domain.role.command.UpdateRoleFunctionsCommand;
 import com.example.demo.iface.dto.in.UpdateRoleFunctionsResource;
 import com.example.demo.iface.dto.out.RoleFunctionQueriedResource;
 import com.example.demo.iface.dto.out.RoleFunctionsUpdatedResource;
-import com.example.demo.service.RoleFunctionCommandService;
-import com.example.demo.service.RoleFunctionQueryService;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
