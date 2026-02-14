@@ -3,9 +3,12 @@ package com.example.demo.application.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.application.shared.dto.GroupRoleQueried;
+import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.service.GroupRoleService;
-import com.example.demo.domain.shared.summary.GroupRoleQueriedSummary;
+import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
 
@@ -22,7 +25,9 @@ public class GroupRoleQueryService {
 	 * @param service 服務
 	 * @return
 	 */
-	public List<GroupRoleQueriedSummary> queryOthers(Long id, String service) {
-		return groupRoleService.queryOthers(id, service);
+	@Transactional
+	public List<GroupRoleQueried> queryOthers(Long id, String service) {
+		List<RoleInfo> others = groupRoleService.queryOthers(id, service);
+		return BaseDataTransformer.transformData(others, GroupRoleQueried.class);
 	}
 }

@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 import com.example.demo.application.port.JwTokenManagerPort;
 import com.example.demo.application.shared.dto.JwtTokenGenerated;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
+import com.example.demo.domain.group.aggregate.GroupInfo;
+import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.service.RoleFunctionService;
 import com.example.demo.domain.service.UserGroupService;
 import com.example.demo.domain.service.UserRoleService;
 import com.example.demo.domain.service.UserService;
-import com.example.demo.domain.shared.summary.UserGroupQueriedSummary;
-import com.example.demo.domain.shared.summary.UserRoleQueriedSummary;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.command.GenerateJwtokenCommand;
 import com.example.demo.domain.user.command.RefreshTokenCommand;
@@ -71,14 +71,12 @@ public class JwtTokenCommandService {
 		}
 
 		// 查詢該使用者所在的群組
-		List<UserGroupQueriedSummary> queryGroups = userGroupService.queryGroups(command.getUsername(),
-				ContextHolder.getService());
-		List<String> groups = queryGroups.stream().map(UserGroupQueriedSummary::getCode).collect(Collectors.toList());
+		List<GroupInfo> queryGroups = userGroupService.queryGroups(command.getUsername(), ContextHolder.getService());
+		List<String> groups = queryGroups.stream().map(GroupInfo::getCode).collect(Collectors.toList());
 
 		// 查詢該使用者個人角色
-		List<UserRoleQueriedSummary> queryRoles = userRoleService.queryRoles(command.getUsername(),
-				ContextHolder.getService());
-		List<String> roles = queryRoles.stream().map(UserRoleQueriedSummary::getCode).collect(Collectors.toList());
+		List<RoleInfo> queryRoles = userRoleService.queryRoles(command.getUsername(), ContextHolder.getService());
+		List<String> roles = queryRoles.stream().map(RoleInfo::getCode).collect(Collectors.toList());
 
 		// 取得該角色清單所具備的相關功能權限
 		Set<String> functionCodes = roleFunctionService.getFunctionsByRoleIds(service, roles).getFuncList().stream()
@@ -111,11 +109,12 @@ public class JwtTokenCommandService {
 	public JwtTokenGenerated refresh(RefreshTokenCommand command) {
 		UserInfo userInfo = userInfoRepository.findByRefreshToken(command.getToken());
 		if (!Objects.isNull(userInfo)) {
-			// 查詢該使用者個人角色
-			List<UserGroupQueriedSummary> queryGroups = userService.queryGroups(userInfo.getUsername());
-			List<String> groups = queryGroups.stream().map(UserGroupQueriedSummary::getCode).collect(Collectors.toList());
-			List<UserRoleQueriedSummary> queryRoles = userService.queryRoles(userInfo.getUsername());
-			List<String> roles = queryRoles.stream().map(UserRoleQueriedSummary::getCode).collect(Collectors.toList());
+			// 查詢該使用者群組資訊
+			List<GroupInfo> queryGroups = userService.queryGroups(userInfo.getUsername());
+			List<String> groups = queryGroups.stream().map(GroupInfo::getCode).collect(Collectors.toList());
+
+			List<RoleInfo> queryRoles = userService.queryRoles(userInfo.getUsername());
+			List<String> roles = queryRoles.stream().map(RoleInfo::getCode).collect(Collectors.toList());
 
 			String service = ContextHolder.getService();
 			// 取得該角色清單所具備的相關功能權限
@@ -142,99 +141,5 @@ public class JwtTokenCommandService {
 		}
 		return null;
 	}
-
-//	/**
-//	 * 從 token 中取得使用者名稱
-//	 * 
-//	 * @param token
-//	 * @return 使用者名稱
-//	 */
-//	public String getUsername(String token) {
-//		log.info("getUsername: {}", getTokenBody(token).getSubject());
-//		log.info("TokenBody: {}", getTokenBody(token));
-//		return getTokenBody(token).getSubject();
-//	}
-
-//	/**
-//	 * 取得使用者信箱
-//	 * 
-//	 * @param token
-//	 * @return 使用者信箱
-//	 */
-//	public String getEmail(String token) {
-//		return (String) getTokenBody(token).get(JwtConstants.JWT_CLAIMS_KEY_EMAIL.getValue());
-//	}
-
-//	/**
-//	 * 取得使用者角色
-//	 * 
-//	 * @param token
-//	 * @return 使用者角色
-//	 */
-//	public List<String> getRoleList(String token) {
-//		return (List<String>) getTokenBody(token).get(JwtConstants.JWT_CLAIMS_KEY_ROLE.getValue());
-//	}
-
-//	/**
-//	 * 取得簽發日
-//	 * 
-//	 * @param token
-//	 * @return 簽發日
-//	 */
-//	public Date getIssAt(String token) {
-//		return getTokenBody(token).getIssuedAt();
-//	}
-
-//	/**
-//	 * 取得過期日
-//	 * 
-//	 * @param token
-//	 * @return 過期日
-//	 */
-//	public Date getExpDate(String token) {
-//		return getTokenBody(token).getExpiration();
-//	}
-
-//	/**
-//	 * 是否已過期
-//	 * 
-//	 * @param token
-//	 * @return true/false
-//	 */
-//	public boolean isExpiration(String token) {
-//		return getTokenBody(token).getExpiration().before(new Date());
-//	}
-
-//	/**
-//	 * 取得 Token 主體
-//	 * 
-//	 * @param token
-//	 * @return Claims
-//	 */
-//	public Claims getTokenBody(String token) {
-//		return jwTokenManager.getTokenBody(token);
-//	}
-
-//	/**
-//	 * 解析 Token
-//	 * 
-//	 * @param token
-//	 * @return 解析後的結果 Map
-//	 */
-//	public Map<String, Object> parseToken(String token) {
-//		Claims claims = getTokenBody(token);
-//		return claims.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-//	}
-
-//	/**
-//	 * 驗證 JWToken 合法性
-//	 * 
-//	 * @param token
-//	 * @return true/false
-//	 */
-//	public boolean validateToken(String token) {
-//		Claims claims = this.getTokenBody(token);
-//		return claims != null;
-//	}
 
 }

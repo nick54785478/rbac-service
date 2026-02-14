@@ -2,6 +2,8 @@ package com.example.demo.domain.shared.summary;
 
 import java.util.List;
 
+import com.example.demo.application.shared.dto.UserGroupQueried;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,6 @@ public class UserGroupsQueriedSummary {
 
 	private String address;
 
-	private List<UserGroupQueriedSummary> groups;
+	private List<UserGroupQueried> groups;
 
 }

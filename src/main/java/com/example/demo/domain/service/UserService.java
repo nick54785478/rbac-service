@@ -16,10 +16,8 @@ import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.shared.summary.FunctionInfoDetailsQueriedSummary;
 import com.example.demo.domain.shared.summary.UserGroupDetailsQueriedSummary;
-import com.example.demo.domain.shared.summary.UserGroupQueriedSummary;
 import com.example.demo.domain.shared.summary.UserInfoDetailsQueriedSummary;
 import com.example.demo.domain.shared.summary.UserRoleDetailsQueriedSummary;
-import com.example.demo.domain.shared.summary.UserRoleQueriedSummary;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
@@ -79,17 +77,14 @@ public class UserService {
 	 * @param username 使用者帳號
 	 * @return List<UserGroupQueried>
 	 */
-	@Transactional
-	public List<UserGroupQueriedSummary> queryGroups(String username) {
+	public List<GroupInfo> queryGroups(String username) {
 		UserInfo userInfo = userRepository.findByUsername(username);
 		// 取得 User Group 的 GroupId
 		List<Long> groupIds = userInfo.getGroups().stream()
 				.filter(e -> StringUtils.equals(e.getActiveFlag().getValue(), YesNo.Y.getValue()))
 				.map(UserGroup::getGroupId).collect(Collectors.toList());
 		// 透過 ID 取得 Group 資料
-		return groupRepository.findByIdInAndActiveFlag(groupIds, YesNo.Y).stream()
-				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueriedSummary.class))
-				.collect(Collectors.toList());
+		return groupRepository.findByIdInAndActiveFlag(groupIds, YesNo.Y);
 	}
 
 	/**
@@ -98,8 +93,7 @@ public class UserService {
 	 * @param username 使用者帳號
 	 * @return List<UserRoleQueried>
 	 */
-	@Transactional
-	public List<UserRoleQueriedSummary> queryRoles(String username) {
+	public List<RoleInfo> queryRoles(String username) {
 		UserInfo user = userRepository.findByUsername(username);
 		// 取得該使用者的 RoleId 清單
 		List<Long> roleIds = user.getRoles().stream()
@@ -108,10 +102,7 @@ public class UserService {
 				.map(UserRole::getRoleId).collect(Collectors.toList());
 
 		// 查詢使用者角色資料
-		return roleRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y).stream()
-				.map(role -> BaseDataTransformer.transformData(role, UserRoleQueriedSummary.class))
-				.collect(Collectors.toList());
-
+		return roleRepository.findByIdInAndActiveFlag(roleIds, YesNo.Y);
 	}
 
 	/**
@@ -165,7 +156,8 @@ public class UserService {
 				.map(role -> BaseDataTransformer.transformData(role, UserRoleDetailsQueriedSummary.class))
 				.collect(Collectors.toList());
 
-		UserInfoDetailsQueriedSummary resource = BaseDataTransformer.transformData(userInfo, UserInfoDetailsQueriedSummary.class);
+		UserInfoDetailsQueriedSummary resource = BaseDataTransformer.transformData(userInfo,
+				UserInfoDetailsQueriedSummary.class);
 		resource.setRoles(roleList);
 		resource.setGroups(groupList);
 		resource.setFunctions(functions);

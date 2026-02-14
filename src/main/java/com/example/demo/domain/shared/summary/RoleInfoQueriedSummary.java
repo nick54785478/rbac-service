@@ -6,10 +6,13 @@ import java.util.List;
 import com.example.demo.shared.enums.YesNo;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RoleInfoQueriedSummary {
@@ -26,7 +29,9 @@ public class RoleInfoQueriedSummary {
 
 	private String description; // 敘述
 
+	@Default
 	private List<RoleFunctionQueriedSummary> functions = new ArrayList<>(); // 角色所屬功能
 
+	@Default
 	private YesNo activeFlag = YesNo.Y; // 是否有效
 }

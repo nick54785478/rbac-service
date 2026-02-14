@@ -1,4 +1,4 @@
-package com.example.demo.domain.shared.summary;
+package com.example.demo.application.shared.dto;
 
 import com.example.demo.shared.enums.YesNo;
 
@@ -9,17 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserGroupQueriedSummary {
+public class UserRoleQueried {
 
 	private Long id;
 	
 	private String service;
 	
-	private String type;
+	private String code;
 
-	private String name; // 名稱
+	private String name;
 
-	private String code; // 群組代號
+	private String type; // 權限種類
 
 	private String description; // 敘述
 

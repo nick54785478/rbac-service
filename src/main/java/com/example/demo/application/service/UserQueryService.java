@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.example.demo.application.shared.dto.UserGroupQueried;
+import com.example.demo.application.shared.dto.UserRoleQueried;
+import com.example.demo.domain.group.aggregate.GroupInfo;
+import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.service.UserService;
-import com.example.demo.domain.shared.summary.UserGroupQueriedSummary;
 import com.example.demo.domain.shared.summary.UserInfoDetailsQueriedSummary;
 import com.example.demo.domain.shared.summary.UserInfoQueriedSummary;
-import com.example.demo.domain.shared.summary.UserRoleQueriedSummary;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.infra.repository.UserInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
@@ -31,9 +33,10 @@ public class UserQueryService {
 	 * @param username 使用者帳號
 	 * @return List<UserGroupQueried> 使用者群組清單
 	 */
-	public List<UserGroupQueriedSummary> queryGroups(String username) {
-		List<UserGroupQueriedSummary> groups = userService.queryGroups(username);
-		return groups;
+	@Transactional
+	public List<UserGroupQueried> queryGroups(String username) {
+		List<GroupInfo> groups = userService.queryGroups(username);
+		return BaseDataTransformer.transformData(groups, UserGroupQueried.class);
 	}
 
 	/**
@@ -42,10 +45,11 @@ public class UserQueryService {
 	 * @param username 使用者帳號
 	 * @return List<UserRoleQueried>
 	 */
-	public List<UserRoleQueriedSummary> queryRoles(String username) {
-		List<UserRoleQueriedSummary> roles = userService.queryRoles(username);
+	@Transactional
+	public List<UserRoleQueried> queryRoles(String username) {
+		List<RoleInfo> roles = userService.queryRoles(username);
 		log.debug("roles: {}", roles);
-		return roles;
+		return BaseDataTransformer.transformData(roles, UserRoleQueried.class);
 	}
 
 	/**

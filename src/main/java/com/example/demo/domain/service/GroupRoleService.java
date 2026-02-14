@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.demo.application.shared.dto.GroupRoleQueried;
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.group.command.UpdateGroupRolesCommand;
@@ -35,8 +36,7 @@ public class GroupRoleService {
 	 * @param service 服務
 	 * @return List<GroupRoleQueried>
 	 */
-	@Transactional
-	public List<GroupRoleQueriedSummary> queryOthers(Long id, String service) {
+	public List<RoleInfo> queryOthers(Long id, String service) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			GroupInfo group = opt.get();
@@ -46,7 +46,8 @@ public class GroupRoleService {
 
 			// 取得與該 Service 相關的角色資料
 			List<RoleInfo> roles = roleInfoRepository.findByServiceAndActiveFlag(service, YesNo.Y);
-
+			
+			
 			// 過濾出該群組所沒有的角色資料
 			List<RoleInfo> filtered = roles.stream().filter(e -> !existingIds.contains(e.getId()))
 					.collect(Collectors.toList());
@@ -63,8 +64,8 @@ public class GroupRoleService {
 			// 合併兩者
 			filtered.addAll(inactiveRelated);
 			
-			
-			return BaseDataTransformer.transformData(filtered, GroupRoleQueriedSummary.class);
+			return filtered;
+					
 
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該群組 ID 有誤，查詢失敗");

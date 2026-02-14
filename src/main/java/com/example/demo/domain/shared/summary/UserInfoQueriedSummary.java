@@ -3,6 +3,9 @@ package com.example.demo.domain.shared.summary;
 import java.util.Date;
 import java.util.List;
 
+import com.example.demo.application.shared.dto.UserGroupQueried;
+import com.example.demo.application.shared.dto.UserRoleQueried;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,9 +29,9 @@ public class UserInfoQueriedSummary {
 	
 	private Date birthday; // 出生年月日
 
-	private List<UserGroupQueriedSummary> groups;
+	private List<UserGroupQueried> groups;
 
-	private List<UserRoleQueriedSummary> roles;
+	private List<UserRoleQueried> roles;
 	
 
 }
