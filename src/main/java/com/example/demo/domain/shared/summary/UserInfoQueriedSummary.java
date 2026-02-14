@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.shared.summary;
 
 import java.util.Date;
 import java.util.List;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoQueried {
+public class UserInfoQueriedSummary {
 
 	private Long id;
 
@@ -26,9 +26,9 @@ public class UserInfoQueried {
 	
 	private Date birthday; // 出生年月日
 
-	private List<UserGroupQueried> groups;
+	private List<UserGroupQueriedSummary> groups;
 
-	private List<UserRoleQueried> roles;
+	private List<UserRoleQueriedSummary> roles;
 	
 
 }

@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.dto.GroupInfoQueried;
-import com.example.demo.domain.dto.GroupRoleQueried;
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
 import com.example.demo.domain.role.aggregate.RoleInfo;
+import com.example.demo.domain.shared.summary.GroupInfoQueriedSummary;
+import com.example.demo.domain.shared.summary.GroupRoleQueriedSummary;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
@@ -29,13 +29,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GroupService {
 
-	private GroupInfoRepository groupInfoRepository;
 	private RoleInfoRepository roleInfoRepository;
+	private GroupInfoRepository groupInfoRepository;
 
 	/**
 	 * 建立多筆群組資訊(僅限於前端使用 Inline-Edit)
 	 * 
-	 * @param command
+	 * @param commands CreateOrUpdateGroupCommand 清單
 	 */
 	public void createOrUpdate(List<CreateOrUpdateGroupCommand> commands) {
 
@@ -72,18 +72,19 @@ public class GroupService {
 	 * @param service 服務
 	 * @return GroupInfoQueried
 	 */
-	public GroupInfoQueried getGroupInfo(Long id, String service) {
+	public GroupInfoQueriedSummary getGroupInfo(Long id, String service) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			GroupInfo group = opt.get();
-			GroupInfoQueried groupQueried = BaseDataTransformer.transformData(group, GroupInfoQueried.class);
+			GroupInfoQueriedSummary groupQueried = BaseDataTransformer.transformData(group, GroupInfoQueriedSummary.class);
 			// 取得 Role Id 清單
 			List<Long> roleIds = group.getRoles().stream().filter(e -> Objects.equals(e.getActiveFlag(), YesNo.Y))
 					.map(GroupRole::getRoleId).collect(Collectors.toList());
 
 			List<RoleInfo> roles = roleInfoRepository.findByIdInAndServiceAndActiveFlag(roleIds, service, YesNo.Y);
 
-			List<GroupRoleQueried> groupRoles = BaseDataTransformer.transformData(roles, GroupRoleQueried.class);
+			List<GroupRoleQueriedSummary> groupRoles = BaseDataTransformer.transformData(roles,
+					GroupRoleQueriedSummary.class);
 			groupQueried.setRoles(groupRoles);
 			return groupQueried;
 
@@ -99,15 +100,15 @@ public class GroupService {
 	 * @return GroupRolesQueried
 	 */
 	@Transactional
-	public List<GroupRoleQueried> queryRoles(Long groupId) {
+	public List<GroupRoleQueriedSummary> queryRoles(Long groupId) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(groupId);
 		if (opt.isEmpty()) {
 			return new ArrayList<>();
 		} else {
 			GroupInfo group = opt.get();
 			List<Long> roleIds = group.getRoles().stream().map(GroupRole::getRoleId).collect(Collectors.toList());
-			List<GroupRoleQueried> result = roleInfoRepository.findByIdIn(roleIds).stream().map(role -> {
-				GroupRoleQueried groupRoleQueried = new GroupRoleQueried();
+			List<GroupRoleQueriedSummary> result = roleInfoRepository.findByIdIn(roleIds).stream().map(role -> {
+				GroupRoleQueriedSummary groupRoleQueried = new GroupRoleQueriedSummary();
 				groupRoleQueried.setId(role.getId());
 				groupRoleQueried.setName(role.getName());
 				groupRoleQueried.setCode(role.getCode());

@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.dto.RoleFunctionQueried;
-import com.example.demo.domain.dto.RoleInfoQueried;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
+import com.example.demo.domain.shared.summary.RoleFunctionQueriedSummary;
+import com.example.demo.domain.shared.summary.RoleInfoQueriedSummary;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.FunctionInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
@@ -71,17 +71,17 @@ public class RoleService {
 	 * @param service 服務
 	 * @return RoleInfoQueried
 	 */
-	public RoleInfoQueried getRoleInfo(Long id, String service) {
+	public RoleInfoQueriedSummary getRoleInfo(Long id, String service) {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
-			RoleInfoQueried roleQueried = BaseDataTransformer.transformData(role, RoleInfoQueried.class);
+			RoleInfoQueriedSummary roleQueried = BaseDataTransformer.transformData(role, RoleInfoQueriedSummary.class);
 			List<Long> funcIds = role.getFunctions().stream().filter(e -> Objects.equals(e.getActiveFlag(), YesNo.Y))
 					.map(RoleFunction::getFunctionId).collect(Collectors.toList());
 			List<FunctionInfo> functions = functionInfoRepository.findByIdInAndServiceAndActiveFlag(funcIds, service,
 					YesNo.Y);
-			List<RoleFunctionQueried> functionRoles = BaseDataTransformer.transformData(functions,
-					RoleFunctionQueried.class);
+			List<RoleFunctionQueriedSummary> functionRoles = BaseDataTransformer.transformData(functions,
+					RoleFunctionQueriedSummary.class);
 			roleQueried.setFunctions(functionRoles);
 			return roleQueried;
 		} else {

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.application.service.UserRoleCommandService;
 import com.example.demo.application.service.UserRoleQueryService;
-import com.example.demo.domain.dto.UserRoleQueried;
+import com.example.demo.domain.shared.summary.UserRoleQueriedSummary;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
 import com.example.demo.iface.dto.in.UpdateUserRolesResource;
 import com.example.demo.iface.dto.out.UserRoleQueriedResource;
@@ -54,7 +54,7 @@ public class UserRoleController {
 	@GetMapping("/{username}")
 	public ResponseEntity<List<UserRoleQueriedResource>> queryRoles(@PathVariable String username,
 			@RequestParam String service) {
-		List<UserRoleQueried> userRoles = userRoleQueryService.queryRoles(username, service);
+		List<UserRoleQueriedSummary> userRoles = userRoleQueryService.queryRoles(username, service);
 		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoles, UserRoleQueriedResource.class),
 				HttpStatus.OK);
 	}

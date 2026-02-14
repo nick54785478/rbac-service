@@ -9,8 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.role.aggregate.RoleInfo;
+import com.example.demo.domain.shared.summary.UserRoleQueriedSummary;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserRole;
 import com.example.demo.domain.user.command.UpdateUserRolesCommand;
@@ -37,7 +37,7 @@ public class UserRoleService {
 	 * @return List<UserRoleGroupQueried>
 	 */
 	@Transactional
-	public List<UserRoleQueried> queryOthers(String username, String service) {
+	public List<UserRoleQueriedSummary> queryOthers(String username, String service) {
 		UserInfo userInfo = userInfoRepository.findByUsername(username);
 		if (!Objects.isNull(userInfo)) {
 			// 篩選出該使用者有的 角色 ID 清單
@@ -61,7 +61,7 @@ public class UserRoleService {
 
 			// 合併兩者
 			filtered.addAll(inactiveRelated);
-			return BaseDataTransformer.transformData(filtered, UserRoleQueried.class);
+			return BaseDataTransformer.transformData(filtered, UserRoleQueriedSummary.class);
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");
 		}
@@ -127,7 +127,7 @@ public class UserRoleService {
 	 * @return List<UserRoleQueried>
 	 */
 	@Transactional
-	public List<UserRoleQueried> queryRoles(String username, String service) {
+	public List<UserRoleQueriedSummary> queryRoles(String username, String service) {
 		UserInfo user = userInfoRepository.findByUsername(username);
 		// 取得該使用者的 RoleId 清單
 		List<Long> roleIds = user.getRoles().stream()
@@ -137,7 +137,7 @@ public class UserRoleService {
 
 		// 查詢使用者角色資料
 		return roleInfoRepository.findByIdInAndServiceAndActiveFlag(roleIds, service, YesNo.Y).stream()
-				.map(role -> BaseDataTransformer.transformData(role, UserRoleQueried.class))
+				.map(role -> BaseDataTransformer.transformData(role, UserRoleQueriedSummary.class))
 				.collect(Collectors.toList());
 
 	}

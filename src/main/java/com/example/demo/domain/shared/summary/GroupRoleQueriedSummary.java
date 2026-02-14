@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.shared.summary;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupRoleQueried {
+public class GroupRoleQueriedSummary {
 
 	private Long id; // 角色 ID
 	
@@ -19,7 +19,7 @@ public class GroupRoleQueried {
 
 	private String name; // 名稱
 
-	private List<RoleInfoQueried> roles;
+	private List<RoleInfoQueriedSummary> roles;
 
 	private String description; // 敘述
 }

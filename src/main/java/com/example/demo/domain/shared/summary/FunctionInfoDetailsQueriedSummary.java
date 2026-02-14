@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.shared.summary;
 
 import com.example.demo.shared.enums.YesNo;
 
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FunctionInfoQueried {
+public class FunctionInfoDetailsQueriedSummary {
 
 	private Long id;
-
-	private String service;
 	
+	private String service;
+
 	private String type; // 配置種類
 
 	private String code; // Code
@@ -24,6 +24,8 @@ public class FunctionInfoQueried {
 	private String actionType;
 
 	private String description; // 敘述
+	
+	private String label; // 權限(群組角色、個人角色)
 
 	private YesNo activeFlag = YesNo.Y; // 是否有效
 }

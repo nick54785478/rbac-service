@@ -5,10 +5,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.dto.GroupOptionQueried;
-import com.example.demo.domain.dto.OptionQueried;
-import com.example.demo.domain.dto.RoleOptionQueried;
-import com.example.demo.domain.dto.UserOptionQueried;
+import com.example.demo.application.shared.dto.GroupOptionQueried;
+import com.example.demo.application.shared.dto.OptionQueried;
+import com.example.demo.application.shared.dto.RoleOptionQueried;
+import com.example.demo.application.shared.dto.UserOptionQueried;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.infra.repository.SettingRepository;

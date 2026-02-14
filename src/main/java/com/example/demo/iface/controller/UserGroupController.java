@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.application.service.UserGroupCommandService;
 import com.example.demo.application.service.UserGroupQueryService;
-import com.example.demo.domain.dto.UserGroupQueried;
+import com.example.demo.domain.shared.summary.UserGroupQueriedSummary;
 import com.example.demo.domain.user.command.UpdateUserGroupsCommand;
 import com.example.demo.iface.dto.in.UpdateUserGroupsResource;
 import com.example.demo.iface.dto.out.UserGroupDetailsQueriedResource;
@@ -56,7 +56,7 @@ public class UserGroupController {
 	@GetMapping("/{username}")
 	public ResponseEntity<List<UserGroupQueriedResource>> queryRoles(@PathVariable String username,
 			@RequestParam String service) {
-		List<UserGroupQueried> userGroups = userGroupQueryService.queryGroups(username, service);
+		List<UserGroupQueriedSummary> userGroups = userGroupQueryService.queryGroups(username, service);
 		return new ResponseEntity<>(BaseDataTransformer.transformData(userGroups, UserGroupQueriedResource.class),
 				HttpStatus.OK);
 	}

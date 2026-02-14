@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.dto.SettingQueried;
-import com.example.demo.domain.service.SettingService;
+import com.example.demo.application.shared.dto.SettingQueried;
+import com.example.demo.domain.setting.aggregate.Setting;
+import com.example.demo.infra.repository.SettingRepository;
+import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
 
@@ -13,7 +15,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SettingQueryService {
 
-	private SettingService settingService;
+	private SettingRepository settingRepository;
 
 	/**
 	 * 根據條件查詢 Setting
@@ -26,7 +28,9 @@ public class SettingQueryService {
 	 * @return List<SettingQueried> 設定清單
 	 */
 	public List<SettingQueried> query(String service, String dataType, String type, String name, String activeFlag) {
-		return settingService.query(service, dataType, type, name, activeFlag);
+		List<Setting> settingList = settingRepository.findAllWithSpecification(service, dataType, type, name,
+				activeFlag);
+		return BaseDataTransformer.transformData(settingList, SettingQueried.class);
 	}
 
 }

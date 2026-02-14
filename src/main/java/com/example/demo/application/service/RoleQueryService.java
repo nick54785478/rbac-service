@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.dto.RoleInfoQueried;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.service.RoleService;
+import com.example.demo.domain.shared.summary.RoleInfoQueriedSummary;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.util.BaseDataTransformer;
 
@@ -30,9 +30,9 @@ public class RoleQueryService {
 	 * @return List<RoleInfoQueried>
 	 */
 	@Transactional
-	public List<RoleInfoQueried> query(String service, String type, String name, String activeFlag) {
+	public List<RoleInfoQueriedSummary> query(String service, String type, String name, String activeFlag) {
 		List<RoleInfo> roles = roleInfoRepository.findAllWithSpecification(service, type, name, activeFlag);
-		return BaseDataTransformer.transformData(roles, RoleInfoQueried.class);
+		return BaseDataTransformer.transformData(roles, RoleInfoQueriedSummary.class);
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class RoleQueryService {
 	 * @return RoleInfoQueried
 	 */
 	@Transactional
-	public RoleInfoQueried getRoleInfo(Long id, String service) {
+	public RoleInfoQueriedSummary getRoleInfo(Long id, String service) {
 		return roleService.getRoleInfo(id, service);
 	}
 }

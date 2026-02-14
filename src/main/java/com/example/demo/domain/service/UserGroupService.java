@@ -9,8 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.dto.UserGroupQueried;
 import com.example.demo.domain.group.aggregate.GroupInfo;
+import com.example.demo.domain.shared.summary.UserGroupQueriedSummary;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
 import com.example.demo.domain.user.command.UpdateUserGroupsCommand;
@@ -37,7 +37,7 @@ public class UserGroupService {
 	 * @return List<UserGroupQueried>
 	 */
 	@Transactional
-	public List<UserGroupQueried> queryOthers(String username, String service) {
+	public List<UserGroupQueriedSummary> queryOthers(String username, String service) {
 		UserInfo userInfo = userInfoRepository.findByUsername(username);
 
 		if (!Objects.isNull(userInfo)) {
@@ -63,7 +63,7 @@ public class UserGroupService {
 
 			// 合併兩者
 			filtered.addAll(inactiveRelated);
-			return BaseDataTransformer.transformData(filtered, UserGroupQueried.class);
+			return BaseDataTransformer.transformData(filtered, UserGroupQueriedSummary.class);
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該群組 ID 有誤，查詢失敗");
 		}
@@ -128,7 +128,7 @@ public class UserGroupService {
 	 * @return List<UserGroupQueried>
 	 */
 	@Transactional
-	public List<UserGroupQueried> queryGroups(String username, String service) {
+	public List<UserGroupQueriedSummary> queryGroups(String username, String service) {
 		UserInfo userInfo = userInfoRepository.findByUsername(username);
 		// 取得 User Group 的 GroupId
 		List<Long> groupIds = userInfo.getGroups().stream()
@@ -136,7 +136,7 @@ public class UserGroupService {
 				.map(UserGroup::getGroupId).collect(Collectors.toList());
 		// 透過 ID 取得 Group 資料
 		return groupInfoRepository.findByIdInAndServiceAndActiveFlag(groupIds, service, YesNo.Y).stream()
-				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueried.class))
+				.map(group -> BaseDataTransformer.transformData(group, UserGroupQueriedSummary.class))
 				.collect(Collectors.toList());
 	}
 }

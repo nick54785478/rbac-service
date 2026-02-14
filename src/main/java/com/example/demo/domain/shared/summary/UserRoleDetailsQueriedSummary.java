@@ -1,7 +1,4 @@
-package com.example.demo.domain.dto;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.example.demo.domain.shared.summary;
 
 import com.example.demo.shared.enums.YesNo;
 
@@ -12,13 +9,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleInfoQueried {
+public class UserRoleDetailsQueriedSummary {
 
 	private Long id;
 	
 	private String service;
-
-	private String code; // 角色 Code
+	
+	private String code;
 
 	private String name;
 
@@ -26,7 +23,5 @@ public class RoleInfoQueried {
 
 	private String description; // 敘述
 
-	private List<RoleFunctionQueried> functions = new ArrayList<>(); // 角色所屬功能
-
-	private YesNo activeFlag = YesNo.Y; // 是否有效
+	private YesNo activeFlag;
 }

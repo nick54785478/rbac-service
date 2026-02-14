@@ -8,11 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.dto.GroupRoleQueried;
 import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.group.command.UpdateGroupRolesCommand;
 import com.example.demo.domain.role.aggregate.RoleInfo;
+import com.example.demo.domain.shared.summary.GroupRoleQueriedSummary;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
@@ -36,7 +36,7 @@ public class GroupRoleService {
 	 * @return List<GroupRoleQueried>
 	 */
 	@Transactional
-	public List<GroupRoleQueried> queryOthers(Long id, String service) {
+	public List<GroupRoleQueriedSummary> queryOthers(Long id, String service) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			GroupInfo group = opt.get();
@@ -62,7 +62,9 @@ public class GroupRoleService {
 
 			// 合併兩者
 			filtered.addAll(inactiveRelated);
-			return BaseDataTransformer.transformData(filtered, GroupRoleQueried.class);
+			
+			
+			return BaseDataTransformer.transformData(filtered, GroupRoleQueriedSummary.class);
 
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該群組 ID 有誤，查詢失敗");

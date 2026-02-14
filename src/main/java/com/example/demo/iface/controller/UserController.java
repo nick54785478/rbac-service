@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.application.service.UserCommandService;
 import com.example.demo.application.service.UserQueryService;
-import com.example.demo.domain.dto.UserGroupQueried;
-import com.example.demo.domain.dto.UserRoleQueried;
+import com.example.demo.domain.shared.summary.UserGroupQueriedSummary;
+import com.example.demo.domain.shared.summary.UserRoleQueriedSummary;
 import com.example.demo.domain.user.command.CreateUserCommand;
 import com.example.demo.domain.user.command.UpdateUserCommand;
 import com.example.demo.iface.dto.in.CreateUserResource;
@@ -76,7 +76,7 @@ public class UserController {
 	 */
 	@GetMapping("/{username}/groups")
 	public ResponseEntity<List<UserGroupDetailsQueriedResource>> queryGroups(@PathVariable String username) {
-		List<UserGroupQueried> userGroups = userQueryService.queryGroups(username);
+		List<UserGroupQueriedSummary> userGroups = userQueryService.queryGroups(username);
 		return new ResponseEntity<>(
 				BaseDataTransformer.transformData(userGroups, UserGroupDetailsQueriedResource.class), HttpStatus.OK);
 	}
@@ -89,7 +89,7 @@ public class UserController {
 	 */
 	@GetMapping("/{username}/roles")
 	public ResponseEntity<List<UserRoleQueriedResource>> queryRoles(@PathVariable String username) {
-		List<UserRoleQueried> userRoles = userQueryService.queryRoles(username);
+		List<UserRoleQueriedSummary> userRoles = userQueryService.queryRoles(username);
 		return new ResponseEntity<>(BaseDataTransformer.transformData(userRoles, UserRoleQueriedResource.class),
 				HttpStatus.OK);
 	}

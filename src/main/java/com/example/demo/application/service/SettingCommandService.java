@@ -8,15 +8,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.demo.domain.service.SettingService;
 import com.example.demo.domain.setting.command.CreateSettingCommand;
 import com.example.demo.domain.setting.command.UpdateSettingCommand;
+import com.example.demo.infra.exception.ValidationException;
+import com.example.demo.infra.repository.SettingRepository;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 36000, rollbackFor = Exception.class)
 public class SettingCommandService {
 
 	private SettingService settingService;
+	private SettingRepository settingRepository;
 
 	/**
 	 * 建立設定
@@ -25,7 +30,6 @@ public class SettingCommandService {
 	 */
 	public void create(CreateSettingCommand command) {
 		// 檢查設定
-		settingService.checkSetting(command);
 		settingService.create(command);
 	}
 
@@ -45,6 +49,12 @@ public class SettingCommandService {
 	 * @param id
 	 */
 	public void delete(Long id) {
-		settingService.delete(id);
+		settingRepository.findById(id).ifPresentOrElse(setting -> {
+			setting.delete();
+			settingRepository.save(setting);
+		}, () -> {
+			log.error("查無此資料，ID:{} 刪除失敗 ", id);
+			throw new ValidationException("VALIDATION_FAILED", "查無此資料，刪除失敗");
+		});
 	}
 }

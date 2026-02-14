@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.service.UserRoleService;
+import com.example.demo.domain.shared.summary.UserRoleQueriedSummary;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +24,8 @@ public class UserRoleQueryService {
 	 * @param username 使用者帳號
 	 * @return List<UserRoleQueried>
 	 */
-	public List<UserRoleQueried> queryRoles(String username, String service) {
-		List<UserRoleQueried> roles = userRoleService.queryRoles(username, service);
+	public List<UserRoleQueriedSummary> queryRoles(String username, String service) {
+		List<UserRoleQueriedSummary> roles = userRoleService.queryRoles(username, service);
 		log.debug("roles: {}", roles);
 		return roles;
 	}
@@ -38,7 +38,7 @@ public class UserRoleQueryService {
 	 * @param service  服務
 	 * @return List<UserRoleGroupQueried>
 	 */
-	public List<UserRoleQueried> queryOthers(String username, String service) {
+	public List<UserRoleQueriedSummary> queryOthers(String username, String service) {
 		return userRoleService.queryOthers(username, service);
 
 	}

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.domain.dto.GroupRoleQueried;
 import com.example.demo.domain.service.GroupRoleService;
+import com.example.demo.domain.shared.summary.GroupRoleQueriedSummary;
 
 import lombok.AllArgsConstructor;
 
@@ -22,7 +22,7 @@ public class GroupRoleQueryService {
 	 * @param service 服務
 	 * @return
 	 */
-	public List<GroupRoleQueried> queryOthers(Long id, String service) {
+	public List<GroupRoleQueriedSummary> queryOthers(Long id, String service) {
 		return groupRoleService.queryOthers(id, service);
 	}
 }

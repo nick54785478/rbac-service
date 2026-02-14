@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.shared.summary;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupRolesQueried {
+public class GroupRolesQueriedSummary {
 
 	private Long groupId;
 	
-	private List<GroupRoleQueried> roleList;
+	private List<GroupRoleQueriedSummary> roleList;
 }

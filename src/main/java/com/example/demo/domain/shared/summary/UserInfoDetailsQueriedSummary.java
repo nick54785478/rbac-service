@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.shared.summary;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoDetailsQueried {
+public class UserInfoDetailsQueriedSummary {
 
 	private Long id;
 
@@ -27,10 +27,10 @@ public class UserInfoDetailsQueried {
 	
 	private String activeFlag;
 
-	private List<UserGroupDetailsQueried> groups;
+	private List<UserGroupDetailsQueriedSummary> groups;
 
-	private List<UserRoleDetailsQueried> roles;
+	private List<UserRoleDetailsQueriedSummary> roles;
 	
-	private List<FunctionInfoDetailsQueried> functions;
+	private List<FunctionInfoDetailsQueriedSummary> functions;
 
 }

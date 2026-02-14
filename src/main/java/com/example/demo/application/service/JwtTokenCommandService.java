@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.application.port.JwTokenManagerPort;
 import com.example.demo.application.shared.dto.JwtTokenGenerated;
-import com.example.demo.domain.dto.UserGroupQueried;
-import com.example.demo.domain.dto.UserRoleQueried;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.service.RoleFunctionService;
 import com.example.demo.domain.service.UserGroupService;
 import com.example.demo.domain.service.UserRoleService;
 import com.example.demo.domain.service.UserService;
+import com.example.demo.domain.shared.summary.UserGroupQueriedSummary;
+import com.example.demo.domain.shared.summary.UserRoleQueriedSummary;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.command.GenerateJwtokenCommand;
 import com.example.demo.domain.user.command.RefreshTokenCommand;
@@ -71,14 +71,14 @@ public class JwtTokenCommandService {
 		}
 
 		// 查詢該使用者所在的群組
-		List<UserGroupQueried> queryGroups = userGroupService.queryGroups(command.getUsername(),
+		List<UserGroupQueriedSummary> queryGroups = userGroupService.queryGroups(command.getUsername(),
 				ContextHolder.getService());
-		List<String> groups = queryGroups.stream().map(UserGroupQueried::getCode).collect(Collectors.toList());
+		List<String> groups = queryGroups.stream().map(UserGroupQueriedSummary::getCode).collect(Collectors.toList());
 
 		// 查詢該使用者個人角色
-		List<UserRoleQueried> queryRoles = userRoleService.queryRoles(command.getUsername(),
+		List<UserRoleQueriedSummary> queryRoles = userRoleService.queryRoles(command.getUsername(),
 				ContextHolder.getService());
-		List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
+		List<String> roles = queryRoles.stream().map(UserRoleQueriedSummary::getCode).collect(Collectors.toList());
 
 		// 取得該角色清單所具備的相關功能權限
 		Set<String> functionCodes = roleFunctionService.getFunctionsByRoleIds(service, roles).getFuncList().stream()
@@ -112,10 +112,10 @@ public class JwtTokenCommandService {
 		UserInfo userInfo = userInfoRepository.findByRefreshToken(command.getToken());
 		if (!Objects.isNull(userInfo)) {
 			// 查詢該使用者個人角色
-			List<UserGroupQueried> queryGroups = userService.queryGroups(userInfo.getUsername());
-			List<String> groups = queryGroups.stream().map(UserGroupQueried::getCode).collect(Collectors.toList());
-			List<UserRoleQueried> queryRoles = userService.queryRoles(userInfo.getUsername());
-			List<String> roles = queryRoles.stream().map(UserRoleQueried::getCode).collect(Collectors.toList());
+			List<UserGroupQueriedSummary> queryGroups = userService.queryGroups(userInfo.getUsername());
+			List<String> groups = queryGroups.stream().map(UserGroupQueriedSummary::getCode).collect(Collectors.toList());
+			List<UserRoleQueriedSummary> queryRoles = userService.queryRoles(userInfo.getUsername());
+			List<String> roles = queryRoles.stream().map(UserRoleQueriedSummary::getCode).collect(Collectors.toList());
 
 			String service = ContextHolder.getService();
 			// 取得該角色清單所具備的相關功能權限

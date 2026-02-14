@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.shared.summary;
 
 import com.example.demo.shared.enums.YesNo;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserGroupDetailsQueried {
+public class UserGroupDetailsQueriedSummary {
 
 	private Long id;
 	

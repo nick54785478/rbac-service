@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.application.shared.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleOptionQueried {
+public class GroupOptionQueried {
 
 	private Long id;
 

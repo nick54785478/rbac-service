@@ -10,12 +10,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.domain.dto.RoleFunctionQueried;
-import com.example.demo.domain.dto.RolesFunctionsQueried;
 import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.UpdateRoleFunctionsCommand;
+import com.example.demo.domain.shared.summary.RoleFunctionQueriedSummary;
+import com.example.demo.domain.shared.summary.RolesFunctionsQueriedSummary;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.FunctionInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
@@ -38,7 +38,7 @@ public class RoleFunctionService {
 	 * @param roleList 角色清單
 	 * @return RolesFunctionsQueried
 	 */
-	public RolesFunctionsQueried getFunctionsByRoleIds(String service, List<String> rolesList) {
+	public RolesFunctionsQueriedSummary getFunctionsByRoleIds(String service, List<String> rolesList) {
 		List<RoleInfo> roles = roleInfoRepository.findByServiceAndCodeInAndActiveFlag(service, rolesList, YesNo.Y);
 		// 取得所有角色清單所帶有的功能 ID
 		Set<Long> allFuncIds = roles.stream().flatMap(role -> role.getFunctions().stream())
@@ -46,7 +46,7 @@ public class RoleFunctionService {
 		// 取得 Function 清單
 		List<FunctionInfo> functions = functionInfoRepository
 				.findByIdInAndServiceAndActiveFlag(new ArrayList<>(allFuncIds), service, YesNo.Y);
-		return new RolesFunctionsQueried(service, rolesList, functions);
+		return new RolesFunctionsQueriedSummary(service, rolesList, functions);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class RoleFunctionService {
 	 * @return List<RoleFunctionQueried>
 	 */
 	@Transactional
-	public List<RoleFunctionQueried> queryOthers(Long id, String service) {
+	public List<RoleFunctionQueriedSummary> queryOthers(Long id, String service) {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
@@ -84,7 +84,7 @@ public class RoleFunctionService {
 
 			// 合併兩者
 			filtered.addAll(inactiveRelated);
-			return BaseDataTransformer.transformData(filtered, RoleFunctionQueried.class);
+			return BaseDataTransformer.transformData(filtered, RoleFunctionQueriedSummary.class);
 
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");

@@ -7,8 +7,8 @@ import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.application.shared.dto.FieldViewCustomisationQueried;
 import com.example.demo.domain.customisation.aggregate.Customisation;
-import com.example.demo.domain.dto.FieldViewCustomisationQueried;
 import com.example.demo.infra.repository.CustomisationRepository;
 import com.example.demo.util.JsonParseUtil;
 

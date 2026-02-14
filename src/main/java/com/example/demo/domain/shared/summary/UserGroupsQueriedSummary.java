@@ -1,4 +1,4 @@
-package com.example.demo.domain.dto;
+package com.example.demo.domain.shared.summary;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserGroupsQueried {
+public class UserGroupsQueriedSummary {
 
 	private Long id;
 
@@ -21,6 +21,6 @@ public class UserGroupsQueried {
 
 	private String address;
 
-	private List<UserGroupQueried> groups;
+	private List<UserGroupQueriedSummary> groups;
 
 }
