@@ -13,13 +13,12 @@ import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.CreateOrUpdateRoleCommand;
-import com.example.demo.domain.shared.summary.RoleFunctionQueriedSummary;
+import com.example.demo.domain.shared.detail.RoleFunctionQueriedDetail;
 import com.example.demo.domain.shared.summary.RoleInfoQueriedSummary;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.FunctionInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.shared.enums.YesNo;
-import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
 
@@ -75,15 +74,19 @@ public class RoleService {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
-			RoleInfoQueriedSummary roleQueried = BaseDataTransformer.transformData(role, RoleInfoQueriedSummary.class);
 			List<Long> funcIds = role.getFunctions().stream().filter(e -> Objects.equals(e.getActiveFlag(), YesNo.Y))
 					.map(RoleFunction::getFunctionId).collect(Collectors.toList());
 			List<FunctionInfo> functions = functionInfoRepository.findByIdInAndServiceAndActiveFlag(funcIds, service,
 					YesNo.Y);
-			List<RoleFunctionQueriedSummary> functionRoles = BaseDataTransformer.transformData(functions,
-					RoleFunctionQueriedSummary.class);
-			roleQueried.setFunctions(functionRoles);
-			return roleQueried;
+			List<RoleFunctionQueriedDetail> roleFunctionList = functions.stream().map(roleFunction -> {
+				return new RoleFunctionQueriedDetail(roleFunction.getId(), roleFunction.getType(),
+						roleFunction.getCode(), roleFunction.getName(), roleFunction.getActionType().getLabel(),
+						roleFunction.getDescription(), roleFunction.getActiveFlag().name());
+			}).collect(Collectors.toList());
+
+			return RoleInfoQueriedSummary.builder().id(id).service(service).code(role.getCode())
+					.description(role.getDescription()).name(role.getName()).type(role.getType())
+					.functions(roleFunctionList).activeFlag(role.getActiveFlag().getValue()).build();
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");
 		}

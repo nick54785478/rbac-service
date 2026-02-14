@@ -113,10 +113,13 @@ public class JwtTokenCommandService {
 			List<GroupInfo> queryGroups = userService.queryGroups(userInfo.getUsername());
 			List<String> groups = queryGroups.stream().map(GroupInfo::getCode).collect(Collectors.toList());
 
+			// 查詢該使用者相關角色資訊
 			List<RoleInfo> queryRoles = userService.queryRoles(userInfo.getUsername());
 			List<String> roles = queryRoles.stream().map(RoleInfo::getCode).collect(Collectors.toList());
 
+			// 取出相關 Service
 			String service = ContextHolder.getService();
+
 			// 取得該角色清單所具備的相關功能權限
 			Set<String> functions = roleFunctionService.getFunctionsByRoleIds(service, roles).getFuncList().stream()
 					.map(FunctionInfo::getCode).collect(Collectors.toSet());

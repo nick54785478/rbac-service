@@ -98,6 +98,7 @@ public class ContextHolder {
 	 * 
 	 * @return 目前登入者的用戶角色
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<String> getRoles() {
 		return JWT_CLAIMS.get() != null
 				? (List<String>) JWT_CLAIMS.get().get(JwtConstants.JWT_CLAIMS_KEY_ROLE.getValue())

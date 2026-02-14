@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.domain.service.RoleFunctionService;
-import com.example.demo.domain.shared.summary.RoleFunctionQueriedSummary;
+import com.example.demo.domain.shared.detail.RoleFunctionQueriedDetail;
 
 import lombok.AllArgsConstructor;
 
@@ -22,7 +22,7 @@ public class RoleFunctionQueryService {
 	 * @param service 服務
 	 * @return List<RoleFunctionQueried> 角色功能清單
 	 */
-	public List<RoleFunctionQueriedSummary> queryOthers(Long id, String service) {
+	public List<RoleFunctionQueriedDetail> queryOthers(Long id, String service) {
 		return roleFunctionService.queryOthers(id, service);
 	}
 }

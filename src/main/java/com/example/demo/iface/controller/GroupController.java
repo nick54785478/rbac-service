@@ -23,6 +23,7 @@ import com.example.demo.iface.dto.out.GroupCreatedOrUpdatedResource;
 import com.example.demo.iface.dto.out.GroupCreatedResource;
 import com.example.demo.iface.dto.out.GroupDeletedResource;
 import com.example.demo.iface.dto.out.GroupInfoQueriedResource;
+import com.example.demo.iface.dto.out.GroupRolesQueriedResource;
 import com.example.demo.util.BaseDataTransformer;
 
 import lombok.AllArgsConstructor;
@@ -92,10 +93,9 @@ public class GroupController {
 	 * @return ResponseEntity<GroupInfoQueriedResource>
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<GroupInfoQueriedResource> getGroupInfo(@PathVariable Long id, @RequestParam String service) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(groupQueryService.getGroupInfo(id, service), GroupInfoQueriedResource.class),
-				HttpStatus.OK);
+	public ResponseEntity<GroupRolesQueriedResource> getGroupInfo(@PathVariable Long id, @RequestParam String service) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(groupQueryService.getGroupInfo(id, service),
+				GroupRolesQueriedResource.class), HttpStatus.OK);
 	}
 
 	/**

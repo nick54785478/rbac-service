@@ -1,8 +1,6 @@
-package com.example.demo.domain.shared.summary;
+package com.example.demo.iface.dto.out;
 
 import java.util.List;
-
-import com.example.demo.domain.shared.detail.RoleFunctionQueriedDetail;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleInfoQueriedSummary {
+public class RoleFunctionsQueriedResource {
 
 	private Long id;
 
@@ -27,7 +25,7 @@ public class RoleInfoQueriedSummary {
 
 	private String description; // 敘述
 
-	private List<RoleFunctionQueriedDetail> functions; // 角色所屬功能
+	private List<RoleFunctionQueriedResource> functions; // 角色所屬功能
 
 	private String activeFlag; // 是否有效
 }

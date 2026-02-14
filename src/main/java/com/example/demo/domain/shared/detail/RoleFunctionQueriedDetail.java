@@ -1,4 +1,4 @@
-package com.example.demo.domain.shared.summary;
+package com.example.demo.domain.shared.detail;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleFunctionQueriedSummary {
+public class RoleFunctionQueriedDetail {
 
 	private Long id;
 

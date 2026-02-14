@@ -25,6 +25,7 @@ import com.example.demo.iface.dto.in.UpdateRoleResource;
 import com.example.demo.iface.dto.out.RoleCreatedOrUpdatedResource;
 import com.example.demo.iface.dto.out.RoleCreatedResource;
 import com.example.demo.iface.dto.out.RoleDeletedResource;
+import com.example.demo.iface.dto.out.RoleFunctionsQueriedResource;
 import com.example.demo.iface.dto.out.RoleInfoQueriedResource;
 import com.example.demo.iface.dto.out.RoleUpdatedResource;
 import com.example.demo.util.BaseDataTransformer;
@@ -96,17 +97,17 @@ public class RoleController {
 	}
 
 	/**
-	 * 透過 ID 查詢角色資料
+	 * 透過 ID 查詢角色資料及其相關功能權限
 	 * 
 	 * @param id      角色ID
 	 * @param service 服務
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/{id}")
-	public ResponseEntity<RoleInfoQueriedResource> getRoleInfo(@PathVariable Long id, @RequestParam String service) {
-		return new ResponseEntity<>(
-				BaseDataTransformer.transformData(roleQueryService.getRoleInfo(id, service), RoleInfoQueriedResource.class),
-				HttpStatus.OK);
+	public ResponseEntity<RoleFunctionsQueriedResource> getRoleInfo(@PathVariable Long id,
+			@RequestParam String service) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(roleQueryService.getRoleInfo(id, service),
+				RoleFunctionsQueriedResource.class), HttpStatus.OK);
 	}
 
 	/**
@@ -117,10 +118,11 @@ public class RoleController {
 	 * @return ResponseEntity<List<RoleQueriedResource>>
 	 */
 	@GetMapping("/query")
-	public ResponseEntity<List<RoleInfoQueriedResource>> query(@RequestParam String service, @RequestParam(required = false) String type,
-			@RequestParam(required = false) String name, @RequestParam(required = false) String activeFlag) {
-		return new ResponseEntity<>(BaseDataTransformer.transformData(roleQueryService.query(service, type, name, activeFlag),
-				RoleInfoQueriedResource.class), HttpStatus.OK);
+	public ResponseEntity<List<RoleInfoQueriedResource>> query(@RequestParam String service,
+			@RequestParam(required = false) String type, @RequestParam(required = false) String name,
+			@RequestParam(required = false) String activeFlag) {
+		return new ResponseEntity<>(BaseDataTransformer.transformData(
+				roleQueryService.query(service, type, name, activeFlag), RoleInfoQueriedResource.class), HttpStatus.OK);
 	}
 
 }

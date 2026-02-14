@@ -11,7 +11,7 @@ import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
-import com.example.demo.domain.shared.summary.GroupsAuthQueriedSummary;
+import com.example.demo.domain.shared.detail.GroupsAuthQueriedDetail;
 import com.example.demo.domain.shared.summary.PersonalAuthQueriedSummary;
 import com.example.demo.domain.user.aggregate.UserInfo;
 import com.example.demo.domain.user.aggregate.entity.UserGroup;
@@ -40,7 +40,7 @@ public class AuthService {
 	 * @param userInfo 使用者資料
 	 * @return GroupsAuthQueried
 	 */
-	public GroupsAuthQueriedSummary queryGroupsAuth(UserInfo userInfo) {
+	public GroupsAuthQueriedDetail queryGroupsAuth(UserInfo userInfo) {
 		// 取得該使用者所在群組 ID 清單
 		List<Long> userGroupIds = userInfo.getGroups().stream().map(UserGroup::getGroupId).collect(Collectors.toList());
 		// 透過群組 ID 清單查詢群組
@@ -61,7 +61,7 @@ public class AuthService {
 		// 透過功能 ID 清單搜尋該權限擁有的功能
 		List<String> functions = functionRepository.findByIdInAndActiveFlag(functionIds, YesNo.Y).stream()
 				.map(FunctionInfo::getCode).collect(Collectors.toList());
-		return GroupsAuthQueriedSummary.builder().username(userInfo.getUsername()).email(userInfo.getEmail()).roles(roles)
+		return GroupsAuthQueriedDetail.builder().username(userInfo.getUsername()).email(userInfo.getEmail()).roles(roles)
 				.functions(functions).build();
 	}
 

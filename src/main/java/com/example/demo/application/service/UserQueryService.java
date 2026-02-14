@@ -71,6 +71,7 @@ public class UserQueryService {
 	 * @param service  服務
 	 * @return UserInfoQueried
 	 */
+	@Transactional
 	public UserInfoDetailsQueriedSummary getUserDetails(String username, String service) {
 		return userService.getUserDetails(username, service);
 	}

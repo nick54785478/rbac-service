@@ -14,7 +14,7 @@ import com.example.demo.domain.function.aggregate.FunctionInfo;
 import com.example.demo.domain.role.aggregate.RoleInfo;
 import com.example.demo.domain.role.aggregate.entity.RoleFunction;
 import com.example.demo.domain.role.command.UpdateRoleFunctionsCommand;
-import com.example.demo.domain.shared.summary.RoleFunctionQueriedSummary;
+import com.example.demo.domain.shared.detail.RoleFunctionQueriedDetail;
 import com.example.demo.domain.shared.summary.RolesFunctionsQueriedSummary;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.FunctionInfoRepository;
@@ -57,7 +57,7 @@ public class RoleFunctionService {
 	 * @return List<RoleFunctionQueried>
 	 */
 	@Transactional
-	public List<RoleFunctionQueriedSummary> queryOthers(Long id, String service) {
+	public List<RoleFunctionQueriedDetail> queryOthers(Long id, String service) {
 		Optional<RoleInfo> opt = roleInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			RoleInfo role = opt.get();
@@ -84,7 +84,7 @@ public class RoleFunctionService {
 
 			// 合併兩者
 			filtered.addAll(inactiveRelated);
-			return BaseDataTransformer.transformData(filtered, RoleFunctionQueriedSummary.class);
+			return BaseDataTransformer.transformData(filtered, RoleFunctionQueriedDetail.class);
 
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該角色 ID 有誤，查詢失敗");

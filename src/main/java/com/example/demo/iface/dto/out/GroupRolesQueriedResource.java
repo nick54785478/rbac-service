@@ -1,22 +1,18 @@
-package com.example.demo.domain.shared.summary;
+package com.example.demo.iface.dto.out;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.demo.domain.shared.detail.GroupRoleQueriedDetail;
 import com.example.demo.shared.enums.YesNo;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupInfoQueriedSummary {
+public class GroupRolesQueriedResource {
 
 	private Long id;
 
@@ -28,11 +24,9 @@ public class GroupInfoQueriedSummary {
 
 	private String name;
 
-	@Default
-	private List<GroupRoleQueriedDetail> roles = new ArrayList<>();
+	private List<RoleInfoQueriedResource> roles = new ArrayList<>();
 
 	private String description; // 敘述
 
-	@Default
 	private YesNo activeFlag = YesNo.Y; // 是否有效
 }

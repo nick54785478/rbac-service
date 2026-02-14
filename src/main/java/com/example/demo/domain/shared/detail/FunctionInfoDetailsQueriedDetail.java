@@ -1,14 +1,9 @@
-package com.example.demo.domain.shared.summary;
+package com.example.demo.domain.shared.detail;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.example.demo.domain.shared.detail.GroupRoleQueriedDetail;
 import com.example.demo.shared.enums.YesNo;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,10 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupInfoQueriedSummary {
+public class FunctionInfoDetailsQueriedDetail {
 
 	private Long id;
-
+	
 	private String service;
 
 	private String type; // 配置種類
@@ -27,12 +22,12 @@ public class GroupInfoQueriedSummary {
 	private String code; // Code
 
 	private String name;
-
-	@Default
-	private List<GroupRoleQueriedDetail> roles = new ArrayList<>();
+	
+	private String actionType;
 
 	private String description; // 敘述
+	
+	private String label; // 權限(群組角色、個人角色)
 
-	@Default
-	private YesNo activeFlag = YesNo.Y; // 是否有效
+	private YesNo activeFlag; // 是否有效
 }

@@ -14,13 +14,12 @@ import com.example.demo.domain.group.aggregate.GroupInfo;
 import com.example.demo.domain.group.aggregate.entity.GroupRole;
 import com.example.demo.domain.group.command.CreateOrUpdateGroupCommand;
 import com.example.demo.domain.role.aggregate.RoleInfo;
+import com.example.demo.domain.shared.detail.GroupRoleQueriedDetail;
 import com.example.demo.domain.shared.summary.GroupInfoQueriedSummary;
-import com.example.demo.domain.shared.summary.GroupRoleQueriedSummary;
 import com.example.demo.infra.exception.ValidationException;
 import com.example.demo.infra.repository.GroupInfoRepository;
 import com.example.demo.infra.repository.RoleInfoRepository;
 import com.example.demo.shared.enums.YesNo;
-import com.example.demo.util.BaseDataTransformer;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -76,17 +75,20 @@ public class GroupService {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(id);
 		if (opt.isPresent()) {
 			GroupInfo group = opt.get();
-			GroupInfoQueriedSummary groupQueried = BaseDataTransformer.transformData(group, GroupInfoQueriedSummary.class);
 			// 取得 Role Id 清單
 			List<Long> roleIds = group.getRoles().stream().filter(e -> Objects.equals(e.getActiveFlag(), YesNo.Y))
 					.map(GroupRole::getRoleId).collect(Collectors.toList());
 
 			List<RoleInfo> roles = roleInfoRepository.findByIdInAndServiceAndActiveFlag(roleIds, service, YesNo.Y);
 
-			List<GroupRoleQueriedSummary> groupRoles = BaseDataTransformer.transformData(roles,
-					GroupRoleQueriedSummary.class);
-			groupQueried.setRoles(groupRoles);
-			return groupQueried;
+			List<GroupRoleQueriedDetail> groupRoles = roles.stream().map(role -> {
+				return GroupRoleQueriedDetail.builder().id(role.getId()).service(service).code(role.getCode())
+						.name(role.getName()).description(role.getDescription()).build();
+			}).collect(Collectors.toList());
+
+			return GroupInfoQueriedSummary.builder().id(id).service(service).type(group.getType()).code(group.getCode())
+					.name(group.getName()).description(group.getDescription()).roles(groupRoles)
+					.activeFlag(group.getActiveFlag()).build();
 
 		} else {
 			throw new ValidationException("VALIDATION_FAILED", "該群組 ID 有誤，查詢失敗");
@@ -100,15 +102,15 @@ public class GroupService {
 	 * @return GroupRolesQueried
 	 */
 	@Transactional
-	public List<GroupRoleQueriedSummary> queryRoles(Long groupId) {
+	public List<GroupRoleQueriedDetail> queryRoles(Long groupId) {
 		Optional<GroupInfo> opt = groupInfoRepository.findById(groupId);
 		if (opt.isEmpty()) {
 			return new ArrayList<>();
 		} else {
 			GroupInfo group = opt.get();
 			List<Long> roleIds = group.getRoles().stream().map(GroupRole::getRoleId).collect(Collectors.toList());
-			List<GroupRoleQueriedSummary> result = roleInfoRepository.findByIdIn(roleIds).stream().map(role -> {
-				GroupRoleQueriedSummary groupRoleQueried = new GroupRoleQueriedSummary();
+			List<GroupRoleQueriedDetail> result = roleInfoRepository.findByIdIn(roleIds).stream().map(role -> {
+				GroupRoleQueriedDetail groupRoleQueried = new GroupRoleQueriedDetail();
 				groupRoleQueried.setId(role.getId());
 				groupRoleQueried.setName(role.getName());
 				groupRoleQueried.setCode(role.getCode());

@@ -36,7 +36,7 @@ public class FunctionInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String service;
 
 	private String type; // 種類
@@ -46,7 +46,7 @@ public class FunctionInfo {
 	private ActionType actionType; // 動作種類
 
 	private String code; // Code
-	
+
 	private String name; // Code
 
 	private String description; // 敘述
@@ -58,7 +58,7 @@ public class FunctionInfo {
 	/**
 	 * 建立一筆功能資料
 	 * 
-	 * @param command
+	 * @param command CreateFunctionCommand
 	 */
 	public void create(CreateFunctionCommand command) {
 		this.service = command.getService();
@@ -69,11 +69,11 @@ public class FunctionInfo {
 		this.description = command.getDescription();
 		this.activeFlag = YesNo.Y;
 	}
-	
+
 	/**
 	 * 新增一筆功能資料
 	 * 
-	 * @param command
+	 * @param command CreateOrUpdateFunctionCommand
 	 */
 	public void create(CreateOrUpdateFunctionCommand command) {
 		this.service = command.getService();
@@ -84,11 +84,11 @@ public class FunctionInfo {
 		this.type = command.getType();
 		this.activeFlag = YesNo.Y;
 	}
-	
+
 	/**
 	 * 更新一筆功能資料
 	 * 
-	 * @param command
+	 * @param command CreateOrUpdateFunctionCommand
 	 */
 	public void update(CreateOrUpdateFunctionCommand command) {
 		this.id = command.getId();
@@ -100,12 +100,12 @@ public class FunctionInfo {
 		this.description = command.getDescription();
 		this.activeFlag = YesNo.valueOf(command.getActiveFlag());
 	}
-	
+
 	/**
 	 * 刪除使用者資料 (ActiveFlag = "N")
 	 */
 	public void delete() {
 		this.activeFlag = YesNo.N;
 	}
-	
+
 }
